@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "292968644019",
+    "firebase_url": "https://allaromanaapp.firebaseio.com",
+    "project_id": "allaromanaapp",
+    "storage_bucket": "allaromanaapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292968644019:android:d674a333d58da6a4991fc6",
+        "android_client_info": {
+          "package_name": "com.example.allaromanaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "292968644019-2b039pr1ad7b57goik9ugj6sq68b32ou.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.allaromanaapp",
+            "certificate_hash": "3ca9ef5ee60dc6fdda4415f3c04976b0a10722ab"
+          }
+        },
+        {
+          "client_id": "292968644019-i0jvrrv810pus9ic7oqnc07jsbgqgde5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM_1RAfzRSIDYBUMK4rGuLaSr3AHH6ICI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "292968644019-i0jvrrv810pus9ic7oqnc07jsbgqgde5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

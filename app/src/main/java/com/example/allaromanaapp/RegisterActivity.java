@@ -82,6 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
                        }
                        else{
                            Toast.makeText(RegisterActivity.this, "Errore !", Toast.LENGTH_SHORT).show();
+                           progressBar.setVisibility(View.GONE);
                        }
                     }
                 });

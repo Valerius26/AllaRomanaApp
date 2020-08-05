@@ -50,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         Password = findViewById(R.id.password);
         RegisterBtn = findViewById(R.id.registerbtn);
         LoginBtn = findViewById(R.id.loginbtn);
+        final Double bilancio = 0.00;
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
@@ -99,6 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
                            user.put("cognome",cognome);
                            user.put("e-mail",email);
                            user.put("password",password);
+                           user.put("bilancio",bilancio);
                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                @Override
                                public void onSuccess(Void aVoid) {

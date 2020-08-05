@@ -24,16 +24,37 @@
             android:layout_marginLeft="50dp"
             android:src="@drawable/profiloimg" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profileImage"
+        android:layout_centerHorizontal="true">
+
         <TextView
-            android:id="@+id/fullnameText"
+            android:id="@+id/nomeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
             android:layout_below="@id/profileImage"
-            android:text="nome e cognome"
+            android:layout_toLeftOf="@id/cognomeText"
+            android:layout_marginRight="10dp"
             android:textSize="20sp"
+            android:text="michele"
             android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/cognomeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/profileImage"
+                android:layout_toRightOf="@id/nomeText"
+                android:textSize="20sp"
+                android:text="scalera"
+                android:textStyle="bold"/>
+
+    </LinearLayout>
 
         <TextView
             android:id="@+id/balanceText"
@@ -111,8 +132,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="E-mail"
         android:textSize="13sp"
+        android:text="E-mail"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.53"
@@ -120,12 +141,11 @@
         tools:layout_editor_absoluteX="11dp" />
 
     <TextView
-        android:id="@+id/e-mailText"
+        android:id="@+id/emailText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:fontFamily="sans-serif-light"
-        android:text="email@blabla.it"
         android:textSize="20dp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"

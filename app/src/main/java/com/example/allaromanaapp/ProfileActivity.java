@@ -15,7 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView nome, cognome, email;
+    TextView nome, cognome, email, bilancio, gruppi;
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
     String userID;
@@ -28,6 +28,8 @@ public class ProfileActivity extends AppCompatActivity {
         nome = findViewById(R.id.nomeText);
         cognome = findViewById(R.id.cognomeText);
         email = findViewById(R.id.emailText);
+        bilancio = findViewById(R.id.balanceText);
+        gruppi = findViewById(R.id.groupText);
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
@@ -41,6 +43,8 @@ public class ProfileActivity extends AppCompatActivity {
                 nome.setText(value.getString("nome"));
                 cognome.setText(value.getString("cognome"));
                 email.setText(value.getString("e-mail"));
+                bilancio.setText(value.getString("bilancio"));
+                gruppi.setText(value.getString("gruppi"));
 
             }
         });

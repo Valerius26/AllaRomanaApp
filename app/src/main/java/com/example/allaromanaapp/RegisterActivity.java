@@ -27,15 +27,21 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class RegisterActivity extends AppCompatActivity {
 
     EditText Nome, Cognome, Email, Password;
     Button RegisterBtn;
     TextView LoginBtn;
     FirebaseAuth fAuth;
+
     ProgressBar progressBar;
     FirebaseFirestore fStore;
     String userID;
+    Double bilancio = 0.00;
+    String balance ="BILANCIO\n" + bilancio + " $";
+    Integer gruppi = 0;
+    String group = "GRUPPI\n" + gruppi;
 
 
     @Override
@@ -50,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         Password = findViewById(R.id.password);
         RegisterBtn = findViewById(R.id.registerbtn);
         LoginBtn = findViewById(R.id.loginbtn);
-        final Double bilancio = 0.00;
+
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
@@ -100,7 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
                            user.put("cognome",cognome);
                            user.put("e-mail",email);
                            user.put("password",password);
-                           user.put("bilancio",bilancio);
+                           user.put("bilancio",balance);
+                           user.put("gruppi",group);
                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                @Override
                                public void onSuccess(Void aVoid) {

@@ -1,9 +1,16 @@
 package com.example.allaromanaapp;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,13 +32,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
 public class RegisterActivity extends AppCompatActivity {
 
     EditText Nome, Cognome, Email, Password;
-    Button RegisterBtn;
+    Button RegisterBtn, ChangeBtn;
     TextView LoginBtn;
     FirebaseAuth fAuth;
 
@@ -47,7 +55,9 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loadLocale();
         setContentView(R.layout.activity_register);
+
         // Initialize Firebase Auth
 
         Nome = findViewById(R.id.nome);
@@ -56,6 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
         Password = findViewById(R.id.password);
         RegisterBtn = findViewById(R.id.registerbtn);
         LoginBtn = findViewById(R.id.loginbtn);
+        ChangeBtn = findViewById(R.id.changeLan);
 
 
         fAuth = FirebaseAuth.getInstance();
@@ -136,5 +147,67 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });
+
+        ChangeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //mostra la lista delle lingue tra le quali scegliere
+                showChangeLanguageDialog();
+            }
+        });
+    }
+
+    private void showChangeLanguageDialog() {
+        final String[] listItems = {"Inglese", "Italiano"};
+        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
+        mBuilder.setTitle("Scegli la lingua..");
+        mBuilder.setSingleChoiceItems(listItems, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                 if(i == 0){
+                     // Inglese
+                     setLocale("en");
+                     recreate();
+                 }
+                 else
+                     if(i == 1){
+                         //Italiano
+                         setLocale("it");
+                         recreate();
+                     }
+
+                 // Chiude la finestra di dialogo quando la lingua viene selezionata
+                 dialogInterface.dismiss();
+
+
+            }
+        });
+
+        AlertDialog mDialog = mBuilder.create();
+        //Mostra dialogo di avviso
+        mDialog.show();
+    }
+
+    private void setLocale(String lang) {
+
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        // Salva i dati nelle preferenze condivise
+        SharedPreferences.Editor editor = getSharedPreferences("Impostazioni", MODE_PRIVATE).edit();
+        editor.putString("La mia lingua", lang);
+        editor.apply();
+
+    }
+
+    // Carica la lingua salvata nella preferenza condivisa
+
+    public void loadLocale(){
+        SharedPreferences prefs = getSharedPreferences("Impostazioni", Activity.MODE_PRIVATE);
+        String language = prefs.getString("La mia lingua", "");
+        setLocale(language);
     }
 }

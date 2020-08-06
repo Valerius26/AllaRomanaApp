@@ -1,3 +1,13 @@
 <resources>
+
     <string name="app_name">AllaRomanaApp</string>
+    <string name="registrazione">Registrazione</string>
+    <string name="nome">Nome</string>
+    <string name="cognome">Cognome</string>
+    <string name="email">E-mail</string>
+    <string name="registrati">Registrati</string>
+    <string name="passaAlogin">Già sei registrato? Accedi qui</string>
+    <string name="cambiaLingua">Cambia lingua</string>
+    <string name="password">Password</string>
+
 </resources>

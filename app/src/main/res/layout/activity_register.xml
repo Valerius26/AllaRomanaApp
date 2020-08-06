@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
-        android:text="Registrazione"
+        android:text="@string/registrazione"
         android:textColor="#000000"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,7 +32,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:padding="10dp"
-        android:text="Nome"
+        android:hint="@string/nome"
         android:textColor="@android:color/background_light"
         android:textColorHint="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -52,7 +52,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:padding="10dp"
-        android:text="Cognome"
+        android:hint="@string/cognome"
         android:textColor="#F8F6F6"
         android:textColorHint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -73,7 +73,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:padding="10dp"
-        android:text="E-mail"
+        android:hint="@string/email"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +91,7 @@
         android:ems="10"
         android:inputType="textPassword"
         android:padding="10dp"
-        android:text="Password"
+        android:hint="@string/password"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -106,7 +106,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="99dp"
-        android:text="Già sei registrato? Accedi qui"
+        android:text="@string/passaAlogin"
         android:textColor="#2196F3"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -122,13 +122,15 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="45dp"
         android:layout_marginEnd="32dp"
-        android:text="Registrati"
+        android:text="@string/registrati"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password"
         app:layout_constraintVertical_bias="0.0" />
+
+
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -140,6 +142,17 @@
         app:layout_constraintTop_toBottomOf="@+id/password"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="178dp" />
+
+    <Button
+        android:id="@+id/changeLan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cambiaLingua"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerbtn"
+        app:layout_constraintVertical_bias="0.73" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

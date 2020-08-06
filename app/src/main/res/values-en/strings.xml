@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AllaRomanaApp</string>
+    <string name="registrazione">Registration</string>
+    <string name="nome">First name</string>
+    <string name="cognome">Surname</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="registrati">Sign in</string>
+    <string name="passaAlogin">Already registered? Sign in here</string>
+    <string name="cambiaLingua">Change language</string>
+</resources>

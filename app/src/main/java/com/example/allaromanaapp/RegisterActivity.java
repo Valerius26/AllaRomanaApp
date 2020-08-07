@@ -46,8 +46,10 @@ public class RegisterActivity extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseFirestore fStore;
     String userID;
-    Double balance = 0.00;
-    Integer groups = 0;
+    Double bilancio = 0.00;
+    String balance = bilancio + "$";
+    Integer gruppi = 0;
+    String groups = gruppi + "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

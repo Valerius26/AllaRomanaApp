@@ -29,7 +29,7 @@ public class ProfileActivity extends AppCompatActivity {
         cognome = findViewById(R.id.cognomeText);
         email = findViewById(R.id.emailText);
         bilancio = findViewById(R.id.balanceText);
-        gruppi = findViewById(R.id.groupTextTitle);
+        gruppi = findViewById(R.id.groupText);
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();

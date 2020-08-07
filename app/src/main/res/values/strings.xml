@@ -10,4 +10,43 @@
     <string name="cambiaLingua">Cambia lingua</string>
     <string name="password">Password</string>
 
+    <string name="accesso">Login</string>
+    <string name="accedi">Accedi</string>
+    <string name="passaAregistr">Sei nuovo? Crea un profilo</string>
+    <string name="passwordDimenticata">Hai dimenticato la password?</string>
+
+    <string name="esci">ESCI</string>
+    <string name="profilo">PROFILO</string>
+    <string name="debiti_crediti">DEBITI/CREDITI</string>
+    <string name="creaGruppo">CREA UN GRUPPO</string>
+    <string name="gruppi">GRUPPI</string>
+    <string name="messaggi">MESSAGGI</string>
+    <string name="impostazioni">IMPOSTAZIONI</string>
+
+    <string name="bilancio">BILANCIO</string>
+
+    <string name="password123">Inserire una password</string>
+    <string name="emailRichiesta">L\'email è richiesta</string>
+    <string name="passwordCorta">La password è troppo corta</string>
+    <string name="utenteRegistrato">Utente registrato</string>
+    <string name="errore">Errore !</string>
+    <string name="inglese">Inglese</string>
+    <string name="italiano">Italiano</string>
+    <string name="sceltaLingua">Scegli la lingua..</string>
+
+    <string name="emailRichiesta2">L\'email è richiesta</string>
+    <string name="password321">Inserire la password</string>
+    <string name="passwordCorta2">La password è troppo corta</string>
+    <string name="loginEffettuato">Login effettuato</string>
+    <string name="errore2">Errore !</string>
+    <string name="resettaPassword">Resettare la password?</string>
+    <string name="inserisciEmail">Inserisci la tua e-mail per ricevere il link di resettaggio</string>
+    <string name="linkInviato">Link di resettaggio inviato</string>
+    <string name="linkNonInviato">Errore! il link non è stato inviato</string>
+    <string name="si">Si</string>
+    <string name="no">No</string>
+    <string name="inglese2">Inglese</string>
+    <string name="italiano2">Italiano</string>
+    <string name="scegliLingua2">Scegli la lingua..</string>
+
 </resources>

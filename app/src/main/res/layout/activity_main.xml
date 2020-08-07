@@ -44,7 +44,7 @@
             android:layout_marginTop="-50dp"
             android:layout_marginEnd="8dp"
             android:onClick="logout"
-            android:text="Esci"
+            android:text="@string/esci"
             tools:ignore="MissingConstraints" ></Button>
 
         <ImageView
@@ -90,8 +90,8 @@
                      android:layout_weight="1"
                      android:orientation = "vertical"
                      android:gravity="center"
-                     android:layout_marginRight="5dp"
-                     >
+                     android:layout_marginRight="5dp">
+
                      <RelativeLayout
                          android:layout_width="match_parent"
                          android:layout_height="match_parent">
@@ -110,7 +110,7 @@
                              android:layout_centerHorizontal="true"
                              android:layout_marginTop="10dp"
                              android:layout_marginBottom="20dp"
-                             android:text="PROFILO"
+                             android:text="@string/profilo"
                              android:textSize="16sp"
                              tools:ignore="NotSibling,UnknownId" />
 
@@ -151,7 +151,7 @@
                              android:layout_centerHorizontal="true"
                              android:layout_marginTop="10dp"
                              android:layout_marginBottom="20dp"
-                             android:text="DEBITI/CREDITI"
+                             android:text="@string/debiti_crediti"
                              android:textSize="16sp"
                              tools:ignore="NotSibling,UnknownId" />
 
@@ -201,7 +201,7 @@
                              android:layout_centerHorizontal="true"
                              android:layout_marginTop="10dp"
                              android:layout_marginBottom="20dp"
-                             android:text="CREA UN GRUPPO"
+                             android:text="@string/creaGruppo"
                              android:textSize="16sp"
                              tools:ignore="NotSibling,UnknownId" />
 
@@ -242,7 +242,7 @@
                              android:layout_centerHorizontal="true"
                              android:layout_marginTop="10dp"
                              android:layout_marginBottom="20dp"
-                             android:text="GRUPPI"
+                             android:text="@string/gruppi"
                              android:textSize="16sp"
                              tools:ignore="NotSibling,UnknownId" />
 
@@ -292,7 +292,7 @@
                              android:layout_centerHorizontal="true"
                              android:layout_marginTop="10dp"
                              android:layout_marginBottom="20dp"
-                             android:text="MESSAGGI"
+                             android:text="@string/messaggi"
                              android:textSize="16sp"
                              tools:ignore="NotSibling,UnknownId" />
 
@@ -333,7 +333,7 @@
                              android:layout_centerHorizontal="true"
                              android:layout_marginTop="10dp"
                              android:layout_marginBottom="20dp"
-                             android:text="IMPOSTAZIONI"
+                             android:text="@string/impostazioni"
                              android:textSize="16sp"
                              tools:ignore="NotSibling,UnknownId" />
 

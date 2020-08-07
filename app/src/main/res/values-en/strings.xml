@@ -9,4 +9,45 @@
     <string name="registrati">Sign in</string>
     <string name="passaAlogin">Already registered? Sign in here</string>
     <string name="cambiaLingua">Change language</string>
+
+
+    <string name="accesso">Log in</string>
+    <string name="accedi">Enter</string>
+    <string name="passaAregistr">Are you new here? Create a profile</string>
+    <string name="passwordDimenticata">Did you forget your password?</string>
+
+    <string name="esci">EXIT</string>
+    <string name="profilo">PROFILE</string>
+    <string name="debiti_crediti">DEBITS/CREDITS</string>
+    <string name="creaGruppo">CREATE A GROUP</string>
+    <string name="gruppi">GROUPS</string>
+    <string name="messaggi">MESSAGGES</string>
+    <string name="impostazioni">SETTINGS</string>
+
+    <string name="bilancio">BALANCE</string>
+
+    <string name="password123">Enter a password</string>
+    <string name="emailRichiesta">Email is required</string>
+    <string name="passwordCorta">The password is too short</string>
+    <string name="utenteRegistrato">Registered user</string>
+    <string name="errore">Error !</string>
+    <string name="inglese">English</string>
+    <string name="italiano">Italian</string>
+    <string name="sceltaLingua">Choose your language ..</string>
+
+    <string name="emailRichiesta2">Email is required</string>
+    <string name="password321">Enter a password</string>
+    <string name="passwordCorta2">The password is too short</string>
+    <string name="loginEffettuato">Login successful</string>
+    <string name="errore2">Error !</string>
+    <string name="resettaPassword">Reset password? </string>
+    <string name="inserisciEmail">Enter your e-mail to receive the reset link</string>
+    <string name="linkInviato">Reset link sent</string>
+    <string name="linkNonInviato">Error! the link was not sent </string>
+    <string name="si">Yes</string>
+    <string name="no">No</string>
+    <string name="inglese2">English</string>
+    <string name="italiano2">Italian</string>
+    <string name="scegliLingua2">Choose your language..</string>
+
 </resources>

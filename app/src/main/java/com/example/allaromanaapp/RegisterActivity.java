@@ -46,11 +46,8 @@ public class RegisterActivity extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseFirestore fStore;
     String userID;
-    Double bilancio = 0.00;
-    String balance ="BILANCIO\n" + bilancio + " $";
-    Integer gruppi = 0;
-    String group = "GRUPPI\n" + gruppi;
-
+    Double balance = 0.00;
+    Integer groups = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,17 +83,17 @@ public class RegisterActivity extends AppCompatActivity {
 
 
                 if(TextUtils.isEmpty(email)){
-                    Email.setError("L'email è richiesta");
+                    Email.setError(getString(R.string.emailRichiesta));
                     return;
                 }
 
                 if(TextUtils.isEmpty(password)){
-                    Password.setError("L'email è richiesta");
+                    Password.setError(getString(R.string.password123));
                     return;
                 }
 
                 if(password.length() < 6){
-                    Password.setError("La password è troppo corta");
+                    Password.setError(getString(R.string.passwordCorta));
                     return;
                 }
 
@@ -109,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                        if(task.isSuccessful()){
-                           Toast.makeText(RegisterActivity.this, "Utente registrato", Toast.LENGTH_SHORT).show();
+                           Toast.makeText(RegisterActivity.this, R.string.utenteRegistrato, Toast.LENGTH_SHORT).show();
                            userID = fAuth.getCurrentUser().getUid();
                            DocumentReference documentReference = fStore.collection("users").document(userID);
                            Map<String,Object> user = new HashMap<>();
@@ -118,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
                            user.put("e-mail",email);
                            user.put("password",password);
                            user.put("bilancio",balance);
-                           user.put("gruppi",group);
+                           user.put("gruppi",groups);
                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                @Override
                                public void onSuccess(Void aVoid) {
@@ -133,7 +130,7 @@ public class RegisterActivity extends AppCompatActivity {
                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                        }
                        else{
-                           Toast.makeText(RegisterActivity.this, "Errore !", Toast.LENGTH_SHORT).show();
+                           Toast.makeText(RegisterActivity.this, R.string.errore, Toast.LENGTH_SHORT).show();
                            progressBar.setVisibility(View.GONE);
                        }
                     }
@@ -158,9 +155,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void showChangeLanguageDialog() {
-        final String[] listItems = {"Inglese", "Italiano"};
+        final String[] listItems = {getString(R.string.inglese), getString(R.string.italiano)};
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
-        mBuilder.setTitle("Scegli la lingua..");
+        mBuilder.setTitle(R.string.sceltaLingua);
         mBuilder.setSingleChoiceItems(listItems, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button profileBtn, balanceBtn, newGroupBtn, groupBtn, messageBtn, settingsBtn;
+    Button profileBtn, balanceBtn, historyBtn, groupBtn, messageBtn, settingsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         profileBtn = (Button) findViewById(R.id.buttonProfile);
         balanceBtn = (Button) findViewById(R.id.buttonDebitoCredito);
-        newGroupBtn = (Button) findViewById(R.id.buttonAddGroup);
+        historyBtn = (Button) findViewById(R.id.storyBtn);
         groupBtn = (Button)findViewById(R.id.buttonGroup);
         messageBtn = (Button) findViewById(R.id.buttonMessage);
         settingsBtn = (Button) findViewById(R.id.buttonImpostation);
@@ -33,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        groupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), GroupActivity.class));
+            }
+        });
     }
 
     public void logout(View view){

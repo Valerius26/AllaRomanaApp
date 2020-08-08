@@ -190,7 +190,7 @@
                          <ImageView
                              android:layout_width="50dp"
                              android:layout_height="50dp"
-                             android:src="@drawable/creagruppoimg"
+                             android:src="@drawable/visualizzaimg"
                              android:layout_centerInParent="true"/>
 
                          <TextView
@@ -201,14 +201,14 @@
                              android:layout_centerHorizontal="true"
                              android:layout_marginTop="10dp"
                              android:layout_marginBottom="20dp"
-                             android:text="@string/creaGruppo"
+                             android:text="@string/gruppi"
                              android:textSize="16sp"
                              tools:ignore="NotSibling,UnknownId" />
 
                          <Button
                              android:layout_width="match_parent"
                              android:layout_height="match_parent"
-                             android:id="@+id/buttonAddGroup"
+                             android:id="@+id/buttonGroup"
                              android:background="@android:color/transparent"/>
 
 
@@ -231,7 +231,7 @@
                          <ImageView
                              android:layout_width="50dp"
                              android:layout_height="50dp"
-                             android:src="@drawable/visualizzaimg"
+                             android:src="@drawable/storicoimg"
                              android:layout_centerInParent="true"/>
 
                          <TextView
@@ -242,14 +242,14 @@
                              android:layout_centerHorizontal="true"
                              android:layout_marginTop="10dp"
                              android:layout_marginBottom="20dp"
-                             android:text="@string/gruppi"
+                             android:text="@string/storico"
                              android:textSize="16sp"
                              tools:ignore="NotSibling,UnknownId" />
 
                          <Button
                              android:layout_width="match_parent"
                              android:layout_height="match_parent"
-                             android:id="@+id/buttonGroup"
+                             android:id="@+id/storyBtn"
                              android:background="@android:color/transparent"/>
 
 
@@ -281,7 +281,7 @@
                          <ImageView
                              android:layout_width="50dp"
                              android:layout_height="50dp"
-                             android:src="@drawable/msgimg"
+                             android:src="@drawable/notimg"
                              android:layout_centerInParent="true"/>
 
                          <TextView
@@ -292,7 +292,7 @@
                              android:layout_centerHorizontal="true"
                              android:layout_marginTop="10dp"
                              android:layout_marginBottom="20dp"
-                             android:text="@string/messaggi"
+                             android:text="@string/notifiche"
                              android:textSize="16sp"
                              tools:ignore="NotSibling,UnknownId" />
 

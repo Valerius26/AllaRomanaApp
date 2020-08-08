@@ -19,9 +19,11 @@
     <string name="profilo">PROFILO</string>
     <string name="debiti_crediti">DEBITI/CREDITI</string>
     <string name="creaGruppo">CREA UN GRUPPO</string>
+    <string name="storico">STORICO PAGAMENTI</string>
     <string name="gruppi">GRUPPI</string>
     <string name="messaggi">MESSAGGI</string>
     <string name="impostazioni">IMPOSTAZIONI</string>
+    <string name="notifiche">NOTIFICHE</string>
 
     <string name="bilancio">BILANCIO</string>
 
@@ -49,4 +51,9 @@
     <string name="italiano2">Italiano</string>
     <string name="scegliLingua2">Scegli la lingua..</string>
 
+    <string name="nuovoGruppo">Nuovo gruppo</string>
+    <string name="NomeGruppo">Nome</string>
+    <string name="Descrizione">Descrizione</string>
+    <string name="SubmitGruppo">Crea il gruppo</string>
+    <string name="NomeRichiesto">Il nome è richiesto</string>
 </resources>

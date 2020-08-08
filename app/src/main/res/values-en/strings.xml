@@ -23,6 +23,8 @@
     <string name="gruppi">GROUPS</string>
     <string name="messaggi">MESSAGGES</string>
     <string name="impostazioni">SETTINGS</string>
+    <string name="storico">PAYMENT HISTORY</string>
+    <string name="notifiche">NOTIFICATION</string>
 
     <string name="bilancio">BALANCE</string>
 
@@ -50,4 +52,9 @@
     <string name="italiano2">Italian</string>
     <string name="scegliLingua2">Choose your language..</string>
 
+    <string name="nuovoGruppo">New group</string>
+    <string name="NomeGruppo">Name</string>
+    <string name="Descrizione">Description</string>
+    <string name="SubmitGruppo">Create the group</string>
+    <string name="NomeRichiesto">The name is required</string>
 </resources>

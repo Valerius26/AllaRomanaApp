@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -45,7 +46,56 @@ public class NewGroupActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
 
+        SubmitGruppoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startCreatingGroup();
+            }
+        });
 
         }
 
+    private void startCreatingGroup() {
+
+        String title = NomeGruppo.getText().toString().trim();
+        String description = Descrizione.getText().toString().trim();
+
+        if(TextUtils.isEmpty(title)){
+            Toast.makeText(this, getString(R.string.NomeRichiesto), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        else{
+            createGroup(title,description);
+        }
+
+
     }
+
+    private void createGroup(String groupTitle, String groupDescription) {
+
+        userID = fAuth.getCurrentUser().getUid();
+
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("Nome gruppo", ""+groupTitle);
+        hashMap.put("Descrizione", ""+groupDescription);
+        hashMap.put("Creato da", ""+userID);
+
+        //crea il gruppo
+        CollectionReference collectionReference = fStore.collection("groups");
+        collectionReference.add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(NewGroupActivity.this, getString(R.string.GruppoCreato) , Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), GroupActivity.class));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+
+
+}

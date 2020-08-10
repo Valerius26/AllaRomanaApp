@@ -57,4 +57,5 @@
     <string name="Descrizione">Description</string>
     <string name="SubmitGruppo">Create the group</string>
     <string name="NomeRichiesto">The name is required</string>
+    <string name="GruppoCreato">The group was created successfully</string>
 </resources>

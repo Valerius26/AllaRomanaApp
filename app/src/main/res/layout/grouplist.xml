@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:contentPadding="3dp"
+    app:layout_goneMarginTop="1dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent">
+
+        <ImageView
+            android:id="@+id/iconGroup"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/gruppoimg" />
+
+        <TextView
+            android:id="@+id/groupTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_toEndOf="@+id/iconGroup"
+            android:text="Group Title"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/DescriptionName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/groupTitle"
+            android:layout_marginStart="4dp"
+            android:layout_toRightOf="@+id/iconGroup"
+            android:text="sender name" />
+
+        <TextView
+            android:id="@+id/GoToGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/DescriptionName"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:singleLine="true"
+            android:text="Entra >"
+            android:textColor="@color/design_default_color_primary"
+            android:textSize="20dp"
+            android:textStyle="italic" />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

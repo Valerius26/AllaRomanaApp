@@ -1,5 +1,7 @@
 package com.example.allaromanaapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.security.acl.Group;
 import java.util.ArrayList;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
     GroupActivity groupActivity;
     ArrayList<group> groups;
 
 
-    public RecyclerViewAdapter(GroupActivity groupActivity, ArrayList<group> groups ){
+
+    public RecyclerViewAdapter( GroupActivity groupActivity, ArrayList<group> groups ){
         this.groupActivity = groupActivity;
         this.groups = groups;
+
     }
 
     @NonNull
@@ -35,6 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
          holder.Title.setText(groups.get(position).getTitle());
          holder.Description.setText(groups.get(position).getDescription());
+
     }
 
     @Override

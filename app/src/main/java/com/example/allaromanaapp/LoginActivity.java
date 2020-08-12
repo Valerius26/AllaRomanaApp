@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView CreateBtn, forgotTextLink;
     ProgressBar progressBar;
     FirebaseAuth fAuth;
+    String mail;
 
 
     @Override
@@ -113,7 +114,12 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                          // extract the email and send reset link
 
-                        String mail = resetMail.getText().toString();
+                        mail = resetMail.getText().toString();
+                        if(TextUtils.isEmpty(mail)){
+                            resetMail.setError(getString(R.string.emailRichiesta));
+                            return;
+                        }
+
                         fAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {

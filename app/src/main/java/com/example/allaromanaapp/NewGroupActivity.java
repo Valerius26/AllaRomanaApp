@@ -39,9 +39,7 @@ public class NewGroupActivity extends AppCompatActivity {
     Button SubmitGruppoBtn;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
-    String userID;
-    Integer gruppi;
-
+    String userID, nome, cognome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,15 +90,24 @@ public class NewGroupActivity extends AppCompatActivity {
         hashMap.put("Descrizione", ""+groupDescription);
         hashMap.put("Creato da", ""+userID);
 
-
-
+        //recupera nome e cognome del creatore
+        DocumentReference documentReference1 = fStore.collection("users").document(userID);
+        documentReference1.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                nome = value.getString("nome");
+                cognome = value.getString("cognome");
+                Log.d("NOME",nome);
+            }
+        });
 
         //crea il gruppo
         CollectionReference collectionReference = fStore.collection("users").document(userID).collection("groups");
         collectionReference.add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                createFirstPartecipant(documentReference);
+                createFirstPartecipant(documentReference, nome, cognome);
                 Toast.makeText(NewGroupActivity.this, getString(R.string.GruppoCreato) , Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 IncrementGroup();
@@ -123,13 +130,22 @@ public class NewGroupActivity extends AppCompatActivity {
 
     }
 
-    private void createFirstPartecipant(DocumentReference documentReference) {
+    private void createFirstPartecipant(DocumentReference documentReference, String nome, String cognome) {
+
+
+
+
         String groupID = documentReference.getId();
+
+
 
         HashMap<String,String> hashMap1 = new HashMap<>();
         hashMap1.put("Ruolo", "creatore");
         hashMap1.put("idUtente", ""+userID);
         hashMap1.put("idGruppo", ""+groupID);
+        hashMap1.put("nomePartecipante",""+nome);
+        hashMap1.put("cognomePartecipante",""+cognome);
+
 
         CollectionReference collectionReference1 = fStore.collection("users").document(userID).collection("groups").document(groupID).collection("partecipants");
         collectionReference1.add(hashMap1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

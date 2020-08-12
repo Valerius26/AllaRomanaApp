@@ -28,7 +28,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         LayoutInflater layoutInflater = LayoutInflater.from(groupActivity.getBaseContext());
         View view = layoutInflater.inflate(R.layout.grouplist, parent, false);
 
-
         return new RecyclerViewHolder(view);
     }
 

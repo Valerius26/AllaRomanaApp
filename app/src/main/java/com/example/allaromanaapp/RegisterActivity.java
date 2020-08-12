@@ -46,10 +46,9 @@ public class RegisterActivity extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseFirestore fStore;
     String userID;
-    Double bilancio = 0.00;
-    String balance = bilancio + "$";
-    Integer gruppi = 0;
-    String groups = gruppi + "";
+    Long bilancio = Long.valueOf(0);
+    Long gruppi = Long.valueOf(0);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,8 +115,8 @@ public class RegisterActivity extends AppCompatActivity {
                            user.put("cognome",cognome);
                            user.put("e-mail",email);
                            user.put("password",password);
-                           user.put("bilancio",balance);
-                           user.put("gruppi",groups);
+                           user.put("bilancio",bilancio);
+                           user.put("gruppi",gruppi);
                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                @Override
                                public void onSuccess(Void aVoid) {

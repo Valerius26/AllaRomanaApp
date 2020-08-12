@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createGroupBtn"
         android:layout_width="wrap_content"
@@ -15,10 +16,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_height="691dp"
         android:layout_marginVertical="35dp"
-        />
+        android:orientation="vertical" />
+
 
 </LinearLayout>
 

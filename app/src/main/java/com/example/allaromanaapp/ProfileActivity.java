@@ -1,9 +1,11 @@
 package com.example.allaromanaapp;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,13 +40,16 @@ public class ProfileActivity extends AppCompatActivity {
 
         final DocumentReference documentReference = fStore.collection("users").document(userID);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 nome.setText(value.getString("nome"));
                 cognome.setText(value.getString("cognome"));
                 email.setText(value.getString("e-mail"));
-                bilancio.setText(value.getString("bilancio"));
-                gruppi.setText(value.getString("gruppi"));
+                int bilancio2 = Math.toIntExact((Long) value.get("bilancio"));
+                bilancio.setText(String.valueOf(bilancio2));
+                int gruppi2 = Math.toIntExact((Long) value.get("gruppi"));
+                gruppi.setText(String.valueOf(gruppi2));
 
             }
         });

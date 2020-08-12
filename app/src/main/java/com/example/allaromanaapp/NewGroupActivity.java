@@ -1,9 +1,12 @@
 package com.example.allaromanaapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,7 +24,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +40,7 @@ public class NewGroupActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID;
-    String groupID;
+    Integer gruppi;
 
 
     @Override
@@ -69,6 +76,7 @@ public class NewGroupActivity extends AppCompatActivity {
 
         else{
             createGroup(title,description);
+
         }
 
 
@@ -94,7 +102,8 @@ public class NewGroupActivity extends AppCompatActivity {
             public void onSuccess(DocumentReference documentReference) {
                 createFirstPartecipant(documentReference);
                 Toast.makeText(NewGroupActivity.this, getString(R.string.GruppoCreato) , Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), GroupActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                IncrementGroup();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -103,6 +112,14 @@ public class NewGroupActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void IncrementGroup() {
+
+        DocumentReference dr = fStore.collection("users").document(userID);
+
+        dr.update("gruppi", FieldValue.increment(1));
 
     }
 

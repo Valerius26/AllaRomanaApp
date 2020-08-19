@@ -21,10 +21,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"
                 android:layout_width="match_parent"
-                android:layout_height="623dp"
+                android:layout_height="704dp"
                 android:layout_marginVertical="35dp"
                 android:orientation="vertical" />
 
@@ -32,9 +33,14 @@
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/createGroupBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="41dp"
+                android:layout_height="81dp"
+                android:layout_gravity="right"
+                android:layout_marginHorizontal="60dp"
+                android:layout_marginTop="-160dp"
                 android:src="@drawable/creagruppoimg"
-                android:layout_gravity="center_horizontal"/>
+                app:backgroundTint="#4CAF50" />
+
+
         </LinearLayout>
 
 

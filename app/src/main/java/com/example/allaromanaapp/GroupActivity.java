@@ -90,6 +90,8 @@ public class GroupActivity extends AppCompatActivity {
                 }
             }
         });*/
+
+
     }
 
     private void loadDataFromFirebase() {
@@ -98,10 +100,10 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                  for(DocumentSnapshot querySnapshot : task.getResult()){
-                     group gruppo = new group(querySnapshot.getString("Nome gruppo"), querySnapshot.getString("Descrizione"));
+                     group gruppo = new group(querySnapshot.getString("Nome gruppo"), querySnapshot.getString("Descrizione"), querySnapshot.getId());
                      groups.add(gruppo);
                  }
-                 adapter = new RecyclerViewAdapter(GroupActivity.this, groups);
+                 adapter = new RecyclerViewAdapter(GroupActivity.this, groups, getApplicationContext());
                  recyclerView.setAdapter(adapter);
             }
         }).addOnFailureListener(new OnFailureListener() {

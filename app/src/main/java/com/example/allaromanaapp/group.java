@@ -1,6 +1,7 @@
 package com.example.allaromanaapp;
 
 public class group {
+    private String groupID;
     private String title;
     private String description;
 
@@ -8,11 +9,19 @@ public class group {
 
     }
 
-    public group(String title, String description){
+    public group(String title, String description, String GroupID){
         this.title = title;
         this.description = description;
+        this.groupID = GroupID;
     }
 
+    public String getGroupID() {
+        return groupID;
+    }
+
+    public void setGroupID(String groupID) {
+        this.groupID = groupID;
+    }
 
     public void setTitle(String title){
         this.title = title;

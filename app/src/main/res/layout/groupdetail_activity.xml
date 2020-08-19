@@ -32,41 +32,60 @@
         app:layout_constraintTop_toBottomOf="@+id/groupTitleDet"
         app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/partecipantList"
-        android:layout_width="356dp"
-        android:layout_height="330dp"
-        android:layout_marginTop="8dp"
+    <TextView
+        android:id="@+id/ListaPart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lista partecipanti"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.24000001" />
+
+    <ScrollView
+        android:id="@+id/ScrollPart"
+        android:layout_width="384dp"
+        android:layout_height="380dp"
+        android:layout_marginTop="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionDet"
-        app:layout_constraintVertical_bias="0.060000002" />
+        app:layout_constraintTop_toBottomOf="@+id/ListaPart"
+        app:layout_constraintVertical_bias="0.060000002">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/aggiungiPart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="74dp"
+        android:layout_marginTop="77dp"
         android:text="Aggiungi partecipante"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/partecipantList"
-        app:layout_constraintVertical_bias="0.69" />
+        app:layout_constraintTop_toBottomOf="@+id/ScrollPart"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/Pagaconto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="73dp"
         android:text="Paga un conto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.93"
+        app:layout_constraintHorizontal_bias="0.91"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/partecipantList"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/ScrollPart"
+        app:layout_constraintVertical_bias="0.13" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

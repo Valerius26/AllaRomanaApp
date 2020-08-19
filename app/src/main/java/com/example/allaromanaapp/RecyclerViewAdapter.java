@@ -18,10 +18,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     GroupActivity groupActivity;
     ArrayList<group> groups;
+    private Context context;
 
 
 
-    public RecyclerViewAdapter( GroupActivity groupActivity, ArrayList<group> groups ){
+    public RecyclerViewAdapter( GroupActivity groupActivity, ArrayList<group> groups, Context context ){
         this.groupActivity = groupActivity;
         this.groups = groups;
 
@@ -39,8 +40,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
+         group gruppo = groups.get(position);
+         final String groupID = gruppo.getGroupID();
+
+
          holder.Title.setText(groups.get(position).getTitle());
          holder.Description.setText(groups.get(position).getDescription());
+         holder.Enter.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 //apri il gruppo
+                 Intent intent = new Intent(context,GroupDetail.class);
+                 intent.putExtra("groupId", groupID);
+                 context.startActivity(intent);
+             }
+         });
 
     }
 

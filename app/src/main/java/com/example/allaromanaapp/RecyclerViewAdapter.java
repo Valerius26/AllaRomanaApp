@@ -25,7 +25,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     public RecyclerViewAdapter( GroupActivity groupActivity, ArrayList<group> groups, Context context ){
         this.groupActivity = groupActivity;
         this.groups = groups;
-
+        this.context = context;
     }
 
     @NonNull

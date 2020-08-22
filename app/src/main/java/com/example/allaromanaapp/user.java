@@ -1,22 +1,31 @@
 package com.example.allaromanaapp;
 
 public class user {
-    private String nome,cognome,email,password;
+    private String nome,cognome,email,password,idUser;
     int gruppi = 0;
     double bilancio = 0.0;
+
+    public String getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
+    }
 
     public user(){
 
     }
 
 
-    public user(String nome, String cognome, String email, String password, int gruppi, double bilancio){
+    public user(String nome, String cognome, String email, String password, String idUser){
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.password = password;
         this.gruppi = gruppi;
         this.bilancio = bilancio;
+        this.idUser = idUser;
     }
 
     public String getNome() {

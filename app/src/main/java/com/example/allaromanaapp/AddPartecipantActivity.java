@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -28,14 +29,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 
-public class GroupDetail extends AppCompatActivity {
+public class AddPartecipantActivity extends AppCompatActivity {
 
     private String groupID, userID;
     private TextView nomeGruppo, descrizioneGruppo;
     RecyclerView recyclerView;
     FloatingActionButton CreatePartecipantBtn;
-    ArrayList<partecipant> partecipants;
-    RecyclerViewAdapter2 adapter;
+    ArrayList<user> users;
+    RecyclerViewAdapter3 adapter;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -43,7 +44,7 @@ public class GroupDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.groupdetail_activity);
+        setContentView(R.layout.activity_addpartecipant);
 
         Intent intent = getIntent();
         fAuth = FirebaseAuth.getInstance();
@@ -53,12 +54,7 @@ public class GroupDetail extends AppCompatActivity {
         groupID = intent.getStringExtra("groupId");
         userID = fAuth.getCurrentUser().getUid();
 
-        nomeGruppo = findViewById(R.id.groupTitleDet);
-        descrizioneGruppo = findViewById(R.id.descriptionDet);
-
-        loadGroupInfo();
-
-        partecipants = new ArrayList<>();
+        users = new ArrayList<>();
         fAuth = FirebaseAuth.getInstance();
         userID = fAuth.getCurrentUser().getUid();
 
@@ -66,60 +62,28 @@ public class GroupDetail extends AppCompatActivity {
         setUpFirestore();
         loadDataFromFirebase();
 
-        CreatePartecipantBtn = (FloatingActionButton) findViewById(R.id.addPartecipant);
-
-
-
-        CreatePartecipantBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), AddPartecipantActivity.class));
-            }
-        });
-
-
     }
 
-    private void loadGroupInfo() {
-        DocumentReference docRef = fStore.collection("users").document(userID).collection("groups").
-                document(groupID);
 
-        docRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if(error != null){
-                    return;
-                }
-                else {
-                    nomeGruppo.setText(value.getString("Nome gruppo"));
-                    descrizioneGruppo.setText(value.getString("Descrizione"));
-                }
-            }
-        });
-
-
-    }
 
     private void loadDataFromFirebase() {
 
-        fStore.collection("users").document(userID).collection("groups")
-                .document(groupID).collection("partecipants").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        fStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for(DocumentSnapshot querySnapshot : task.getResult()){
-                    partecipant partecipante = new partecipant(querySnapshot.getString("Ruolo"),
-                            querySnapshot.getString("idGruppo"), querySnapshot.getString("idUtente"),
-                            querySnapshot.getString("nomePartecipante"), querySnapshot.getString("cognomePartecipante"),
-                            querySnapshot.getId());
-                    partecipants.add(partecipante);
+                    user utente = new user(querySnapshot.getString("nome"),
+                            querySnapshot.getString("cognome"), querySnapshot.getString("e-mail"),
+                            querySnapshot.getString("password"), querySnapshot.getId() );
+                    users.add(utente);
                 }
-                adapter = new RecyclerViewAdapter2(GroupDetail.this, partecipants, getApplicationContext() );
+                adapter = new RecyclerViewAdapter3(AddPartecipantActivity.this, users, getApplicationContext() );
                 recyclerView.setAdapter(adapter);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(GroupDetail.this, R.string.errore, Toast.LENGTH_LONG).show();
+                Toast.makeText(AddPartecipantActivity.this, R.string.errore, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -129,7 +93,7 @@ public class GroupDetail extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        recyclerView = findViewById(R.id.recycler2);
+        recyclerView = findViewById(R.id.recycler3);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

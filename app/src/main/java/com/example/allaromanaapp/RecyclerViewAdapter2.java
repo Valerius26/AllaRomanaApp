@@ -49,7 +49,7 @@ public class RecyclerViewAdapter2 extends RecyclerView.Adapter<RecyclerViewHolde
             @Override
             public void onClick(View view) {
                 //apri il profilo
-                Intent intent = new Intent(context,ProfileActivity.class);
+                Intent intent = new Intent(context,NotCurrentProfileActivity.class);
                 intent.putExtra("idUtente", partecipantID);
                 context.startActivity(intent);
             }

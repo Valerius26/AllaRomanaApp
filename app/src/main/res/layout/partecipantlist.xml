@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:contentPadding="3dp"
+    app:layout_goneMarginTop="1dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/cardview_light_background">
+
+        <ImageView
+            android:id="@+id/iconPartecipant"
+            android:clickable="true"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/profiloimg" />
+
+        <TextView
+            android:id="@+id/partecipantName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_toEndOf="@+id/iconGroup"
+            android:text="Name Surname"
+            android:textSize="22sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginVertical="20dp"/>
+
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

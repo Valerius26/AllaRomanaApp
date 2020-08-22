@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +43,7 @@ public class AddPartecipantActivity extends AppCompatActivity {
     FloatingActionButton CreatePartecipantBtn;
     ArrayList<user> users;
     RecyclerViewAdapter3 adapter;
-    SearchView searchView;
+    EditText editText;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
 
@@ -51,7 +52,7 @@ public class AddPartecipantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addpartecipant);
 
-        searchView = findViewById(R.id.searchUser);
+        editText = findViewById(R.id.searchUser);
         Intent intent = getIntent();
         fAuth = FirebaseAuth.getInstance();
 
@@ -68,7 +69,10 @@ public class AddPartecipantActivity extends AppCompatActivity {
         setUpFirestore();
         loadDataFromFirebase();
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        String string = editText.getText().toString().trim();
+
+
+        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 searchUsers(s);
@@ -80,27 +84,34 @@ public class AddPartecipantActivity extends AppCompatActivity {
                 searchUsers(newText);
                 return false;
             }
-        });
+        });*/
+
 
     }
 
-    private void searchUsers(String s) {
+
+
+
+
+    /*private void searchUsers(String s) {
         String query = s.toLowerCase();
 
 
-    }
+    }*/
 
 
     private void loadDataFromFirebase() {
-
         fStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for(DocumentSnapshot querySnapshot : task.getResult()){
-                    user utente = new user(querySnapshot.getString("nome"),
-                            querySnapshot.getString("cognome"), querySnapshot.getString("e-mail"),
-                            querySnapshot.getString("password"), querySnapshot.getId() );
-                    users.add(utente);
+                    String userid =  querySnapshot.getId();
+                    if(!userid.equals(userID)) {
+                        user utente = new user(querySnapshot.getString("nome"),
+                                querySnapshot.getString("cognome"), querySnapshot.getString("e-mail"),
+                                querySnapshot.getString("password"), userid);
+                        users.add(utente);
+                    }
                 }
                 adapter = new RecyclerViewAdapter3(AddPartecipantActivity.this, users, getApplicationContext() );
                 recyclerView.setAdapter(adapter);

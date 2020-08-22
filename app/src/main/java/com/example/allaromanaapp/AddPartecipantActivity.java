@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,9 +26,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class AddPartecipantActivity extends AppCompatActivity {
@@ -37,7 +42,7 @@ public class AddPartecipantActivity extends AppCompatActivity {
     FloatingActionButton CreatePartecipantBtn;
     ArrayList<user> users;
     RecyclerViewAdapter3 adapter;
-
+    SearchView searchView;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
 
@@ -46,6 +51,7 @@ public class AddPartecipantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addpartecipant);
 
+        searchView = findViewById(R.id.searchUser);
         Intent intent = getIntent();
         fAuth = FirebaseAuth.getInstance();
 
@@ -62,8 +68,27 @@ public class AddPartecipantActivity extends AppCompatActivity {
         setUpFirestore();
         loadDataFromFirebase();
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                searchUsers(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchUsers(newText);
+                return false;
+            }
+        });
+
     }
 
+    private void searchUsers(String s) {
+        String query = s.toLowerCase();
+
+
+    }
 
 
     private void loadDataFromFirebase() {

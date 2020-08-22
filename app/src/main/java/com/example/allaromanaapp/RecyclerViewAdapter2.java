@@ -45,15 +45,6 @@ public class RecyclerViewAdapter2 extends RecyclerView.Adapter<RecyclerViewHolde
 
 
         holder2.Name.setText(partecipants.get(position).getNome() + " " + partecipants.get(position).getCognome());
-        holder2.Profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //apri il profilo
-                Intent intent = new Intent(context,NotCurrentProfileActivity.class);
-                intent.putExtra("idUtente", partecipantID);
-                context.startActivity(intent);
-            }
-        });
 
     }
 

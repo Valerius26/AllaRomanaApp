@@ -2,6 +2,7 @@ package com.example.allaromanaapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,9 +44,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
          group gruppo = groups.get(position);
          final String groupID = gruppo.getGroupID();
 
+             Log.d("nome", "" + groups.get(position).getTitle());
 
-         holder.Title.setText(groups.get(position).getTitle());
-         holder.Description.setText(groups.get(position).getDescription());
+             holder.Title.setText(groups.get(position).getTitle());
+             holder.Description.setText(groups.get(position).getDescription());
+
+
          holder.Enter.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {

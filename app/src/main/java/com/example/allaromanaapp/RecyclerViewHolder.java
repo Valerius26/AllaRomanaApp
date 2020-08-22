@@ -20,6 +20,5 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder {
         Title = itemView.findViewById(R.id.groupTitle);
         Description = itemView.findViewById(R.id.DescriptionName);
         Enter = itemView.findViewById(R.id.GoToGroup);
-
     }
 }

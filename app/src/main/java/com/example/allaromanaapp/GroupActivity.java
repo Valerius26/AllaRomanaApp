@@ -40,6 +40,7 @@ import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 public class GroupActivity extends AppCompatActivity {
 
+    TextView EmptyList;
     RecyclerView recyclerView;
     FloatingActionButton CreateGroupBtn;
     FirebaseAuth fAuth;
@@ -53,6 +54,8 @@ public class GroupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
+        EmptyList = findViewById(R.id.emptyList);
+        EmptyList.setVisibility(View.INVISIBLE);
         groups = new ArrayList<>();
         fAuth = FirebaseAuth.getInstance();
         userID = fAuth.getCurrentUser().getUid();
@@ -60,7 +63,6 @@ public class GroupActivity extends AppCompatActivity {
         setUpRecyclerView();
         setUpFirestore();
         loadDataFromFirebase();
-
 
 
 
@@ -103,8 +105,14 @@ public class GroupActivity extends AppCompatActivity {
                      group gruppo = new group(querySnapshot.getString("Nome gruppo"), querySnapshot.getString("Descrizione"), querySnapshot.getId());
                      groups.add(gruppo);
                  }
+
                  adapter = new RecyclerViewAdapter(GroupActivity.this, groups, getApplicationContext());
                  recyclerView.setAdapter(adapter);
+
+                if (groups.size() == 0)
+                {
+                    EmptyList.setVisibility(View.VISIBLE);
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

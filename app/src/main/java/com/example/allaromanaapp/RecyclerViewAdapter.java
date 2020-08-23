@@ -55,7 +55,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
              public void onClick(View view) {
                  //apri il gruppo
                  Intent intent = new Intent(context,GroupDetail.class);
-                 intent.putExtra("groupId", groupID);
+                 intent.putExtra("idGruppo", groupID);
                  context.startActivity(intent);
              }
          });

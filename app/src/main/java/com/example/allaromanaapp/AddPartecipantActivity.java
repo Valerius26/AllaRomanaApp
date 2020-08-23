@@ -41,12 +41,11 @@ import java.util.Comparator;
 
 public class AddPartecipantActivity extends AppCompatActivity {
 
-    private String groupID, userID;
-    private TextView nomeGruppo, descrizioneGruppo;
+    private String groupID,userID;
     RecyclerView recyclerView;
-    FloatingActionButton CreatePartecipantBtn;
     ArrayList<user> users;
     ArrayList<user> usersSearched;
+    ArrayList<group> groups;
     RecyclerViewAdapter3 adapter;
     EditText searchUser;
     FirebaseAuth fAuth;
@@ -60,14 +59,17 @@ public class AddPartecipantActivity extends AppCompatActivity {
 
         searchUser = findViewById(R.id.searchUser);
         Intent intent = getIntent();
+        groupID = intent.getStringExtra("idGruppo");
         fAuth = FirebaseAuth.getInstance();
 
         fStore = FirebaseFirestore.getInstance();
 
-        groupID = intent.getStringExtra("groupId");
+
         userID = fAuth.getCurrentUser().getUid();
 
         users = new ArrayList<>();
+        groups = new ArrayList<>();
+
         fAuth = FirebaseAuth.getInstance();
         userID = fAuth.getCurrentUser().getUid();
 
@@ -185,7 +187,7 @@ public class AddPartecipantActivity extends AppCompatActivity {
                         users.add(utente);
                     }
                 }
-                adapter = new RecyclerViewAdapter3(AddPartecipantActivity.this, users, getApplicationContext() );
+                adapter = new RecyclerViewAdapter3(AddPartecipantActivity.this, users, groupID, getApplicationContext() );
                 recyclerView.setAdapter(adapter);
             }
         }).addOnFailureListener(new OnFailureListener() {

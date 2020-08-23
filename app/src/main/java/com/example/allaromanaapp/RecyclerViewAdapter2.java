@@ -22,7 +22,8 @@ public class RecyclerViewAdapter2 extends RecyclerView.Adapter<RecyclerViewHolde
 
 
 
-    public RecyclerViewAdapter2( GroupDetail groupDetailActivity, ArrayList<partecipant> partecipants, Context context ){
+
+    public RecyclerViewAdapter2( GroupDetail groupDetailActivity, ArrayList<partecipant> partecipants,  Context context ){
         this.groupDetailActivity = groupDetailActivity;
         this.partecipants = partecipants;
         this.context = context;

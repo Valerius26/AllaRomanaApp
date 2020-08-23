@@ -50,7 +50,7 @@ public class GroupDetail extends AppCompatActivity {
 
         fStore = FirebaseFirestore.getInstance();
 
-        groupID = intent.getStringExtra("groupId");
+        groupID = intent.getStringExtra("idGruppo");
         userID = fAuth.getCurrentUser().getUid();
 
         nomeGruppo = findViewById(R.id.groupTitleDet);
@@ -73,7 +73,9 @@ public class GroupDetail extends AppCompatActivity {
         CreatePartecipantBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), AddPartecipantActivity.class));
+                Intent intent = new Intent(getApplicationContext(),AddPartecipantActivity.class);
+                intent.putExtra("idGruppo",groupID);
+                startActivity(intent);
             }
         });
 

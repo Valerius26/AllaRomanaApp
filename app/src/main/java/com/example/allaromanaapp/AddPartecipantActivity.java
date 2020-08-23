@@ -4,12 +4,16 @@ package com.example.allaromanaapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.SearchView;
@@ -42,17 +46,19 @@ public class AddPartecipantActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     FloatingActionButton CreatePartecipantBtn;
     ArrayList<user> users;
+    ArrayList<user> usersSearched;
     RecyclerViewAdapter3 adapter;
-    EditText editText;
+    EditText searchUser;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
+    SearchAdapter searchAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addpartecipant);
 
-        editText = findViewById(R.id.searchUser);
+        searchUser = findViewById(R.id.searchUser);
         Intent intent = getIntent();
         fAuth = FirebaseAuth.getInstance();
 
@@ -69,7 +75,29 @@ public class AddPartecipantActivity extends AppCompatActivity {
         setUpFirestore();
         loadDataFromFirebase();
 
-        String string = editText.getText().toString().trim();
+        searchUser.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(!editable.toString().isEmpty())
+                   setAdapter(editable.toString());
+
+                else {
+                    usersSearched = new ArrayList<user>();
+                    usersSearched.clear();
+                    recyclerView.removeAllViews();
+                }
+            }
+        });
 
 
         /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -85,6 +113,50 @@ public class AddPartecipantActivity extends AppCompatActivity {
                 return false;
             }
         });*/
+
+
+    }
+
+    private void setAdapter(final String searchedString) {
+
+        recyclerView = findViewById(R.id.recycler3);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
+
+        fStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String fullName = "";
+                usersSearched = new ArrayList<user>();
+                usersSearched.clear();
+                recyclerView.removeAllViews();
+                for(DocumentSnapshot querySnapshot: task.getResult()){
+                    String userid =  querySnapshot.getId();
+
+                        String name = querySnapshot.getString("nome");
+                        String surname = querySnapshot.getString("cognome");
+                        fullName = name + " " + surname;
+                        user utente = new user(name,
+                                surname, querySnapshot.getString("e-mail"),
+                                querySnapshot.getString("password"), userid);
+
+
+                    if(fullName.toLowerCase().contains(searchedString.toLowerCase())){
+                       usersSearched.add(utente);
+                       Log.d("fullName", utente.getNome() + " " + utente.getCognome() );
+                    }
+
+                }
+                searchAdapter = new SearchAdapter(AddPartecipantActivity.this, usersSearched, getApplicationContext());
+                recyclerView.setAdapter(searchAdapter);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
 
 
     }

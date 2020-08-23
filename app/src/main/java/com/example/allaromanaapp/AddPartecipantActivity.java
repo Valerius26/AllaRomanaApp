@@ -133,7 +133,7 @@ public class AddPartecipantActivity extends AppCompatActivity {
                 recyclerView.removeAllViews();
                 for(DocumentSnapshot querySnapshot: task.getResult()){
                     String userid =  querySnapshot.getId();
-
+                    if(!userid.equals(userID)) {
                         String name = querySnapshot.getString("nome");
                         String surname = querySnapshot.getString("cognome");
                         fullName = name + " " + surname;
@@ -142,11 +142,11 @@ public class AddPartecipantActivity extends AppCompatActivity {
                                 querySnapshot.getString("password"), userid);
 
 
-                    if(fullName.toLowerCase().contains(searchedString.toLowerCase())){
-                       usersSearched.add(utente);
-                       Log.d("fullName", utente.getNome() + " " + utente.getCognome() );
-                    }
+                        if (fullName.toLowerCase().contains(searchedString.toLowerCase())) {
+                            usersSearched.add(utente);
 
+                        }
+                    }
                 }
                 searchAdapter = new SearchAdapter(AddPartecipantActivity.this, usersSearched, getApplicationContext());
                 recyclerView.setAdapter(searchAdapter);

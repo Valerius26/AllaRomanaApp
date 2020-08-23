@@ -46,7 +46,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchHolder> {
 
 
         String name = usersSearched.get(position).getNome() + " " + usersSearched.get(position).getCognome();
-        Log.d("FULLNAME" , name);
         holder.Name.setText(name);
         holder.Profile.setOnClickListener(new View.OnClickListener() {
             @Override

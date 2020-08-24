@@ -102,7 +102,8 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                  for(DocumentSnapshot querySnapshot : task.getResult()){
-                     group gruppo = new group(querySnapshot.getString("Nome gruppo"), querySnapshot.getString("Descrizione"), querySnapshot.getId());
+                     group gruppo = new group(querySnapshot.getString("Nome gruppo"), querySnapshot.getString("Descrizione"),
+                             querySnapshot.getId(), querySnapshot.getString("Creato da"));
                      groups.add(gruppo);
                  }
 

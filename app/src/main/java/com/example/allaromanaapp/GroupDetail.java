@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 public class GroupDetail extends AppCompatActivity {
 
-    private String groupID, userID;
+    private String groupID, userID, creatorID;
     private TextView nomeGruppo, descrizioneGruppo;
     RecyclerView recyclerView;
     FloatingActionButton CreatePartecipantBtn;
@@ -51,6 +51,7 @@ public class GroupDetail extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
 
         groupID = intent.getStringExtra("idGruppo");
+        creatorID = intent.getStringExtra("idCreatore");
         userID = fAuth.getCurrentUser().getUid();
 
         nomeGruppo = findViewById(R.id.groupTitleDet);
@@ -75,12 +76,15 @@ public class GroupDetail extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),AddPartecipantActivity.class);
                 intent.putExtra("idGruppo",groupID);
+                intent.putExtra("idCreatore",creatorID);
                 startActivity(intent);
             }
         });
 
 
     }
+
+
 
     private void loadGroupInfo() {
         DocumentReference docRef = fStore.collection("users").document(userID).collection("groups").

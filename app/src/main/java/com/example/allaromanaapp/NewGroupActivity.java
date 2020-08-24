@@ -98,11 +98,11 @@ public class NewGroupActivity extends AppCompatActivity {
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 nome = value.getString("nome");
                 cognome = value.getString("cognome");
-                Log.d("NOME",nome);
             }
         });
 
-        //crea il gruppo
+
+        //crea il gruppo nell'utente
         CollectionReference collectionReference = fStore.collection("users").document(userID).collection("groups");
         collectionReference.add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
@@ -118,6 +118,7 @@ public class NewGroupActivity extends AppCompatActivity {
 
             }
         });
+
 
 
     }

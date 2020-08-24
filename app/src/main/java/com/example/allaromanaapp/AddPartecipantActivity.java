@@ -41,7 +41,7 @@ import java.util.Comparator;
 
 public class AddPartecipantActivity extends AppCompatActivity {
 
-    private String groupID,userID;
+    private String groupID,userID,creatorID;
     RecyclerView recyclerView;
     ArrayList<user> users;
     ArrayList<user> usersSearched;
@@ -60,6 +60,7 @@ public class AddPartecipantActivity extends AppCompatActivity {
         searchUser = findViewById(R.id.searchUser);
         Intent intent = getIntent();
         groupID = intent.getStringExtra("idGruppo");
+        creatorID = intent.getStringExtra("idCreatore");
         fAuth = FirebaseAuth.getInstance();
 
         fStore = FirebaseFirestore.getInstance();
@@ -135,6 +136,7 @@ public class AddPartecipantActivity extends AppCompatActivity {
                 recyclerView.removeAllViews();
                 for(DocumentSnapshot querySnapshot: task.getResult()){
                     String userid =  querySnapshot.getId();
+
                     if(!userid.equals(userID)) {
                         String name = querySnapshot.getString("nome");
                         String surname = querySnapshot.getString("cognome");
@@ -163,6 +165,33 @@ public class AddPartecipantActivity extends AppCompatActivity {
 
     }
 
+    private boolean partecipantExists(final String userid) {
+        final ArrayList<String> idpartecipants = new ArrayList<>();
+        fStore.collection("users").document(creatorID).collection("groups").document(groupID).collection("partecipants").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot querySnapshot : task.getResult()){
+                        String idPartecipant = querySnapshot.getString("idUtente");
+                        idpartecipants.add(idPartecipant);
+                    }
+                }
+
+        });
+        for(int x = 0; x < idpartecipants.size(); x++){
+            Log.d("iddddddddddddd",idpartecipants.get(x));
+            Log.d("iddddddddddddd",idpartecipants.get(x));
+            Log.d("iddddddddddddd",idpartecipants.get(x));
+            Log.d("iddddddddddddd",idpartecipants.get(x));
+            Log.d("iddddddddddddd",idpartecipants.get(x));
+            if(idpartecipants.get(x).equals(userid))
+                return true;
+        }
+
+
+
+        return false;
+    }
+
 
 
 
@@ -180,14 +209,14 @@ public class AddPartecipantActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for(DocumentSnapshot querySnapshot : task.getResult()){
                     String userid =  querySnapshot.getId();
-                    if(!userid.equals(userID)) {
+                    if(!userid.equals(userID) || partecipantExists(userid)) {
                         user utente = new user(querySnapshot.getString("nome"),
                                 querySnapshot.getString("cognome"), querySnapshot.getString("e-mail"),
                                 querySnapshot.getString("password"), userid);
                         users.add(utente);
                     }
                 }
-                adapter = new RecyclerViewAdapter3(AddPartecipantActivity.this, users, groupID, getApplicationContext() );
+                adapter = new RecyclerViewAdapter3(AddPartecipantActivity.this, users, groupID, creatorID, getApplicationContext() );
                 recyclerView.setAdapter(adapter);
             }
         }).addOnFailureListener(new OnFailureListener() {

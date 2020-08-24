@@ -43,8 +43,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
          group gruppo = groups.get(position);
          final String groupID = gruppo.getGroupID();
-
-             Log.d("nome", "" + groups.get(position).getTitle());
+         final String creatorID = gruppo.getCreatorID();
 
              holder.Title.setText(groups.get(position).getTitle());
              holder.Description.setText(groups.get(position).getDescription());
@@ -56,6 +55,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
                  //apri il gruppo
                  Intent intent = new Intent(context,GroupDetail.class);
                  intent.putExtra("idGruppo", groupID);
+                 intent.putExtra("idCreatore",creatorID);
                  context.startActivity(intent);
              }
          });

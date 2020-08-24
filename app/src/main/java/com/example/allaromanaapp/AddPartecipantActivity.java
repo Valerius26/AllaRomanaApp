@@ -51,6 +51,7 @@ public class AddPartecipantActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     SearchAdapter searchAdapter;
+    String idPartecipant = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +138,7 @@ public class AddPartecipantActivity extends AppCompatActivity {
                 for(DocumentSnapshot querySnapshot: task.getResult()){
                     String userid =  querySnapshot.getId();
 
-                    if(!userid.equals(userID)) {
+                    if(!userid.equals(userID) && !partecipantExists(userid)) {
                         String name = querySnapshot.getString("nome");
                         String surname = querySnapshot.getString("cognome");
                         fullName = name + " " + surname;
@@ -167,29 +168,21 @@ public class AddPartecipantActivity extends AppCompatActivity {
 
     private boolean partecipantExists(final String userid) {
         final ArrayList<String> idpartecipants = new ArrayList<>();
+
         fStore.collection("users").document(creatorID).collection("groups").document(groupID).collection("partecipants").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for(DocumentSnapshot querySnapshot : task.getResult()){
-                        String idPartecipant = querySnapshot.getString("idUtente");
+                        idPartecipant = querySnapshot.getString("idUtente");
                         idpartecipants.add(idPartecipant);
+
                     }
                 }
 
+
         });
-        for(int x = 0; x < idpartecipants.size(); x++){
-            Log.d("iddddddddddddd",idpartecipants.get(x));
-            Log.d("iddddddddddddd",idpartecipants.get(x));
-            Log.d("iddddddddddddd",idpartecipants.get(x));
-            Log.d("iddddddddddddd",idpartecipants.get(x));
-            Log.d("iddddddddddddd",idpartecipants.get(x));
-            if(idpartecipants.get(x).equals(userid))
-                return true;
-        }
 
-
-
-        return false;
+            return false;
     }
 
 
@@ -209,7 +202,7 @@ public class AddPartecipantActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for(DocumentSnapshot querySnapshot : task.getResult()){
                     String userid =  querySnapshot.getId();
-                    if(!userid.equals(userID) || partecipantExists(userid)) {
+                    if(!userid.equals(userID) && !partecipantExists(userid)) {
                         user utente = new user(querySnapshot.getString("nome"),
                                 querySnapshot.getString("cognome"), querySnapshot.getString("e-mail"),
                                 querySnapshot.getString("password"), userid);

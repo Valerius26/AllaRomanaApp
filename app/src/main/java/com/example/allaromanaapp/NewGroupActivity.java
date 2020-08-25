@@ -74,13 +74,12 @@ public class NewGroupActivity extends AppCompatActivity {
 
         else{
             createGroup(title,description);
-
         }
 
 
     }
 
-    private void createGroup(String groupTitle, String groupDescription) {
+    private void createGroup(final String groupTitle, final String groupDescription) {
 
         userID = fAuth.getCurrentUser().getUid();
 
@@ -107,6 +106,7 @@ public class NewGroupActivity extends AppCompatActivity {
         collectionReference.add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
+                createGroupAll(userID,groupTitle,groupDescription,nome,cognome);
                 createFirstPartecipant(documentReference, nome, cognome);
                 Toast.makeText(NewGroupActivity.this, getString(R.string.GruppoCreato) , Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -119,6 +119,61 @@ public class NewGroupActivity extends AppCompatActivity {
             }
         });
 
+
+
+
+    }
+
+    private void createGroupAll(String userID, String groupTitle, String groupDescription, final String nome, final String cognome) {
+        userID = fAuth.getCurrentUser().getUid();
+
+
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("Nome gruppo", ""+groupTitle);
+        hashMap.put("Descrizione", ""+groupDescription);
+        hashMap.put("Creato da", ""+userID);
+
+
+        //crea il gruppo nell'utente
+        CollectionReference collectionReference = fStore.collection("AllGroups");
+        collectionReference.add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                createFirstPartecipantInAllGroups(documentReference, nome, cognome);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+
+    private void createFirstPartecipantInAllGroups(DocumentReference documentReference, String nome, String cognome) {
+        String groupID = documentReference.getId();
+
+
+
+        HashMap<String,String> hashMap1 = new HashMap<>();
+        hashMap1.put("Ruolo", "creatore");
+        hashMap1.put("idUtente", ""+userID);
+        hashMap1.put("idGruppo", ""+groupID);
+        hashMap1.put("nomePartecipante",""+nome);
+        hashMap1.put("cognomePartecipante",""+cognome);
+
+
+        CollectionReference collectionReference1 = fStore.collection("AllGroups").document(groupID).collection("partecipants");
+        collectionReference1.add(hashMap1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
 
 
     }
@@ -163,6 +218,7 @@ public class NewGroupActivity extends AppCompatActivity {
 
 
     }
+
 
 
 }

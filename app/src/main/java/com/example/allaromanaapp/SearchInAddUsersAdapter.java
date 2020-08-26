@@ -1,6 +1,7 @@
 package com.example.allaromanaapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,8 +36,10 @@ public class SearchInAddUsersAdapter extends RecyclerView.Adapter<ViewHolderAddU
             @Override
             public void onItemClick(View view, int position) {
 
-                String fullName = usersList.get(position).getCognome() + " " + usersList.get(position).getNome();
-                Toast.makeText(context,""+fullName,Toast.LENGTH_SHORT).show();
+                String clickedUserID = usersList.get(position).getIdUser();
+                Intent intent = new Intent(context,NotCurrentProfileActivity.class);
+                intent.putExtra("idUtente", clickedUserID);
+                context.startActivity(intent);
             }
 
             @Override

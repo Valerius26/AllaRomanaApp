@@ -2,7 +2,6 @@ package com.example.allaromanaapp;
 
 public class User {
     private String nome,cognome,email,password,idUser;
-    int gruppi = 0;
     Long bilancio = Long.valueOf(0);
 
     public String getIdUser() {
@@ -23,7 +22,6 @@ public class User {
         this.cognome = cognome;
         this.email = email;
         this.password = password;
-        this.gruppi = gruppi;
         this.bilancio = bilancio;
         this.idUser = idUser;
     }
@@ -58,14 +56,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public int getGruppi() {
-        return gruppi;
-    }
-
-    public void setGruppi() {
-        gruppi = gruppi + 1;
     }
 
     public Long getBilancio() {

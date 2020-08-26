@@ -5,10 +5,12 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,13 +18,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddUsers extends AppCompatActivity {
     EditText searchUser;
@@ -31,9 +41,11 @@ public class AddUsers extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     FirebaseFirestore db;
+    FirebaseAuth firebaseAuth;
     ViewAdapterAddUsers adapter;
     SearchInAddUsersAdapter searchAdapter;
-
+    String currentUserID;
+    String name, surname = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +54,12 @@ public class AddUsers extends AppCompatActivity {
 
         usersList = new ArrayList<>();
         usersSearched = new ArrayList<>();
+
         db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        currentUserID = firebaseAuth.getCurrentUser().getUid();
+
+        createAccount(currentUserID);
 
         searchUser = findViewById(R.id.searchUser);
         recyclerView = (RecyclerView) findViewById(R.id.recycler3);
@@ -79,6 +96,9 @@ public class AddUsers extends AppCompatActivity {
 
     }
 
+
+
+
     private void setAdapter(final String searchedString) {
         recyclerView = findViewById(R.id.recycler3);
         recyclerView.setHasFixedSize(true);
@@ -92,19 +112,19 @@ public class AddUsers extends AppCompatActivity {
                 usersSearched = new ArrayList<User>();
                 usersSearched.clear();
                 recyclerView.removeAllViews();
-                for(DocumentSnapshot querySnapshot: task.getResult()){
-                    String userid =  querySnapshot.getId();
-
-                        String name = querySnapshot.getString("nome");
-                        String surname = querySnapshot.getString("cognome");
-                        fullName = name + " " + surname;
-                        User utente = new User(name,
-                                surname, querySnapshot.getString("e-mail"),
-                                querySnapshot.getString("password"), userid,(Long) querySnapshot.get("bilancio"));
+                for(DocumentSnapshot documentSnapshot: task.getResult()){
+                    String currentID = documentSnapshot.getId();
+                    User user = new User();
+                    if(!currentUserID.equals(currentID)) {
+                        user = new User(documentSnapshot.getString("nome"), documentSnapshot.getString("cognome"),
+                                documentSnapshot.getString("e-mail"), documentSnapshot.getString("password"),
+                                currentID, (Long) documentSnapshot.get("bilancio"));
+                        usersList.add(user);
+                    }
 
 
                         if (fullName.toLowerCase().contains(searchedString.toLowerCase())) {
-                            usersSearched.add(utente);
+                            usersSearched.add(user);
 
                         }
                     }
@@ -129,10 +149,13 @@ public class AddUsers extends AppCompatActivity {
 
 
                 for(DocumentSnapshot documentSnapshot: task.getResult()){
-                    User user = new User(documentSnapshot.getString("nome"),documentSnapshot.getString("cognome"),
-                            documentSnapshot.getString("e-mail"),documentSnapshot.getString("password"),
-                            documentSnapshot.getId(), (Long) documentSnapshot.get("bilancio"));
-                    usersList.add(user);
+                    String currentID = documentSnapshot.getId();
+                    if(!currentUserID.equals(currentID)) {
+                        User user = new User(documentSnapshot.getString("nome"), documentSnapshot.getString("cognome"),
+                                documentSnapshot.getString("e-mail"), documentSnapshot.getString("password"),
+                                currentID, (Long) documentSnapshot.get("bilancio"));
+                        usersList.add(user);
+                    }
                 }
                 adapter = new ViewAdapterAddUsers(AddUsers.this, usersList, getApplicationContext());
                 recyclerView.setAdapter(adapter);
@@ -144,5 +167,69 @@ public class AddUsers extends AppCompatActivity {
                 Toast.makeText(AddUsers.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void createAccount(final String creatorID) {
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("Creatore",""+creatorID);
+        hashMap.put("id in All","null");
+        db.collection("users").document(creatorID).collection("accounts").add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                String accountID = documentReference.getId();
+                startFirstPartecipant(accountID,creatorID);
+                createAccountinAllAccounts(accountID,creatorID);
+            }
+        });
+    }
+
+    private void startFirstPartecipant(final String accountID, final String creatorID) {
+        DocumentReference documentReference = db.collection("users").document(creatorID);
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                name = value.getString("nome");
+                surname = value.getString("cognome");
+                createFirstPartecipant(accountID,creatorID,name,surname);
+            }
+        });
+    }
+
+    private void createAccountinAllAccounts(final String accountID, final String creatorID) {
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("id",accountID);
+        hashMap.put("creatore",creatorID);
+
+        db.collection("Allaccounts").add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                String InAllAccountID = documentReference.getId();
+                AddIdInAccount(InAllAccountID,accountID,creatorID);
+            }
+        });
+    }
+
+    private void AddIdInAccount(String inAllAccountID, String accountID, String creatorID) {
+        Map<String,String> map = new HashMap<>();
+        DocumentReference documentReference = db.collection("users").document(creatorID)
+                .collection("accounts").document(accountID);
+
+        documentReference.update("id in All",inAllAccountID);
+    }
+
+    private void createFirstPartecipant(String accountID, String creatorID, String nome, String cognome) {
+        final HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("nomePartecipante",nome);
+        hashMap.put("cognomePartecipante",cognome);
+        hashMap.put("idUtente",creatorID);
+
+        db.collection("users").document(creatorID).collection("accounts").document(accountID)
+                .collection("partecipants").add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+
+            }
+        });
+
     }
 }

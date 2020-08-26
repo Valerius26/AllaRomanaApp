@@ -1,5 +1,6 @@
 package com.example.allaromanaapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchInAddUsersAdapter extends RecyclerView.Adapter<ViewHolderAddUsers> {
@@ -17,6 +19,7 @@ public class SearchInAddUsersAdapter extends RecyclerView.Adapter<ViewHolderAddU
     AddUsers addUsers;
     List<User> usersList;
     Context context;
+    List<User> accountUsers = new ArrayList<>();
 
     public SearchInAddUsersAdapter(AddUsers addUsers, List<User> usersList, Context context) {
         this.addUsers = addUsers;
@@ -51,10 +54,17 @@ public class SearchInAddUsersAdapter extends RecyclerView.Adapter<ViewHolderAddU
         return viewHolderAddUsers;
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolderAddUsers holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolderAddUsers holder, final int position) {
 
         holder.fullName.setText(usersList.get(position).getNome() + " " + usersList.get(position).getCognome());
+        holder.addPartecipant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override

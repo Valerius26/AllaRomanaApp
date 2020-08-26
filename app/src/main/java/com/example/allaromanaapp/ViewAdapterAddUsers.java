@@ -64,9 +64,7 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
             @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View view) {
-                accountUsers.add(usersList.get(position));
-                Toast.makeText(context,usersList.get(position).getNome() + " " + usersList.get(position).getCognome() + " aggiunto",Toast.LENGTH_SHORT).show();
-                holder.addPartecipant.setVisibility(View.INVISIBLE);
+
             }
         });
     }

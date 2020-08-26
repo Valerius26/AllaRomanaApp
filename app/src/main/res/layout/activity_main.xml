@@ -190,7 +190,7 @@
                          <ImageView
                              android:layout_width="50dp"
                              android:layout_height="50dp"
-                             android:src="@drawable/visualizzaimg"
+                             android:src="@drawable/money2img"
                              android:layout_centerInParent="true"/>
 
                          <TextView
@@ -201,7 +201,7 @@
                              android:layout_centerHorizontal="true"
                              android:layout_marginTop="10dp"
                              android:layout_marginBottom="20dp"
-                             android:text="@string/gruppi"
+                             android:text="@string/pagaConto"
                              android:textSize="16sp"
                              tools:ignore="NotSibling,UnknownId" />
 

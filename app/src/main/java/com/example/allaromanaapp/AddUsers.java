@@ -3,11 +3,14 @@ package com.example.allaromanaapp;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,10 +27,12 @@ import java.util.List;
 public class AddUsers extends AppCompatActivity {
     EditText searchUser;
     List<User> usersList;
+    List<User> usersSearched;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     FirebaseFirestore db;
     ViewAdapterAddUsers adapter;
+    SearchInAddUsersAdapter searchAdapter;
 
 
     @Override
@@ -36,6 +41,7 @@ public class AddUsers extends AppCompatActivity {
         setContentView(R.layout.activity_addpartecipant);
 
         usersList = new ArrayList<>();
+        usersSearched = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
 
         searchUser = findViewById(R.id.searchUser);
@@ -46,6 +52,73 @@ public class AddUsers extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         showData();
+
+        searchUser.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(!editable.toString().isEmpty())
+                    setAdapter(editable.toString());
+
+                else {
+                    usersSearched = new ArrayList<User>();
+                    usersSearched.clear();
+                    recyclerView.removeAllViews();
+                }
+            }
+        });
+
+    }
+
+    private void setAdapter(final String searchedString) {
+        recyclerView = findViewById(R.id.recycler3);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
+
+        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String fullName = "";
+                usersSearched = new ArrayList<User>();
+                usersSearched.clear();
+                recyclerView.removeAllViews();
+                for(DocumentSnapshot querySnapshot: task.getResult()){
+                    String userid =  querySnapshot.getId();
+
+                        String name = querySnapshot.getString("nome");
+                        String surname = querySnapshot.getString("cognome");
+                        fullName = name + " " + surname;
+                        User utente = new User(name,
+                                surname, querySnapshot.getString("e-mail"),
+                                querySnapshot.getString("password"), userid,(Long) querySnapshot.get("bilancio"));
+
+
+                        if (fullName.toLowerCase().contains(searchedString.toLowerCase())) {
+                            usersSearched.add(utente);
+
+                        }
+                    }
+
+                searchAdapter = new SearchInAddUsersAdapter(AddUsers.this, usersSearched, getApplicationContext());
+                recyclerView.setAdapter(searchAdapter);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
     }
 
     private void showData() {

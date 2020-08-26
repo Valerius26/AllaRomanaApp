@@ -3,6 +3,7 @@ package com.example.allaromanaapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +30,15 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
     List<User> usersList;
     Context context;
     FirebaseFirestore db;
+    String creatorID, accountID, inAllAccountID;
 
-    public ViewAdapterAddUsers(AddUsers addUsers, List<User> usersList, Context context) {
+    public ViewAdapterAddUsers(AddUsers addUsers, List<User> usersList, Context context, String creatorID, String accountID, String inAllAccountID) {
         this.addUsers = addUsers;
         this.usersList = usersList;
         this.context = context;
+        this.creatorID = creatorID;
+        this.accountID = accountID;
+        this.inAllAccountID = inAllAccountID;
     }
 
     @NonNull
@@ -72,7 +77,7 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
             @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View view) {
-
+                 
             }
         });
     }

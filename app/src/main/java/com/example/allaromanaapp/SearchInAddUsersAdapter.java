@@ -3,6 +3,7 @@ package com.example.allaromanaapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +20,15 @@ public class SearchInAddUsersAdapter extends RecyclerView.Adapter<ViewHolderAddU
     AddUsers addUsers;
     List<User> usersList;
     Context context;
-    List<User> accountUsers = new ArrayList<>();
+    String creatorID,accountID,inAllAccountID;
 
-    public SearchInAddUsersAdapter(AddUsers addUsers, List<User> usersList, Context context) {
+    public SearchInAddUsersAdapter(AddUsers addUsers, List<User> usersList, Context context, String creatorID, String accountID, String inAllAccountID) {
         this.addUsers = addUsers;
         this.usersList = usersList;
         this.context = context;
+        this.creatorID = creatorID;
+        this.accountID = accountID;
+        this.inAllAccountID = inAllAccountID;
     }
 
     @NonNull
@@ -62,7 +66,7 @@ public class SearchInAddUsersAdapter extends RecyclerView.Adapter<ViewHolderAddU
         holder.addPartecipant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                 String selectedUserID = usersList.get(position).getIdUser();
             }
         });
     }

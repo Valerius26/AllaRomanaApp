@@ -2,6 +2,7 @@ package com.example.allaromanaapp;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -45,12 +46,20 @@ public class AddUsers extends AppCompatActivity {
     ViewAdapterAddUsers adapter;
     SearchInAddUsersAdapter searchAdapter;
     String currentUserID;
-    String name, surname = "";
+    String creatorID,accountID,inAllAccountID;
+    String name = "";
+    String surname = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addpartecipant);
+
+        Intent intent = getIntent();
+        creatorID = intent.getStringExtra("idCreatore");
+        accountID = intent.getStringExtra("idAccount");
+        inAllAccountID = intent.getStringExtra("idAccountInAll");
+
 
         usersList = new ArrayList<>();
         usersSearched = new ArrayList<>();
@@ -59,7 +68,7 @@ public class AddUsers extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserID = firebaseAuth.getCurrentUser().getUid();
 
-        createAccount(currentUserID);
+
 
         searchUser = findViewById(R.id.searchUser);
         recyclerView = (RecyclerView) findViewById(R.id.recycler3);
@@ -93,6 +102,8 @@ public class AddUsers extends AppCompatActivity {
                 }
             }
         });
+
+
 
     }
 
@@ -129,7 +140,7 @@ public class AddUsers extends AppCompatActivity {
                         }
                     }
 
-                searchAdapter = new SearchInAddUsersAdapter(AddUsers.this, usersSearched, getApplicationContext());
+                searchAdapter = new SearchInAddUsersAdapter(AddUsers.this, usersSearched, getApplicationContext(),creatorID,accountID,inAllAccountID);
                 recyclerView.setAdapter(searchAdapter);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -157,7 +168,7 @@ public class AddUsers extends AppCompatActivity {
                         usersList.add(user);
                     }
                 }
-                adapter = new ViewAdapterAddUsers(AddUsers.this, usersList, getApplicationContext());
+                adapter = new ViewAdapterAddUsers(AddUsers.this, usersList, getApplicationContext(),creatorID,accountID,inAllAccountID);
                 recyclerView.setAdapter(adapter);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -169,67 +180,5 @@ public class AddUsers extends AppCompatActivity {
         });
     }
 
-    private void createAccount(final String creatorID) {
-        HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put("Creatore",""+creatorID);
-        hashMap.put("id in All","null");
-        db.collection("users").document(creatorID).collection("accounts").add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                String accountID = documentReference.getId();
-                startFirstPartecipant(accountID,creatorID);
-                createAccountinAllAccounts(accountID,creatorID);
-            }
-        });
-    }
 
-    private void startFirstPartecipant(final String accountID, final String creatorID) {
-        DocumentReference documentReference = db.collection("users").document(creatorID);
-        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                name = value.getString("nome");
-                surname = value.getString("cognome");
-                createFirstPartecipant(accountID,creatorID,name,surname);
-            }
-        });
-    }
-
-    private void createAccountinAllAccounts(final String accountID, final String creatorID) {
-        HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put("id",accountID);
-        hashMap.put("creatore",creatorID);
-
-        db.collection("Allaccounts").add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                String InAllAccountID = documentReference.getId();
-                AddIdInAccount(InAllAccountID,accountID,creatorID);
-            }
-        });
-    }
-
-    private void AddIdInAccount(String inAllAccountID, String accountID, String creatorID) {
-        Map<String,String> map = new HashMap<>();
-        DocumentReference documentReference = db.collection("users").document(creatorID)
-                .collection("accounts").document(accountID);
-
-        documentReference.update("id in All",inAllAccountID);
-    }
-
-    private void createFirstPartecipant(String accountID, String creatorID, String nome, String cognome) {
-        final HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put("nomePartecipante",nome);
-        hashMap.put("cognomePartecipante",cognome);
-        hashMap.put("idUtente",creatorID);
-
-        db.collection("users").document(creatorID).collection("accounts").document(accountID)
-                .collection("partecipants").add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-
-            }
-        });
-
-    }
 }

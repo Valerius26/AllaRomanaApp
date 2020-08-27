@@ -117,7 +117,7 @@ public class AddUsers extends AppCompatActivity {
 
     }
 
-    private void minTwoPartecipant(String creatorID, String accountID) {
+    private void minTwoPartecipant(final String creatorID, final String accountID) {
         db.collection("users").document(creatorID).collection("accounts").document(accountID)
                 .collection("partecipants").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -132,7 +132,10 @@ public class AddUsers extends AppCompatActivity {
                     Log.d("dueeeeeeeeeeeeeeeeeee",""+partecipants.size());
                 }
                 else{
-                    //parti con la visualizzazione dei partecipanti
+                    Intent intent = new Intent(getApplicationContext(),SelectPaying.class);
+                    intent.putExtra("idCreatore", creatorID);
+                    intent.putExtra("idAccount",accountID);
+                    getApplicationContext().startActivity(intent);
                 }
             }
         });

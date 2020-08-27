@@ -33,6 +33,7 @@
 
         <activity android:name=".AddUsers"/>
 
+        <activity android:name=".SelectPaying"/>
     </application>
 
 </manifest>

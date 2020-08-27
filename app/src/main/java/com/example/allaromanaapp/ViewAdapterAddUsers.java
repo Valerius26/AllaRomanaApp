@@ -13,12 +13,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,8 +68,9 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
             @Override
             public void onItemLongClick(View view, int position) {
                 db = FirebaseFirestore.getInstance();
-                createPartecipant(usersList.get(position).getIdUser(),usersList.get(position).getNome(),
+                partecipantExists(usersList.get(position).getIdUser(),usersList.get(position).getNome(),
                         usersList.get(position).getCognome());
+
             }
         });
 
@@ -76,26 +80,49 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderAddUsers holder, final int position) {
 
-        final String selectedUserID = usersList.get(position).getIdUser();
         String name = usersList.get(position).getNome();
         String surname = usersList.get(position).getCognome();
         holder.fullName.setText(name + " " + surname);
 
     }
 
-    private void createPartecipant(final String selectedUserID, final String name, final String surname) {
-        HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put("Creatore",creatorID);
-        hashMap.put("IdAccount in creatore",accountID);
-        hashMap.put("IdAccount in all", inAllAccountID);
+    private void createPartecipant(final String selectedUserID, final String name, final String surname,ArrayList duplicati) {
+        if(duplicati.size() == 0) {
 
-        db.collection("users").document(selectedUserID).collection("accounts").add(hashMap)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        createPartecipantInCreator(name,surname,selectedUserID);
+
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("Creatore", creatorID);
+            hashMap.put("IdAccount in creatore", accountID);
+            hashMap.put("IdAccount in all", inAllAccountID);
+
+
+            db.collection("users").document(selectedUserID).collection("accounts").add(hashMap)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            createPartecipantInCreator(name, surname, selectedUserID);
+                        }
+                    });
+        }
+    }
+
+    private void partecipantExists(final String selectedUserID, final String nome, final String cognome) {
+        db.collection("users").document(creatorID).collection("accounts")
+                .document(accountID).collection("partecipants").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                ArrayList<String> duplicate = new ArrayList<>();
+                for(DocumentSnapshot documentSnapshot: task.getResult()){
+                    String idUtente = documentSnapshot.getString("idUtente");
+                    if(idUtente.equals(selectedUserID)){
+                        duplicate.add(idUtente);
+                        Toast.makeText(context,"non puoi aggiungere un utente che già partecipa al conto",Toast.LENGTH_SHORT).show();
                     }
-                });
+
+                }
+                createPartecipant(selectedUserID,nome,cognome,duplicate);
+            }
+        });
 
     }
 

@@ -13,7 +13,6 @@ public class ViewHolderAddUsers extends RecyclerView.ViewHolder {
 
     ImageView profile;
     TextView fullName;
-    FloatingActionButton addPartecipant;
     View usersView;
 
     public ViewHolderAddUsers(@NonNull View itemView) {
@@ -39,7 +38,6 @@ public class ViewHolderAddUsers extends RecyclerView.ViewHolder {
 
         profile = itemView.findViewById(R.id.iconUser);
         fullName = itemView.findViewById(R.id.userName);
-        addPartecipant = itemView.findViewById(R.id.addPartecipant);
     }
 
     private ViewHolderAddUsers.ClickListener clickListener;

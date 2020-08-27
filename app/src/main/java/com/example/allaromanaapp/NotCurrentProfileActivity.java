@@ -73,8 +73,6 @@ public class NotCurrentProfileActivity extends AppCompatActivity {
                     email.setText(value.getString("e-mail"));
                     bilancio2 = Math.toIntExact((Long) value.get("bilancio"));
                     bilancio.setText(String.valueOf(bilancio2));
-                    gruppi2 = Math.toIntExact((Long) value.get("gruppi"));
-                    gruppi.setText(String.valueOf(gruppi2));
                 }
             }
         });

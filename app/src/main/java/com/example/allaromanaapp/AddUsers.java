@@ -71,11 +71,10 @@ public class AddUsers extends AppCompatActivity {
 
 
         searchUser = findViewById(R.id.searchUser);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler3);
-
+        recyclerView = findViewById(R.id.recycler3);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
 
         showData();
 
@@ -109,8 +108,8 @@ public class AddUsers extends AppCompatActivity {
 
 
 
-
     private void setAdapter(final String searchedString) {
+
         recyclerView = findViewById(R.id.recycler3);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -123,23 +122,24 @@ public class AddUsers extends AppCompatActivity {
                 usersSearched = new ArrayList<User>();
                 usersSearched.clear();
                 recyclerView.removeAllViews();
-                for(DocumentSnapshot documentSnapshot: task.getResult()){
-                    String currentID = documentSnapshot.getId();
-                    User user = new User();
-                    if(!currentUserID.equals(currentID)) {
-                        user = new User(documentSnapshot.getString("nome"), documentSnapshot.getString("cognome"),
-                                documentSnapshot.getString("e-mail"), documentSnapshot.getString("password"),
-                                currentID, (Long) documentSnapshot.get("bilancio"));
-                        usersList.add(user);
-                    }
+                for(DocumentSnapshot querySnapshot: task.getResult()){
+                    String userid =  querySnapshot.getId();
+
+                    if(!userid.equals(currentUserID)) {
+                        String name = querySnapshot.getString("nome");
+                        String surname = querySnapshot.getString("cognome");
+                        fullName = name + " " + surname;
+                        User utente = new User(name,
+                                surname, querySnapshot.getString("e-mail"),
+                                querySnapshot.getString("password"), userid,(Long) querySnapshot.get("bilancio"));
 
 
                         if (fullName.toLowerCase().contains(searchedString.toLowerCase())) {
-                            usersSearched.add(user);
+                            usersSearched.add(utente);
 
                         }
                     }
-
+                }
                 searchAdapter = new SearchInAddUsersAdapter(AddUsers.this, usersSearched, getApplicationContext(),creatorID,accountID,inAllAccountID);
                 recyclerView.setAdapter(searchAdapter);
             }
@@ -150,7 +150,10 @@ public class AddUsers extends AppCompatActivity {
             }
         });
 
+
     }
+
+
 
     private void showData() {
 

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +33,7 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
     FirebaseFirestore db;
     String creatorID, accountID, inAllAccountID;
 
+
     public ViewAdapterAddUsers(AddUsers addUsers, List<User> usersList, Context context, String creatorID, String accountID, String inAllAccountID) {
         this.addUsers = addUsers;
         this.usersList = usersList;
@@ -53,7 +55,7 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
         viewHolderAddUsers.setOnClickListener(new ViewHolderAddUsers.ClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                db = FirebaseFirestore.getInstance();
                 String clickedUserID = usersList.get(position).getIdUser();
                 Intent intent = new Intent(context,NotCurrentProfileActivity.class);
                 intent.putExtra("idUtente", clickedUserID);
@@ -62,7 +64,9 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
 
             @Override
             public void onItemLongClick(View view, int position) {
-
+                db = FirebaseFirestore.getInstance();
+                createPartecipant(usersList.get(position).getIdUser(),usersList.get(position).getNome(),
+                        usersList.get(position).getCognome());
             }
         });
 
@@ -71,19 +75,45 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderAddUsers holder, final int position) {
-        db = FirebaseFirestore.getInstance();
-        holder.fullName.setText(usersList.get(position).getNome() + " " + usersList.get(position).getCognome());
-        holder.addPartecipant.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("RestrictedApi")
-            @Override
-            public void onClick(View view) {
-                 
-            }
-        });
+
+        final String selectedUserID = usersList.get(position).getIdUser();
+        String name = usersList.get(position).getNome();
+        String surname = usersList.get(position).getCognome();
+        holder.fullName.setText(name + " " + surname);
+
     }
 
+    private void createPartecipant(final String selectedUserID, final String name, final String surname) {
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("Creatore",creatorID);
+        hashMap.put("IdAccount in creatore",accountID);
+        hashMap.put("IdAccount in all", inAllAccountID);
 
+        db.collection("users").document(selectedUserID).collection("accounts").add(hashMap)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        createPartecipantInCreator(name,surname,selectedUserID);
+                    }
+                });
 
+    }
+
+    public void createPartecipantInCreator(final String name, final String surname, String selectedUserID){
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("nomePartecipante",name);
+        hashMap.put("cognomePartecipante",surname);
+        hashMap.put("idUtente",selectedUserID);
+
+        db.collection("users").document(creatorID).collection("accounts")
+                .document(accountID).collection("partecipants").add(hashMap)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(context, name + " " + surname + " aggiunto", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
     @Override
     public int getItemCount() {

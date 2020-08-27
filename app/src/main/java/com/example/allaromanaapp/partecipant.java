@@ -1,21 +1,9 @@
 package com.example.allaromanaapp;
 
 public class partecipant {
-    public String getRuolo() {
-        return Ruolo;
-    }
 
-    public void setRuolo(String ruolo) {
-        Ruolo = ruolo;
-    }
-
-    public String getIdGruppo() {
-        return idGruppo;
-    }
-
-    public void setIdGruppo(String idGruppo) {
-        this.idGruppo = idGruppo;
-    }
+    private String idUtente;
+    private String nomeP;
 
     public String getIdUtente() {
         return idUtente;
@@ -25,49 +13,48 @@ public class partecipant {
         this.idUtente = idUtente;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeP() {
+        return nomeP;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeP(String nomeP) {
+        this.nomeP = nomeP;
     }
 
-    public String getCognome() {
-        return cognome;
+    public String getCognomeP() {
+        return cognomeP;
     }
 
-    public void setCognome(String cognome) {
-        this.cognome = cognome;
+    public void setCognomeP(String cognomeP) {
+        this.cognomeP = cognomeP;
     }
 
-    private String idPartecipante;
-    private String Ruolo;
-
-    public String getIdPartecipante() {
-        return idPartecipante;
-    }
-
-    public void setIdPartecipante(String idPartecipante) {
-        this.idPartecipante = idPartecipante;
-    }
-
-    private String idGruppo;
-    private String idUtente;
-    private String nome, cognome;
+    private String cognomeP;
 
     public partecipant(){
 
     }
 
-    public partecipant(String Ruolo, String idGruppo, String idUtente, String nome, String cognome, String idPartecipante){
-        this.Ruolo = Ruolo;
-        this.idGruppo = idGruppo;
-        this.idUtente = idUtente;
-        this.nome = nome;
-        this.cognome = cognome;
-        this.idPartecipante = idPartecipante;
+    public partecipant(String nome, String cognome, String idPartecipante){
+        this.nomeP = nome;
+        this.cognomeP = cognome;
+        this.idUtente = idPartecipante;
     }
+
+    public String getIdPartecipante() {
+        return idUtente;
+    }
+
+    public void setIdPartecipante(String idPartecipante) {
+        this.idUtente = idPartecipante;
+    }
+
+
+
+
+
+
+
 
 
 

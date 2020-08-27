@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -49,6 +51,7 @@ public class AddUsers extends AppCompatActivity {
     String creatorID,accountID,inAllAccountID;
     String name = "";
     String surname = "";
+    Button next;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,8 @@ public class AddUsers extends AppCompatActivity {
 
         searchUser = findViewById(R.id.searchUser);
         recyclerView = findViewById(R.id.recycler3);
+        next = findViewById(R.id.nextBtn);
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
@@ -103,9 +108,35 @@ public class AddUsers extends AppCompatActivity {
         });
 
 
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                minTwoPartecipant(creatorID,accountID);
+            }
+        });
 
     }
 
+    private void minTwoPartecipant(String creatorID, String accountID) {
+        db.collection("users").document(creatorID).collection("accounts").document(accountID)
+                .collection("partecipants").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                ArrayList<String> partecipants = new ArrayList<>();
+                for(DocumentSnapshot documentSnapshot : task.getResult()){
+                    String id = documentSnapshot.getId();
+                    partecipants.add(id);
+                }
+                if(partecipants.size() < 2){
+                    Toast.makeText(AddUsers.this,"aggiungi un partecipante", Toast.LENGTH_SHORT).show();
+                    Log.d("dueeeeeeeeeeeeeeeeeee",""+partecipants.size());
+                }
+                else{
+                    //parti con la visualizzazione dei partecipanti
+                }
+            }
+        });
+    }
 
 
     private void setAdapter(final String searchedString) {

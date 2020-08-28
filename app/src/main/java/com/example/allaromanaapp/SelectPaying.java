@@ -156,6 +156,7 @@ public class SelectPaying extends AppCompatActivity {
         final int credit = (int) (importNumber/partecipantsSize);
         hashMap.put("credito",""+credit);
         hashMap.put("idDebitore",debtor);
+        hashMap.put("idCreatoreConto",creatorID);
 
 
         db.collection("users").document(pagante).collection("credits")

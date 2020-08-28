@@ -42,15 +42,12 @@ public class AddUsers extends AppCompatActivity {
     List<User> usersList;
     List<User> usersSearched;
     RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
     ViewAdapterAddUsers adapter;
     SearchInAddUsersAdapter searchAdapter;
     String currentUserID;
-    String creatorID,accountID,inAllAccountID;
-    String name = "";
-    String surname = "";
+    String creatorID,accountID;
     Button next;
 
     @Override
@@ -61,8 +58,6 @@ public class AddUsers extends AppCompatActivity {
         Intent intent = getIntent();
         creatorID = intent.getStringExtra("idCreatore");
         accountID = intent.getStringExtra("idAccount");
-        inAllAccountID = intent.getStringExtra("idAccountInAll");
-
 
         usersList = new ArrayList<>();
         usersSearched = new ArrayList<>();
@@ -174,7 +169,7 @@ public class AddUsers extends AppCompatActivity {
                         }
                     }
                 }
-                searchAdapter = new SearchInAddUsersAdapter(AddUsers.this, usersSearched, getApplicationContext(),creatorID,accountID,inAllAccountID);
+                searchAdapter = new SearchInAddUsersAdapter(AddUsers.this, usersSearched, getApplicationContext(),creatorID,accountID);
                 recyclerView.setAdapter(searchAdapter);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -205,7 +200,7 @@ public class AddUsers extends AppCompatActivity {
                         usersList.add(user);
                     }
                 }
-                adapter = new ViewAdapterAddUsers(AddUsers.this, usersList, getApplicationContext(),creatorID,accountID,inAllAccountID);
+                adapter = new ViewAdapterAddUsers(AddUsers.this, usersList, getApplicationContext(),creatorID,accountID);
                 recyclerView.setAdapter(adapter);
             }
         }).addOnFailureListener(new OnFailureListener() {

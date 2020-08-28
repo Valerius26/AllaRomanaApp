@@ -115,9 +115,9 @@ public class SelectPaying extends AppCompatActivity {
 
     }
 
-    private void updateDB(String pagante, String debtor, Long importNumber, int partecipantsSize) {
+    private void updateDB(final String pagante, final String debtor, Long importNumber, int partecipantsSize) {
         HashMap<String,String> hashMap = new HashMap<>();
-        int credit = (int) (importNumber/partecipantsSize);
+        final int credit = (int) (importNumber/partecipantsSize);
         hashMap.put("credito",""+credit);
         hashMap.put("idDebitore",debtor);
 
@@ -127,6 +127,7 @@ public class SelectPaying extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                  Toast.makeText(getApplicationContext(),"importo Pagato", Toast.LENGTH_SHORT).show();
+                 updateDebtor(pagante,debtor,credit);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -135,7 +136,29 @@ public class SelectPaying extends AppCompatActivity {
             }
         });
 
+
+
     }
+
+    private void updateDebtor(String pagante, String debtor, int credit) {
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("debito",""+credit);
+        hashMap.put("idCreditore",pagante);
+
+        db.collection("users").document(debtor).collection("debts")
+                .add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     private void showPartecipant() {
 

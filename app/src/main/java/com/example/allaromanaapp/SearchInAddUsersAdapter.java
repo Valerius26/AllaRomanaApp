@@ -34,16 +34,15 @@ public class SearchInAddUsersAdapter extends RecyclerView.Adapter<ViewHolderAddU
     List<User> usersList;
     Context context;
     FirebaseFirestore db;
-    String creatorID, accountID, inAllAccountID;
+    String creatorID, accountID;
 
 
-    public SearchInAddUsersAdapter(AddUsers addUsers, List<User> usersList, Context context, String creatorID, String accountID, String inAllAccountID) {
+    public SearchInAddUsersAdapter(AddUsers addUsers, List<User> usersList, Context context, String creatorID, String accountID) {
         this.addUsers = addUsers;
         this.usersList = usersList;
         this.context = context;
         this.creatorID = creatorID;
         this.accountID = accountID;
-        this.inAllAccountID = inAllAccountID;
     }
 
     @NonNull
@@ -89,12 +88,9 @@ public class SearchInAddUsersAdapter extends RecyclerView.Adapter<ViewHolderAddU
     private void createPartecipant(final String selectedUserID, final String name, final String surname,ArrayList duplicati) {
         if(duplicati.size() == 0) {
 
-
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("Creatore", creatorID);
             hashMap.put("IdAccount in creatore", accountID);
-            hashMap.put("IdAccount in all", inAllAccountID);
-
 
             db.collection("users").document(selectedUserID).collection("accounts").add(hashMap)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

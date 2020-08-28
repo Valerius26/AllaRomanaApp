@@ -34,16 +34,15 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
     List<User> usersList;
     Context context;
     FirebaseFirestore db;
-    String creatorID, accountID, inAllAccountID;
+    String creatorID, accountID;
 
 
-    public ViewAdapterAddUsers(AddUsers addUsers, List<User> usersList, Context context, String creatorID, String accountID, String inAllAccountID) {
+    public ViewAdapterAddUsers(AddUsers addUsers, List<User> usersList, Context context, String creatorID, String accountID) {
         this.addUsers = addUsers;
         this.usersList = usersList;
         this.context = context;
         this.creatorID = creatorID;
         this.accountID = accountID;
-        this.inAllAccountID = inAllAccountID;
     }
 
     @NonNull
@@ -86,25 +85,7 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
 
     }
 
-    private void createPartecipant(final String selectedUserID, final String name, final String surname,ArrayList duplicati) {
-        if(duplicati.size() == 0) {
 
-
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("Creatore", creatorID);
-            hashMap.put("IdAccount in creatore", accountID);
-            hashMap.put("IdAccount in all", inAllAccountID);
-
-
-            db.collection("users").document(selectedUserID).collection("accounts").add(hashMap)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            createPartecipantInCreator(name, surname, selectedUserID);
-                        }
-                    });
-        }
-    }
 
     private void partecipantExists(final String selectedUserID, final String nome, final String cognome) {
         db.collection("users").document(creatorID).collection("accounts")
@@ -120,7 +101,7 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
                     }
 
                 }
-                createPartecipant(selectedUserID,nome,cognome,duplicate);
+                createPartecipantInCreator(nome, cognome, selectedUserID);
             }
         });
 

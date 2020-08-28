@@ -70,13 +70,11 @@ public class MainActivity extends AppCompatActivity {
     private void createAccount(final String creatorID) {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("Creatore",""+creatorID);
-        hashMap.put("id in All","null");
         db.collection("users").document(creatorID).collection("accounts").add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 String accountID = documentReference.getId();
                 startFirstPartecipant(accountID,creatorID);
-                createAccountinAllAccounts(accountID,creatorID);
             }
         });
     }
@@ -93,36 +91,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void createAccountinAllAccounts(final String accountID, final String creatorID) {
-        HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put("id",accountID);
-        hashMap.put("creatore",creatorID);
 
-        db.collection("Allaccounts").add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                String InAllAccountID = documentReference.getId();
-                AddIdInAccount(InAllAccountID,accountID,creatorID);
-            }
-        });
-    }
-
-    private void AddIdInAccount(String inAllAccountID, String accountID, String creatorID) {
-        Map<String,String> map = new HashMap<>();
-        DocumentReference documentReference = db.collection("users").document(creatorID)
-                .collection("accounts").document(accountID);
-
-        documentReference.update("id in All",inAllAccountID);
-
-        Intent intent = new Intent(getApplicationContext(),AddUsers.class);
-        intent.putExtra("idCreatore", creatorID);
-        intent.putExtra("idAccount",accountID);
-        intent.putExtra("idAccountInAll",inAllAccountID);
-        getApplicationContext().startActivity(intent);
-    }
-
-
-    private void createFirstPartecipant(String accountID, String creatorID, String nome, String cognome) {
+    private void createFirstPartecipant(final String accountID, final String creatorID, String nome, String cognome) {
         final HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("nomePartecipante",nome);
         hashMap.put("cognomePartecipante",cognome);
@@ -132,7 +102,10 @@ public class MainActivity extends AppCompatActivity {
                 .collection("partecipants").add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-
+                Intent intent = new Intent(getApplicationContext(),AddUsers.class);
+                intent.putExtra("idCreatore", creatorID);
+                intent.putExtra("idAccount",accountID);
+                getApplicationContext().startActivity(intent);
             }
         });
 

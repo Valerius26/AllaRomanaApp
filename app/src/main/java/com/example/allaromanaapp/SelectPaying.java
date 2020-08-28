@@ -2,10 +2,13 @@ package com.example.allaromanaapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,6 +53,7 @@ public class SelectPaying extends AppCompatActivity {
         pay = findViewById(R.id.payBtn);
 
 
+
         Intent intent = getIntent();
         creatorID = intent.getStringExtra("idCreatore");
         accountID = intent.getStringExtra("idAccount");
@@ -60,6 +64,35 @@ public class SelectPaying extends AppCompatActivity {
 
         showPartecipant();
 
+
+        pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String importo = editImport.getText().toString().trim();
+                Long importNumber = Long.valueOf(0);
+
+                try {
+                    int num = Integer.parseInt(importo);
+                    if(!TextUtils.isEmpty(importo)){
+                        importNumber = (Long) Long.valueOf(importo);
+                        return;
+                    }
+                    if(TextUtils.isEmpty(importo)){
+                        editImport.setError("L'importo è richiesto");
+                        return;
+                    }
+                    int partecipantsSize = adapter.getItemCount();
+
+                    if(importNumber < partecipantsSize){
+                        editImport.setError("L'importo dev'essere maggiore o ugale numero di partecipanti");
+                    }
+                } catch (NumberFormatException e) {
+                    editImport.setError("Inserisci un intero");
+                }
+
+                String pagante = adapter.getPayingUser();
+            }
+        });
 
     }
 

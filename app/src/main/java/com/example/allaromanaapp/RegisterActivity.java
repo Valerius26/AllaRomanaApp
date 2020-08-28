@@ -47,7 +47,6 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     String userID;
     Long bilancio = Long.valueOf(0);
-    Long gruppi = Long.valueOf(0);
 
 
     @Override

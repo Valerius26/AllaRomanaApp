@@ -2,6 +2,7 @@ package com.example.allaromanaapp;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ public class ViewHolderAddUsers extends RecyclerView.ViewHolder {
 
     ImageView profile;
     TextView fullName;
+    RelativeLayout partecipantCard;
     View usersView;
 
     public ViewHolderAddUsers(@NonNull View itemView) {
@@ -36,6 +38,7 @@ public class ViewHolderAddUsers extends RecyclerView.ViewHolder {
             }
         });
 
+        partecipantCard = itemView.findViewById(R.id.partecipantCard);
         profile = itemView.findViewById(R.id.iconUser);
         fullName = itemView.findViewById(R.id.userName);
     }

@@ -1,5 +1,6 @@
 package com.example.allaromanaapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,13 +11,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,10 +39,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         currentUserID = firebaseAuth.getUid();
-
+        account_delete(currentUserID);
 
         profileBtn = (Button) findViewById(R.id.buttonProfile);
         balanceBtn = (Button) findViewById(R.id.buttonDebitoCredito);
@@ -59,6 +66,45 @@ public class MainActivity extends AppCompatActivity {
                 createAccount(currentUserID);
             }
         });
+    }
+
+    private void account_delete(String currentUserID) {
+        final CollectionReference collectionReference = db.collection("users").document(currentUserID)
+                .collection("accounts");
+
+        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(!task.getResult().isEmpty()) {
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        String id = documentSnapshot.getId();
+                        deletePartecipants(collectionReference,id);
+                        deleteAccount(collectionReference,id);
+                    }
+                }
+            }
+        });
+    }
+
+    private void deleteAccount(CollectionReference collectionReference, String id) {
+        collectionReference.document(id).delete();
+    }
+
+    private void deletePartecipants(CollectionReference collectionReference, String id) {
+        final CollectionReference collectionReference1 = collectionReference.document(id).collection("partecipants");
+        collectionReference1.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot documentSnapshot: task.getResult()) {
+                    String id_partecipant = documentSnapshot.getId();
+                    delete(collectionReference1, id_partecipant);
+                }
+            }
+        });
+    }
+
+    private void delete(CollectionReference collectionReference1, String id_partecipant) {
+        collectionReference1.document(id_partecipant).delete();
     }
 
     public void logout(View view){

@@ -17,13 +17,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class SelectPaying extends AppCompatActivity {
@@ -68,40 +72,69 @@ public class SelectPaying extends AppCompatActivity {
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String importo = editImport.getText().toString().trim();
-                Long importNumber = Long.valueOf(0);
-
-                try {
-                    int num = Integer.parseInt(importo);
-                    if(!TextUtils.isEmpty(importo)){
-                        importNumber = (Long) Long.valueOf(importo);
-                        return;
-                    }
-                    if(TextUtils.isEmpty(importo)){
-                        editImport.setError("L'importo è richiesto");
-                        return;
-                    }
-                    int partecipantsSize = adapter.getItemCount();
-
-                    if(importNumber < partecipantsSize){
-                        editImport.setError("L'importo dev'essere maggiore o ugale numero di partecipanti");
-                    }
-                } catch (NumberFormatException e) {
-                    editImport.setError("Inserisci un intero");
-                }
-
                 String pagante = adapter.getPayingUser();
+                if(!TextUtils.isEmpty(pagante)) {
 
-                ArrayList<String> creditors = new ArrayList<>();
-                creditors = adapter.getCreditors();
-                updateDB(pagante,creditors);
+                    String importo = editImport.getText().toString().trim();
+                    Long importNumber = Long.valueOf(0);
+                    int partecipantsSize = 0;
+
+                    try {
+                        int num = Integer.parseInt(importo);
+                        if (TextUtils.isEmpty(importo)) {
+                            editImport.setError("L'importo è richiesto");
+                            return;
+                        }else {
+                                importNumber = (Long) Long.valueOf(importo);
+                                partecipantsSize = adapter.getItemCount();
+                                if (importNumber < partecipantsSize) {
+                                   editImport.setError("L'importo dev'essere maggiore o ugale numero di partecipanti");
+                                }else {
+
+                                    ArrayList<String> debtors = new ArrayList<>();
+                                    debtors = adapter.getDebtors();
+                                    for (int position = 0; position < debtors.size(); position++) {
+                                        String id_debtor = debtors.get(position);
+                                        updateDB(pagante, id_debtor, importNumber, partecipantsSize);
+                                    }
+                                }
+                                return;
+                            }
+                    } catch (NumberFormatException e) {
+                        editImport.setError("Inserisci un intero");
+                    }
+
+
+                    return;
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Seleziona un pagante", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
     }
 
-    private void updateDB(String pagante, ArrayList<String> creditors) {
-        
+    private void updateDB(String pagante, String debtor, Long importNumber, int partecipantsSize) {
+        HashMap<String,String> hashMap = new HashMap<>();
+        int credit = (int) (importNumber/partecipantsSize);
+        hashMap.put("credito",""+credit);
+        hashMap.put("idDebitore",debtor);
+
+
+        db.collection("users").document(pagante).collection("credits")
+                .add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                 Toast.makeText(getApplicationContext(),"importo Pagato", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void showPartecipant() {

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -84,9 +85,14 @@ public class MainActivity extends AppCompatActivity {
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                name = value.getString("nome");
-                surname = value.getString("cognome");
-                createFirstPartecipant(accountID,creatorID,name,surname);
+                if(error!=null){
+                    Log.d("ErroreBanaleEStupido", ""+error.getMessage());
+                }
+                else {
+                    name = value.getString("nome");
+                    surname = value.getString("cognome");
+                    createFirstPartecipant(accountID, creatorID, name, surname);
+                }
             }
         });
     }

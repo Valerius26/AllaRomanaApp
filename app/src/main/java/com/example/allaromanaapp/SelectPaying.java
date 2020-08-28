@@ -91,9 +91,17 @@ public class SelectPaying extends AppCompatActivity {
                 }
 
                 String pagante = adapter.getPayingUser();
+
+                ArrayList<String> creditors = new ArrayList<>();
+                creditors = adapter.getCreditors();
+                updateDB(pagante,creditors);
             }
         });
 
+    }
+
+    private void updateDB(String pagante, ArrayList<String> creditors) {
+        
     }
 
     private void showPartecipant() {

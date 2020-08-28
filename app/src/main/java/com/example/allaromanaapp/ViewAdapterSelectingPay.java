@@ -77,4 +77,15 @@ public class ViewAdapterSelectingPay extends RecyclerView.Adapter<ViewHolderAddU
     public String getPayingUser(){
         return payingUser;
     }
+
+    public ArrayList<String> getCreditors() {
+        ArrayList<String> creditors = new ArrayList<>();
+        for(int count = 0; count < partecipants.size(); count++){
+            String creditor = partecipants.get(count).getIdUtente();
+            if(creditor!=payingUser){
+                creditors.add(creditor);
+            }
+        }
+        return creditors;
+    }
 }

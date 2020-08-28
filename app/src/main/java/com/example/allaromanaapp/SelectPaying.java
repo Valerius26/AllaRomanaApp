@@ -97,6 +97,8 @@ public class SelectPaying extends AppCompatActivity {
                                         String id_debtor = debtors.get(position);
                                         updateDB(pagante, id_debtor, importNumber, partecipantsSize);
                                     }
+                                    deletePartecipants(creatorID,accountID);
+                                    deleteAccount(creatorID,accountID);
                                 }
                                 return;
                             }
@@ -113,6 +115,40 @@ public class SelectPaying extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void deletePartecipants(final String creatorID, final String accountID) {
+        db.collection("users").document(creatorID).collection("accounts")
+                .document(accountID).collection("partecipants").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot documentSnapshot :task.getResult()){
+                    String partecipant_id = documentSnapshot.getId();
+                    delete(creatorID,accountID,partecipant_id);
+                }
+            }
+        });
+    }
+
+    private void delete(String creatorID, String accountID, String partecipant_id) {
+        db.collection("users").document(creatorID).collection("accounts")
+                .document(accountID).collection("partecipants").document(partecipant_id)
+                .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+            }
+        });
+    }
+
+    private void deleteAccount(String creatorID, String accountID) {
+        db.collection("users").document(creatorID).collection("accounts")
+                .document(accountID).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                startActivity(new Intent(SelectPaying.this,MainActivity.class));
+            }
+        });
     }
 
     private void updateDB(final String pagante, final String debtor, Long importNumber, int partecipantsSize) {

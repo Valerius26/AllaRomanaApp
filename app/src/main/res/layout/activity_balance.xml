@@ -31,29 +31,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.029999971" />
 
-    <ScrollView
-        android:layout_width="409dp"
-        android:layout_height="660dp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="70dp"
-        tools:ignore="MissingConstraints">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-    </ScrollView>
-
     <ImageButton
         android:id="@+id/back"
-        android:onClick=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -63,5 +42,31 @@
         tools:layout_editor_absoluteX="7dp"
         tools:ignore="MissingConstraints" />
 
+    <ScrollView
+        android:layout_width="384dp"
+        android:layout_height="650dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/debtTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler4"
+                android:layout_width="match_parent"
+                android:layout_height="640dp"
+                android:layout_marginVertical="35dp"
+                android:orientation="vertical"
+                android:layout_marginTop="60dp"/>
+
+        </LinearLayout>
+
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,12 +25,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 
 public class SelectPaying extends AppCompatActivity {
@@ -106,7 +110,7 @@ public class SelectPaying extends AppCompatActivity {
                                     debtors = adapter.getDebtors();
                                     for (int position = 0; position < debtors.size(); position++) {
                                         String id_debtor = debtors.get(position);
-                                        updateDB(pagante, id_debtor, importNumber, partecipantsSize);
+                                        recupera_nome_debitore(id_debtor,pagante,importNumber,partecipantsSize);
                                     }
                                     deletePartecipants(creatorID,accountID);
                                     deleteAccount(creatorID,accountID);
@@ -123,6 +127,18 @@ public class SelectPaying extends AppCompatActivity {
                 else{
                     Toast.makeText(getApplicationContext(),"Seleziona un pagante", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+    }
+
+    private void recupera_nome_debitore(final String id_debtor, final String pagante, final Long importNumber, final int partecipantSize) {
+        db.collection("users").document(id_debtor).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                String nome_debitore = value.getString("nome");
+                String cognome_debitore = value.getString("cognome");
+                updateDB(id_debtor,pagante,importNumber,partecipantSize,nome_debitore,cognome_debitore);
             }
         });
 
@@ -162,12 +178,15 @@ public class SelectPaying extends AppCompatActivity {
         });
     }
 
-    private void updateDB(final String pagante, final String debtor, Long importNumber, int partecipantsSize) {
+    private void updateDB(final String debtor, final String pagante, Long importNumber, int partecipantsSize, String nome, String cognome) {
+
         HashMap<String,String> hashMap = new HashMap<>();
         final int credit = (int) (importNumber/partecipantsSize);
         hashMap.put("credito",""+credit);
         hashMap.put("idDebitore",debtor);
         hashMap.put("idCreatoreConto",creatorID);
+        hashMap.put("nome debitore",nome);
+        hashMap.put("cognome debitore",cognome);
 
 
         db.collection("users").document(pagante).collection("credits")
@@ -175,8 +194,8 @@ public class SelectPaying extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                  Toast.makeText(getApplicationContext(),"importo Pagato", Toast.LENGTH_SHORT).show();
-                 updateBalanceCredit(pagante,credit); //devo pensare a qualcos altro...
-                 updateDebtor(pagante,debtor,credit);
+                 //updateBalanceCredit(pagante,credit); //devo pensare a qualcos altro...
+                 recupera_nome_creditore(pagante,debtor,credit);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -189,18 +208,36 @@ public class SelectPaying extends AppCompatActivity {
 
     }
 
+    private void recupera_nome_creditore(final String pagante, final String debtor, final int credit) {
+        db.collection("users").document(pagante).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(error!=null){
+
+                }else {
+
+                    String nome_creditore = value.getString("nome");
+                    String cognome_creditore = value.getString("cognome");
+                    updateDebtor(pagante, debtor, credit, nome_creditore, cognome_creditore);
+                }
+            }
+        });
+
+    }
 
 
-    private void updateDebtor(final String pagante, final String debtor, final int credit) {
+    private void updateDebtor(final String pagante, final String debtor, final int credit, String nome, String cognome) {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("debito",""+credit);
         hashMap.put("idCreditore",pagante);
+        hashMap.put("nome creditore",nome);
+        hashMap.put("cognome creditore",cognome);
 
         db.collection("users").document(debtor).collection("debts")
                 .add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                updateBalanceDebit(debtor,credit);
+                //updateBalanceDebit(debtor,credit);
                 inviaNotifica(debtor,  documentReference.getId(), pagante);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -213,7 +250,12 @@ public class SelectPaying extends AppCompatActivity {
 
     private void updateBalanceDebit(String debtor, int credit) {
         DocumentReference documentReference = db.collection("users").document(debtor);
-        documentReference.update("bilancio", FieldValue.increment(-credit));
+        documentReference.update("bilancio", FieldValue.increment(-credit)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+            }
+        });
     }
 
     private void inviaNotifica(String debtor, String id, String pagante) {

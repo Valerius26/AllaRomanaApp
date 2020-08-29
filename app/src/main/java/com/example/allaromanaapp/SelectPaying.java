@@ -157,7 +157,7 @@ public class SelectPaying extends AppCompatActivity {
                 .document(accountID).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
             }
         });
     }
@@ -175,7 +175,7 @@ public class SelectPaying extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                  Toast.makeText(getApplicationContext(),"importo Pagato", Toast.LENGTH_SHORT).show();
-                 updateBalance(pagante,credit);
+                 updateBalanceCredit(pagante,credit);
                  updateDebtor(pagante,debtor,credit);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -246,9 +246,10 @@ public class SelectPaying extends AppCompatActivity {
                     }
                 });
     }
-    private void updateBalance(String pagante, int credit) {
+    private void updateBalanceCredit(String pagante, int credit) {
 
         DocumentReference documentReference = db.collection("users").document(pagante);
         documentReference.update("bilancio", FieldValue.increment(credit));
+
     }
 }

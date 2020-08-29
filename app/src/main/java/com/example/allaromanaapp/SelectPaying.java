@@ -175,7 +175,7 @@ public class SelectPaying extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                  Toast.makeText(getApplicationContext(),"importo Pagato", Toast.LENGTH_SHORT).show();
-                 updateBalanceCredit(pagante,credit);
+                 updateBalanceCredit(pagante,credit); //devo pensare a qualcos altro...
                  updateDebtor(pagante,debtor,credit);
             }
         }).addOnFailureListener(new OnFailureListener() {

@@ -101,7 +101,9 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
                     }
 
                 }
-                createPartecipantInCreator(nome, cognome, selectedUserID);
+                if(duplicate.size()==0) {
+                    createPartecipantInCreator(nome, cognome, selectedUserID);
+                }
             }
         });
 

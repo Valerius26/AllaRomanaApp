@@ -124,7 +124,6 @@ public class AddUsers extends AppCompatActivity {
                 }
                 if(partecipants.size() < 2){
                     Toast.makeText(AddUsers.this,"aggiungi un partecipante", Toast.LENGTH_SHORT).show();
-                    Log.d("dueeeeeeeeeeeeeeeeeee",""+partecipants.size());
                 }
                 else{
                     Intent intent = new Intent(getApplicationContext(),SelectPaying.class);

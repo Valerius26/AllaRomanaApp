@@ -7,6 +7,7 @@ import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -37,17 +39,18 @@ public class MainActivity extends AppCompatActivity {
     String name,surname;
     CardView nuovaNotifica;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         currentUserID = firebaseAuth.getUid();
         account_delete(currentUserID);
+
 
         profileBtn = (Button) findViewById(R.id.buttonProfile);
         balanceBtn = (Button) findViewById(R.id.buttonDebitoCredito);
@@ -78,14 +81,14 @@ public class MainActivity extends AppCompatActivity {
         messageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), balanceActivity.class));
+                startActivity(new Intent(getApplicationContext(), notificationActivity.class));
             }
         });
 
         balanceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(getApplicationContext(), balanceActivity.class));
             }
         });
     }
@@ -200,5 +203,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
 
 }

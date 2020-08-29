@@ -24,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -68,6 +69,16 @@ public class SelectPaying extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
 
         showPartecipant();
+
+        retAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),AddUsers.class);
+                intent.putExtra("idCreatore", creatorID);
+                intent.putExtra("idAccount",accountID);
+                startActivity(intent);
+            }
+        });
 
 
         pay.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +157,7 @@ public class SelectPaying extends AppCompatActivity {
                 .document(accountID).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                startActivity(new Intent(SelectPaying.this,MainActivity.class));
+
             }
         });
     }
@@ -164,6 +175,7 @@ public class SelectPaying extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                  Toast.makeText(getApplicationContext(),"importo Pagato", Toast.LENGTH_SHORT).show();
+                 updateBalance(pagante,credit);
                  updateDebtor(pagante,debtor,credit);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -177,7 +189,9 @@ public class SelectPaying extends AppCompatActivity {
 
     }
 
-    private void updateDebtor(final String pagante, final String debtor, int credit) {
+
+
+    private void updateDebtor(final String pagante, final String debtor, final int credit) {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("debito",""+credit);
         hashMap.put("idCreditore",pagante);
@@ -186,6 +200,7 @@ public class SelectPaying extends AppCompatActivity {
                 .add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
+                updateBalanceDebit(debtor,credit);
                 inviaNotifica(debtor,  documentReference.getId(), pagante);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -194,6 +209,11 @@ public class SelectPaying extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateBalanceDebit(String debtor, int credit) {
+        DocumentReference documentReference = db.collection("users").document(debtor);
+        documentReference.update("bilancio", FieldValue.increment(-credit));
     }
 
     private void inviaNotifica(String debtor, String id, String pagante) {
@@ -225,5 +245,10 @@ public class SelectPaying extends AppCompatActivity {
                         recyclerView.setAdapter(adapter);
                     }
                 });
+    }
+    private void updateBalance(String pagante, int credit) {
+
+        DocumentReference documentReference = db.collection("users").document(pagante);
+        documentReference.update("bilancio", FieldValue.increment(credit));
     }
 }

@@ -39,7 +39,7 @@
 
         <activity android:name=".balanceActivity"/>
 
-        <activity android:name=".balCreditActivity "/>
+        <activity android:name=".balCreditActivity"/>
 
         <activity android:name=".notificationActivity"/>
     </application>

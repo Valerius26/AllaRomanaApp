@@ -3,6 +3,7 @@ package com.example.allaromanaapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db;
     String currentUserID;
     String name,surname;
+    CardView nuovaNotifica;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
         payBtn = (Button)findViewById(R.id.buttonGroup);
         messageBtn = (Button) findViewById(R.id.buttonMessage);
         settingsBtn = (Button) findViewById(R.id.buttonImpostation);
+        nuovaNotifica = (CardView) findViewById(R.id.notifyCounter);
+
+        nuovaNotifica.setVisibility(View.INVISIBLE);
+
+        notifyNew(currentUserID);
 
         profileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +72,36 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 createAccount(currentUserID);
+            }
+        });
+
+        messageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), balanceActivity.class));
+            }
+        });
+
+        balanceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+    }
+
+    private void notifyNew(String currentUserID) {
+        db.collection("users").document(currentUserID).collection("notify")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(!task.getResult().isEmpty()){
+                    for(DocumentSnapshot documentSnapshot: task.getResult()){
+                        if(documentSnapshot.get("letto").equals("no")){
+                            nuovaNotifica.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
             }
         });
     }

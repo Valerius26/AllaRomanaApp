@@ -34,6 +34,10 @@
         <activity android:name=".AddUsers"/>
 
         <activity android:name=".SelectPaying"/>
+
+        <activity android:name=".confirmActivity"/>
+
+        <activity android:name=".balanceActivity"/>
     </application>
 
 </manifest>

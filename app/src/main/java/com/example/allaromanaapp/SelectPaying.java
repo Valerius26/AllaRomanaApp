@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -90,7 +91,6 @@ public class SelectPaying extends AppCompatActivity {
                                 if (importNumber < partecipantsSize) {
                                    editImport.setError("L'importo dev'essere maggiore o ugale numero di partecipanti");
                                 }else {
-
                                     ArrayList<String> debtors = new ArrayList<>();
                                     debtors = adapter.getDebtors();
                                     for (int position = 0; position < debtors.size(); position++) {
@@ -177,7 +177,7 @@ public class SelectPaying extends AppCompatActivity {
 
     }
 
-    private void updateDebtor(String pagante, String debtor, int credit) {
+    private void updateDebtor(final String pagante, final String debtor, int credit) {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("debito",""+credit);
         hashMap.put("idCreditore",pagante);
@@ -186,7 +186,7 @@ public class SelectPaying extends AppCompatActivity {
                 .add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-
+                inviaNotifica(debtor,  documentReference.getId(), pagante);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -194,6 +194,17 @@ public class SelectPaying extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void inviaNotifica(String debtor, String id, String pagante) {
+
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("idPagante", pagante);
+        hashMap.put("idDebito",id);
+        hashMap.put("letto","no");
+
+        db.collection("users").document(debtor).collection("notify")
+                .add(hashMap);
     }
 
 

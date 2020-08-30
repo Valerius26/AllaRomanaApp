@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class detsHolder extends RecyclerView.ViewHolder {
 
-    TextView userName,info;
+    TextView userName,info,debt,debtNum;
     ImageView iconUser;
     View debtView;
 
@@ -39,6 +39,8 @@ public class detsHolder extends RecyclerView.ViewHolder {
          userName = itemView.findViewById(R.id.userName);
          info = itemView.findViewById(R.id.info);
          iconUser = itemView.findViewById(R.id.iconUser);
+         debt = itemView.findViewById(R.id.debt);
+         debtNum = itemView.findViewById(R.id.debtNum);
 
     }
 

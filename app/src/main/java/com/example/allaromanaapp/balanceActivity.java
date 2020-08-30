@@ -84,7 +84,7 @@ public class balanceActivity extends AppCompatActivity {
 
                 for(DocumentSnapshot documentSnapshot: task.getResult()){
                         Creditors creditor = new Creditors(documentSnapshot.getId(),documentSnapshot.getString("nome creditore"),
-                                documentSnapshot.getString("cognome creditore"));
+                                documentSnapshot.getString("cognome creditore"), Long.valueOf(documentSnapshot.getString("debito")));
                         debtsList.add(creditor);
                 }
                 adapter = new debtsAdapter(balanceActivity.this, debtsList, getApplicationContext());

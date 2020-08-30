@@ -65,6 +65,7 @@ public class debtsAdapter extends RecyclerView.Adapter<detsHolder> {
         return dtHolder;
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull detsHolder holder, int position) {
         String name = debtsList.get(position).getName();

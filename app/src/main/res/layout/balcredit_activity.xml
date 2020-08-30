@@ -10,7 +10,7 @@
         android:id="@+id/creditTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lista crediti"
+        android:text="Lista debiti"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +23,7 @@
         android:id="@+id/goDebt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Vai ai debiti"
+        android:text="Vai ai crediti"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.94"
@@ -31,38 +31,42 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.029999971" />
 
+    <ImageButton
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.029999971"
+        app:srcCompat="?attr/homeAsUpIndicator"
+        tools:layout_editor_absoluteX="7dp"
+        tools:ignore="MissingConstraints" />
+
     <ScrollView
-        android:id="@+id/scrollView3"
-        android:layout_width="409dp"
-        android:layout_height="660dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="70dp">
+        android:layout_width="384dp"
+        android:layout_height="650dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/creditTitle">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical" >
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:id="@+id/recycler4"
+                android:layout_width="match_parent"
+                android:layout_height="640dp"
+                android:layout_marginVertical="35dp"
+                android:orientation="vertical"
+                android:layout_marginTop="60dp"/>
 
         </LinearLayout>
+
+
     </ScrollView>
-
-    <ImageButton
-        android:id="@+id/back2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.029999971"
-        app:srcCompat="?attr/homeAsUpIndicator" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

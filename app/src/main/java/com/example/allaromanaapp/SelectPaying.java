@@ -194,8 +194,9 @@ public class SelectPaying extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                  Toast.makeText(getApplicationContext(),"importo Pagato", Toast.LENGTH_SHORT).show();
+                 String id_credito = documentReference.getId();
                  //updateBalanceCredit(pagante,credit); //devo pensare a qualcos altro...
-                 recupera_nome_creditore(pagante,debtor,credit);
+                 recupera_nome_creditore(pagante,debtor,credit,id_credito);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -208,7 +209,7 @@ public class SelectPaying extends AppCompatActivity {
 
     }
 
-    private void recupera_nome_creditore(final String pagante, final String debtor, final int credit) {
+    private void recupera_nome_creditore(final String pagante, final String debtor, final int credit, final String id_credito) {
         db.collection("users").document(pagante).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -218,7 +219,7 @@ public class SelectPaying extends AppCompatActivity {
 
                     String nome_creditore = value.getString("nome");
                     String cognome_creditore = value.getString("cognome");
-                    updateDebtor(pagante, debtor, credit, nome_creditore, cognome_creditore);
+                    updateDebtor(pagante, debtor, credit, nome_creditore, cognome_creditore,id_credito);
                 }
             }
         });
@@ -226,7 +227,7 @@ public class SelectPaying extends AppCompatActivity {
     }
 
 
-    private void updateDebtor(final String pagante, final String debtor, final int credit, String nome, String cognome) {
+    private void updateDebtor(final String pagante, final String debtor, final int credit, final String nome, final String cognome, final String id_credito) {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("debito",""+credit);
         hashMap.put("idCreditore",pagante);
@@ -238,7 +239,7 @@ public class SelectPaying extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 //updateBalanceDebit(debtor,credit);
-                inviaNotifica(debtor,  documentReference.getId(), pagante);
+                inviaNotifica(debtor,  documentReference.getId(), pagante, id_credito, nome, cognome, credit);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -258,11 +259,16 @@ public class SelectPaying extends AppCompatActivity {
         });
     }
 
-    private void inviaNotifica(String debtor, String id, String pagante) {
+    private void inviaNotifica(String debtor, String id, String pagante, String id_credito, String nome, String cognome, int credit) {
 
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("idPagante", pagante);
         hashMap.put("idDebito",id);
+        hashMap.put("Debitore",debtor);
+        hashMap.put("idCredito",id_credito);
+        hashMap.put("nomePagante",nome);
+        hashMap.put("cognomePagante",cognome);
+        hashMap.put("daPagare",""+credit);
         hashMap.put("letto","no");
 
         db.collection("users").document(debtor).collection("notify")

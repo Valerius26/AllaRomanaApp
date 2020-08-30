@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:contentPadding="3dp"
+    app:layout_goneMarginTop="1dp">
+
+    <RelativeLayout
+        android:id="@+id/partecipantCard"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:background="@color/cardview_light_background">
+
+        <ImageView
+            android:id="@+id/iconMessage"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:clickable="true"
+            android:src="@drawable/msgimg" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginVertical="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_toEndOf="@+id/iconMessage"
+            android:text="Name Surname"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginVertical="40dp"
+            android:layout_marginHorizontal="75dp"
+            android:layout_toEndOf="@+id/iconUser"
+            android:text="Tocca per aprire"
+            android:textSize="15sp" />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

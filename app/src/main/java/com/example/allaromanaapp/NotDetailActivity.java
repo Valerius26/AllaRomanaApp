@@ -131,6 +131,14 @@ public class NotDetailActivity extends AppCompatActivity {
         });
 
 
+        userName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),NotCurrentProfileActivity.class);
+                intent.putExtra("idUtente", sendID);
+                getApplicationContext().startActivity(intent);
+            }
+        });
 
     }
 

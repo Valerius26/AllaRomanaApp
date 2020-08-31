@@ -42,6 +42,8 @@
         <activity android:name=".balCreditActivity"/>
 
         <activity android:name=".notificationActivity"/>
+
+        <activity android:name=".NotDetailActivity"/>
     </application>
 
 </manifest>

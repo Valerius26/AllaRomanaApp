@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -26,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class notificationActivity extends AppCompatActivity {
 
@@ -66,7 +68,21 @@ public class notificationActivity extends AppCompatActivity {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //elimina se letto uguale si
+              final CollectionReference collectionReference = db.collection("users").document(currentUserID)
+                      .collection("notify");
+
+              collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                  @Override
+                  public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                      if(!task.getResult().isEmpty()) {
+                          for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                              if(documentSnapshot.getString("letto").equals("si")){
+                                  collectionReference.document(documentSnapshot.getId()).delete();
+                              }
+                          }
+                      }
+                  }
+              });
             }
         });
 
@@ -84,9 +100,10 @@ public class notificationActivity extends AppCompatActivity {
                     for (DocumentSnapshot documentSnapshot : task.getResult()){
                         notify not = new notify(documentSnapshot.getString("nomePagante"),
                                 documentSnapshot.getString("cognomePagante"),documentSnapshot.getId(),
-                                Long.valueOf(documentSnapshot.getString("daPagare")));
+                                Long.valueOf(documentSnapshot.getString("daPagare")),documentSnapshot.getString("letto"));
                         notifies.add(not);
                     }
+                    Collections.reverse(notifies);
                     adapter = new notificationAdapter(notifies,getApplicationContext(),notificationActivity.this);
                     recyclerView.setAdapter(adapter);
                 }

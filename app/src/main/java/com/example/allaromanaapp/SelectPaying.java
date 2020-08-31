@@ -270,6 +270,8 @@ public class SelectPaying extends AppCompatActivity {
         hashMap.put("cognomePagante",cognome);
         hashMap.put("daPagare",""+credit);
         hashMap.put("letto","no");
+        hashMap.put("testo","Ti ricordo che hai un debito con me pari a euro " +
+                credit + ".\nRimborsami al più presto, grazie.");
 
         db.collection("users").document(debtor).collection("notify")
                 .add(hashMap);

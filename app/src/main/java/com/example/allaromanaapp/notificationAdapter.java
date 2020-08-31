@@ -1,12 +1,16 @@
 package com.example.allaromanaapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -35,7 +39,12 @@ public class notificationAdapter extends RecyclerView.Adapter<notificationHolde>
         ntHolder.setOnClickListener(new creditsHolder.ClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                String notID = notificationList.get(position).getId();
+                Long daPagare = notificationList.get(position).getDebito();
+                Intent intent = new Intent(context,NotDetailActivity.class);
+                intent.putExtra("idNotifica", notID);
+                intent.putExtra("debito",""+daPagare);
+                context.startActivity(intent);
             }
 
             @Override
@@ -48,12 +57,16 @@ public class notificationAdapter extends RecyclerView.Adapter<notificationHolde>
 
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull notificationHolde holder, int position) {
-
         String name = notificationList.get(position).getNome();
         String surname = notificationList.get(position).getCognome();
+        String letto = notificationList.get(position).getLetto();
         holder.userName.setText(name + " " + surname);
+        if(letto.equals("si"))
+            holder.iconMsg.setVisibility(View.INVISIBLE);
+
     }
 
     @Override

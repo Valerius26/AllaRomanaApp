@@ -36,7 +36,7 @@ public class NotCurrentProfileActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     String userID;
     Button deleteProfile;
-    int bilancio2, gruppi2;
+    int bilancio2;
 
 
     @Override

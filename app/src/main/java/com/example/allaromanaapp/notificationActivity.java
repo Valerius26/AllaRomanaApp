@@ -81,6 +81,7 @@ public class notificationActivity extends AppCompatActivity {
                                   collectionReference.document(documentSnapshot.getId()).delete();
                               }
                           }
+                          startActivity(new Intent(getApplicationContext(),notificationActivity.class));
                       }
                   }
               });

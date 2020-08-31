@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class notificationActivity extends AppCompatActivity {
 
@@ -38,7 +39,7 @@ public class notificationActivity extends AppCompatActivity {
     notificationAdapter adapter;
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
-    String currentUserID;
+    String currentUserID,letto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +99,18 @@ public class notificationActivity extends AppCompatActivity {
                 if (!task.getResult().isEmpty()) {
                     ArrayList<notify> notifies = new ArrayList<>();
                     for (DocumentSnapshot documentSnapshot : task.getResult()){
+                        letto = documentSnapshot.getString("letto");
                         notify not = new notify(documentSnapshot.getString("nomePagante"),
                                 documentSnapshot.getString("cognomePagante"),documentSnapshot.getId(),
-                                Long.valueOf(documentSnapshot.getString("daPagare")),documentSnapshot.getString("letto"));
+                                Long.valueOf(documentSnapshot.getString("daPagare")),letto);
                         notifies.add(not);
                     }
-                    Collections.reverse(notifies);
+                    Collections.sort(notifies, new Comparator<notify>() {
+                        @Override
+                        public int compare(notify notify, notify t1) {
+                            return notify.getLetto().compareTo(t1.getLetto());
+                        }
+                    });
                     adapter = new notificationAdapter(notifies,getApplicationContext(),notificationActivity.this);
                     recyclerView.setAdapter(adapter);
                 }
@@ -111,6 +118,9 @@ public class notificationActivity extends AppCompatActivity {
         });
 
     }
+
+
+
 
 
     private void setUpRecyclerView() {

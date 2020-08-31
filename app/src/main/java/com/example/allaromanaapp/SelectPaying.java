@@ -136,9 +136,13 @@ public class SelectPaying extends AppCompatActivity {
         db.collection("users").document(id_debtor).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                String nome_debitore = value.getString("nome");
-                String cognome_debitore = value.getString("cognome");
-                updateDB(id_debtor,pagante,importNumber,partecipantSize,nome_debitore,cognome_debitore);
+                if (error != null) {
+
+                } else {
+                    String nome_debitore = value.getString("nome");
+                    String cognome_debitore = value.getString("cognome");
+                    updateDB(id_debtor, pagante, importNumber, partecipantSize, nome_debitore, cognome_debitore);
+                }
             }
         });
 
@@ -239,7 +243,7 @@ public class SelectPaying extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 //updateBalanceDebit(debtor,credit);
-                inviaNotifica(debtor,  documentReference.getId(), pagante, id_credito, nome, cognome, credit);
+                inviaNotifica(debtor, pagante, nome, cognome, credit);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -259,15 +263,12 @@ public class SelectPaying extends AppCompatActivity {
         });
     }
 
-    private void inviaNotifica(String debtor, String id, String pagante, String id_credito, String nome, String cognome, int credit) {
+    private void inviaNotifica(String debtor,String pagante, String nomeMittente, String cognomeMittente, int credit) {
 
         HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put("idPagante", pagante);
-        hashMap.put("idDebito",id);
-        hashMap.put("Debitore",debtor);
-        hashMap.put("idCredito",id_credito);
-        hashMap.put("nomePagante",nome);
-        hashMap.put("cognomePagante",cognome);
+        hashMap.put("nomeMittente",nomeMittente);
+        hashMap.put("cognomeMittente",cognomeMittente);
+        hashMap.put("idMittente",pagante);
         hashMap.put("daPagare",""+credit);
         hashMap.put("letto","no");
         hashMap.put("testo","Ti ricordo che hai un debito con me pari a euro " +

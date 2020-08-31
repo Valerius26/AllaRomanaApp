@@ -35,7 +35,7 @@ public class NotDetailActivity extends AppCompatActivity {
     TextView userName,message,info,indicate;
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
-    String debito,name,surname,nomePagante,cognomePagante;
+    String debito,name,surname,nomeMittente,cognomeMittente;
     String sendID;
 
     @Override
@@ -71,10 +71,10 @@ public class NotDetailActivity extends AppCompatActivity {
                     return;
                 }
                 else {
-                    sendID = value.getString("idPagante");
-                    nomePagante = value.getString("nomePagante");
-                    cognomePagante = value.getString("cognomePagante");
-                    userName.setText(nomePagante + " " + cognomePagante);
+                    sendID = value.getString("idMittente");
+                    nomeMittente = value.getString("nomeMittente");
+                    cognomeMittente = value.getString("cognomeMittente");
+                    userName.setText(nomeMittente + " " + cognomeMittente);
                     debito = (value.getString("daPagare"));
                     message.setText(value.getString("testo"));
                 }
@@ -87,7 +87,7 @@ public class NotDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder indicateDialog = new AlertDialog.Builder(view.getContext());
                 indicateDialog.setTitle("Segnalazione");
-                indicateDialog.setMessage("Sei sicuro di voler segnalare " + nomePagante +" "+cognomePagante+"?");
+                indicateDialog.setMessage("Sei sicuro di voler segnalare " + nomeMittente +" "+cognomeMittente+"?");
 
                 indicateDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                     @Override
@@ -147,10 +147,12 @@ public class NotDetailActivity extends AppCompatActivity {
     private void sendToCreditor() {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("idMittente",currentUserID);
-        hashMap.put("Testo","Ti ho segnalato per un debito di euro " + debito + ".\nNon so nulla di " +
+        hashMap.put("testo","Ti ho segnalato per un debito di euro " + debito + ".\nNon so nulla di " +
                     "questo debito.");
         hashMap.put("nomeMittente",name);
         hashMap.put("cognomeMittente",surname);
+        hashMap.put("letto","no");
+        hashMap.put("daPagare",""+debito);
 
         db.collection("users").document(sendID).collection("notify").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override

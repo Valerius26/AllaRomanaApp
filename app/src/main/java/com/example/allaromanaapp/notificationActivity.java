@@ -101,8 +101,8 @@ public class notificationActivity extends AppCompatActivity {
                     ArrayList<notify> notifies = new ArrayList<>();
                     for (DocumentSnapshot documentSnapshot : task.getResult()){
                         letto = documentSnapshot.getString("letto");
-                        notify not = new notify(documentSnapshot.getString("nomePagante"),
-                                documentSnapshot.getString("cognomePagante"),documentSnapshot.getId(),
+                        notify not = new notify(documentSnapshot.getString("nomeMittente"),
+                                documentSnapshot.getString("cognomeMittente"),documentSnapshot.getId(),
                                 Long.valueOf(documentSnapshot.getString("daPagare")),letto);
                         notifies.add(not);
                     }

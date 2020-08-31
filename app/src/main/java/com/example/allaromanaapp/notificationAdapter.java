@@ -3,6 +3,7 @@ package com.example.allaromanaapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,7 @@ public class notificationAdapter extends RecyclerView.Adapter<notificationHolde>
 
     }
 
-    @SuppressLint("ResourceAsColor")
+
     @Override
     public void onBindViewHolder(@NonNull notificationHolde holder, int position) {
         String name = notificationList.get(position).getNome();

@@ -76,7 +76,12 @@ public class NotDetailActivity extends AppCompatActivity {
                     cognomeMittente = value.getString("cognomeMittente");
                     userName.setText(nomeMittente + " " + cognomeMittente);
                     debito = (value.getString("daPagare"));
-                    message.setText(value.getString("testo"));
+                    String testo = value.getString("testo");
+                    message.setText(testo);
+                    if(testo.contains("Ti ho segnalato per un debito")){
+                        info.setVisibility(View.INVISIBLE);
+                        indicate.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
         });

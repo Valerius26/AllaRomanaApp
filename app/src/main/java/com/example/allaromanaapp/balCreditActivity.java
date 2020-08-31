@@ -75,10 +75,9 @@ public class balCreditActivity extends AppCompatActivity {
                 ArrayList<Creditors> creditsList = new ArrayList();
 
                 for(DocumentSnapshot documentSnapshot: task.getResult()){
-                    Creditors creditor = new Creditors(documentSnapshot.getId(),documentSnapshot.getString("nome debitore"),
+                    Creditors creditor = new Creditors(documentSnapshot.getString("idDebitore"),documentSnapshot.getString("nome debitore"),
                             documentSnapshot.getString("cognome debitore"),
                             Long.valueOf(documentSnapshot.getString("credito")));
-                    Log.d("nomeeeeeeee",documentSnapshot.getString("nome debitore"));
                     creditsList.add(creditor);
                 }
                 adapter = new creditsAdapter(creditsList, getApplicationContext(), balCreditActivity.this);

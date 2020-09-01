@@ -53,6 +53,8 @@
         <activity android:name=".LoginAdminActivity"/>
 
         <activity android:name=".AdminActivity"/>
+
+        <activity android:name=".SettingActivity"/>
     </application>
 
 </manifest>

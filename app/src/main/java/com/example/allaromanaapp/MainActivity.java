@@ -91,6 +91,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), balanceActivity.class));
             }
         });
+
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),SettingActivity.class));
+            }
+        });
+
+
     }
 
     private void notifyNew(String currentUserID) {

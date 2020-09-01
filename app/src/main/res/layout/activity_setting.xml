@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/root"
     tools:context="com.example.allaromanaapp.SettingActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="410dp"
         android:layout_height="90dp"
         android:background="#03A9F4"
@@ -19,15 +19,28 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-
         <TextView
             android:id="@+id/lightSensor"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="30dp"
-            android:layout_marginVertical="20dp"
+            android:layout_marginVertical="10dp"
             android:layout_weight="1"
             android:text="Luminosità"
             android:textSize="40dp" />
+
+
     </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/brightBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.07999998" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,8 @@
     package="com.example.allaromanaapp">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <application
+    <uses-permission android:name = "android.permission.WRITE_SETTINGS"/>
+<application
         android:fullBackupContent="true"
         android:debuggable="true"
         android:allowBackup="true"

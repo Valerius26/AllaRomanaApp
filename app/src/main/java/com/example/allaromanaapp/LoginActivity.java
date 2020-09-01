@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ import java.util.Locale;
 public class LoginActivity extends AppCompatActivity {
 
     EditText Email, Password;
+    ImageButton loginAdmin;
     Button LoginBtn, ChangeBtn;
     TextView CreateBtn, forgotTextLink;
     ProgressBar progressBar;
@@ -42,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        loginAdmin = findViewById(R.id.loginAdmin);
         Email = findViewById(R.id.email);
         Password = findViewById(R.id.password);
         progressBar = findViewById(R.id.progressBar);
@@ -51,6 +54,15 @@ public class LoginActivity extends AppCompatActivity {
         forgotTextLink = findViewById(R.id.forgotPassword);
         ChangeBtn = findViewById(R.id.changeLan);
 
+        loginAdmin.setVisibility(View.INVISIBLE);
+
+        loginAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),LoginAdminActivity.class));
+            }
+        });
+
         LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,39 +70,45 @@ public class LoginActivity extends AppCompatActivity {
                 String email = Email.getText().toString().trim();
                 String password = Password.getText().toString().trim();
 
-                if(TextUtils.isEmpty(email)){
+                if (TextUtils.isEmpty(email)) {
                     Email.setError(getString(R.string.emailRichiesta2));
+                    loginAdmin.setVisibility(View.INVISIBLE);
                     return;
                 }
 
-                if(TextUtils.isEmpty(password)){
+                if (TextUtils.isEmpty(password)) {
                     Password.setError(getString(R.string.password321));
                     return;
                 }
 
-                if(password.length() < 6){
+                if (password.length() < 6) {
                     Password.setError(getString(R.string.passwordCorta2));
                     return;
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
+                if (email.equals("admin") && password.equals("admin1")) {
+                    loginAdmin.setVisibility(View.VISIBLE);
+                } else {
 
-                fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                    progressBar.setVisibility(View.VISIBLE);
 
-                        if(task.isSuccessful()){
-                            Toast.makeText(LoginActivity.this, R.string.loginEffettuato, Toast.LENGTH_SHORT ).show();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+
+                            if (task.isSuccessful()) {
+                                Toast.makeText(LoginActivity.this, R.string.loginEffettuato, Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            } else {
+                                Toast.makeText(LoginActivity.this, R.string.errore2, Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+                            }
                         }
-                        else{
-                            Toast.makeText(LoginActivity.this, R.string.errore2, Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-                });
+                    });
+                }
             }
         });
+
 
         CreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override

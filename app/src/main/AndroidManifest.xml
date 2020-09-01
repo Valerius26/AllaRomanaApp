@@ -14,6 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="HardcodedDebugMode">
+
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,6 +49,10 @@
         <activity android:name=".notificationActivity"/>
 
         <activity android:name=".NotDetailActivity"/>
+
+        <activity android:name=".LoginAdminActivity"/>
+
+        <activity android:name=".AdminActivity"/>
     </application>
 
 </manifest>

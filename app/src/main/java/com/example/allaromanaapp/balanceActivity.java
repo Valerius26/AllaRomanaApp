@@ -70,9 +70,6 @@ public class balanceActivity extends AppCompatActivity {
 
     }
 
-    public void home() {
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-    }
 
     private void loadDataFromFirebase() {
 

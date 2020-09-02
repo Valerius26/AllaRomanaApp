@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         payBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("asfagfas",currentUserID);
                 createAccount(currentUserID);
             }
         });
@@ -207,7 +208,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(),AddUsers.class);
                 intent.putExtra("idCreatore", creatorID);
                 intent.putExtra("idAccount",accountID);
-                getApplicationContext().startActivity(intent);
+             //   getApplicationContext().startActivity(intent);
+                MainActivity.this.startActivity(intent);
             }
         });
 

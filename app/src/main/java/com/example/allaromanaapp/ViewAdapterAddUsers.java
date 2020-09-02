@@ -30,15 +30,13 @@ import java.util.Map;
 
 public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers> {
 
-    AddUsers addUsers;
     List<User> usersList;
     Context context;
     FirebaseFirestore db;
     String creatorID, accountID;
 
 
-    public ViewAdapterAddUsers(AddUsers addUsers, List<User> usersList, Context context, String creatorID, String accountID) {
-        this.addUsers = addUsers;
+    public ViewAdapterAddUsers(List<User> usersList, Context context, String creatorID, String accountID) {
         this.usersList = usersList;
         this.context = context;
         this.creatorID = creatorID;
@@ -75,6 +73,7 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
 
         return viewHolderAddUsers;
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderAddUsers holder, final int position) {

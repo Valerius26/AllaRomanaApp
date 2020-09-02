@@ -16,13 +16,11 @@ import java.util.ArrayList;
 
 public class ViewAdapterSelectingPay extends RecyclerView.Adapter<ViewHolderAddUsers>{
 
-    SelectPaying selectPaying;
     Context context;
     ArrayList<partecipant> partecipants;
     String payingUser;
 
-    public ViewAdapterSelectingPay(SelectPaying selectPaying, Context context, ArrayList partecipants) {
-        this.selectPaying = selectPaying;
+    public ViewAdapterSelectingPay(Context context, ArrayList partecipants) {
         this.context = context;
         this.partecipants = partecipants;
     }
@@ -59,6 +57,7 @@ public class ViewAdapterSelectingPay extends RecyclerView.Adapter<ViewHolderAddU
 
         return viewHolderAddUsers;
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderAddUsers holder, int position) {

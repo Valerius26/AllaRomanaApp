@@ -292,7 +292,7 @@ public class SelectPaying extends AppCompatActivity {
                                    documentSnapshot.getString("cognomePartecipante"),documentSnapshot.getString("idUtente"));
                            partecipants.add(p);
                        }
-                        adapter = new ViewAdapterSelectingPay(SelectPaying.this, getApplicationContext(), partecipants);
+                        adapter = new ViewAdapterSelectingPay(SelectPaying.this, partecipants);
                         recyclerView.setAdapter(adapter);
                     }
                 });

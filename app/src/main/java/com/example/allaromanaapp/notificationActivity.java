@@ -112,7 +112,7 @@ public class notificationActivity extends AppCompatActivity {
                             return notify.getLetto().compareTo(t1.getLetto());
                         }
                     });
-                    adapter = new notificationAdapter(notifies,getApplicationContext(),notificationActivity.this);
+                    adapter = new notificationAdapter(notifies,notificationActivity.this);
                     recyclerView.setAdapter(adapter);
                 }
             }

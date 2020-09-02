@@ -78,6 +78,13 @@ public class AddUsers extends AppCompatActivity {
 
         showData();
 
+
+         searchUser.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+
+             }
+         });
         searchUser.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -123,13 +130,14 @@ public class AddUsers extends AppCompatActivity {
                     partecipants.add(id);
                 }
                 if(partecipants.size() < 2){
-                    Toast.makeText(AddUsers.this,"aggiungi un partecipante", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddUsers.this,R.string.aggiungiPartecipante, Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Intent intent = new Intent(getApplicationContext(),SelectPaying.class);
                     intent.putExtra("idCreatore", creatorID);
                     intent.putExtra("idAccount",accountID);
-                    getApplicationContext().startActivity(intent);
+                    //getApplicationContext().startActivity(intent);
+                    AddUsers.this.startActivity(intent);
                 }
             }
         });
@@ -168,7 +176,7 @@ public class AddUsers extends AppCompatActivity {
                         }
                     }
                 }
-                searchAdapter = new SearchInAddUsersAdapter(AddUsers.this, usersSearched, getApplicationContext(),creatorID,accountID);
+                searchAdapter = new SearchInAddUsersAdapter(usersSearched, AddUsers.this,creatorID,accountID);
                 recyclerView.setAdapter(searchAdapter);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -199,7 +207,7 @@ public class AddUsers extends AppCompatActivity {
                         usersList.add(user);
                     }
                 }
-                adapter = new ViewAdapterAddUsers(AddUsers.this, usersList, getApplicationContext(),creatorID,accountID);
+                adapter = new ViewAdapterAddUsers( usersList, AddUsers.this,creatorID,accountID);
                 recyclerView.setAdapter(adapter);
             }
         }).addOnFailureListener(new OnFailureListener() {

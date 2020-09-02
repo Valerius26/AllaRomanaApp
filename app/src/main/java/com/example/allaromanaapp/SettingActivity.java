@@ -1,5 +1,5 @@
 package com.example.allaromanaapp;
-
+import com.example.allaromanaapp.notificationActivity;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Service;
@@ -29,9 +29,9 @@ public class SettingActivity extends AppCompatActivity{
 
     private TextView light;
     private SeekBar brightBar;
-    private int brightness;
+    public int brightness;
     private ContentResolver contentResolver;
-    private Window window;
+    public Window window;
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private SensorEventListener lightEventListener;
@@ -57,7 +57,12 @@ public class SettingActivity extends AppCompatActivity{
         }
 
         try{
-            brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS);
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS_MODE,
+                    Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+
+            brightness = Settings.System.getInt(getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS);
         }catch (Exception e){
             Log.e("ERROR","CANNOT ACCESS SYSTEM BRIGHTNESS");
             e.printStackTrace();
@@ -68,8 +73,8 @@ public class SettingActivity extends AppCompatActivity{
         brightBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(progress<=20){
-                    brightness = 20;
+                if(progress<=10){
+                    brightness = 10;
                 }else{
                     brightness = progress;
                 }
@@ -85,7 +90,8 @@ public class SettingActivity extends AppCompatActivity{
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Settings.System.putInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS, brightness);
+                android.provider.Settings.System.putInt(contentResolver,
+                        android.provider.Settings.System.SCREEN_BRIGHTNESS, brightness);
                 WindowManager.LayoutParams layoutParams = window.getAttributes();
 
                 layoutParams.screenBrightness = brightness / (float) 255;
@@ -117,12 +123,30 @@ public class SettingActivity extends AppCompatActivity{
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener(lightEventListener);
+
+        try{
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS_MODE,
+                    Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+
+            brightness = Settings.System.getInt(getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS);
+        }catch (Exception e){
+            Log.e("ERROR","CANNOT ACCESS SYSTEM BRIGHTNESS");
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(lightEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        android.provider.Settings.System.putInt(contentResolver,
+                android.provider.Settings.System.SCREEN_BRIGHTNESS, brightness);
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
+
+        layoutParams.screenBrightness = brightness / (float) 255;
+        window.setAttributes(layoutParams);
     }
 
 

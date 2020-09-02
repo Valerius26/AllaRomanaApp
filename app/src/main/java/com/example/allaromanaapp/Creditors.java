@@ -1,13 +1,7 @@
 package com.example.allaromanaapp;
 
 public class Creditors {
-    public Long getDebt() {
-        return debt;
-    }
 
-    public void setDebt(Long debt) {
-        this.debt = debt;
-    }
 
     private String id;
     private String name;
@@ -43,5 +37,13 @@ public class Creditors {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public Long getDebt() {
+        return debt;
+    }
+
+    public void setDebt(Long debt) {
+        this.debt = debt;
     }
 }

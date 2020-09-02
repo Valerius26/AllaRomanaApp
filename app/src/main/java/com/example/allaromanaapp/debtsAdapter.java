@@ -35,7 +35,7 @@ public class debtsAdapter extends RecyclerView.Adapter<detsHolder> {
     balanceActivity balAct;
     FirebaseFirestore db;
 
-    public debtsAdapter(balanceActivity balAct, ArrayList debtsList, Context context) {
+    public debtsAdapter(ArrayList debtsList, Context context) {
         this.debtsList = debtsList;
         this.context = context;
         this.balAct = balAct;
@@ -53,12 +53,24 @@ public class debtsAdapter extends RecyclerView.Adapter<detsHolder> {
         dtHolder.setOnClickListener(new detsHolder.ClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                String clickedUserID = debtsList.get(position).getId();
+                Intent intent = new Intent(context,NotCurrentProfileActivity.class);
+                intent.putExtra("idUtente", clickedUserID);
+                context.startActivity(intent);
             }
 
             @Override
             public void onItemLongClick(View view, int position) {
-
+                String creditorID = debtsList.get(position).getId();
+                String name = debtsList.get(position).getName();
+                String surname = debtsList.get(position).getSurname();
+                Long debt = debtsList.get(position).getDebt();
+                Intent intent = new Intent(context,payActivity.class);
+                intent.putExtra("name",name);
+                intent.putExtra("surname",surname);
+                intent.putExtra("debt",""+debt);
+                intent.putExtra("creditorID",creditorID);
+                context.startActivity(intent);
             }
         });
 

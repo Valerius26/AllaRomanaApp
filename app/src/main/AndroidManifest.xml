@@ -56,6 +56,8 @@
         <activity android:name=".AdminActivity"/>
 
         <activity android:name=".SettingActivity"/>
+
+        <activity android:name=".payActivity"/>
     </application>
 
 </manifest>

@@ -27,7 +27,7 @@
             android:layout_marginVertical="10dp"
             android:layout_weight="1"
             android:text="Luminosità"
-            android:textSize="40dp" />
+            android:textSize="35dp" />
 
 
     </LinearLayout>

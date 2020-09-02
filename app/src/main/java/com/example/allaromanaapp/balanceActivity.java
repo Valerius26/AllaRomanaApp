@@ -80,11 +80,11 @@ public class balanceActivity extends AppCompatActivity {
              ArrayList<Creditors> debtsList = new ArrayList();
 
                 for(DocumentSnapshot documentSnapshot: task.getResult()){
-                        Creditors creditor = new Creditors(documentSnapshot.getId(),documentSnapshot.getString("nome creditore"),
+                        Creditors creditor = new Creditors(documentSnapshot.getString("idCreditore"),documentSnapshot.getString("nome creditore"),
                                 documentSnapshot.getString("cognome creditore"), Long.valueOf(documentSnapshot.getString("debito")));
                         debtsList.add(creditor);
                 }
-                adapter = new debtsAdapter(balanceActivity.this, debtsList, getApplicationContext());
+                adapter = new debtsAdapter(debtsList, balanceActivity.this);
                 recyclerView.setAdapter(adapter);
             }
         }).addOnFailureListener(new OnFailureListener() {

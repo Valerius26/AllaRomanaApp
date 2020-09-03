@@ -29,6 +29,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -60,6 +61,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         userID = fAuth.getCurrentUser().getUid();
 
+        //updateBalance();
+
         final DocumentReference documentReference = fStore.collection("users").document(userID);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -88,6 +91,42 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void updateBalance() {
+        fStore.collection("users").document(userID).collection("debts").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Integer debt = 0;
+                        for(DocumentSnapshot documentSnapshot: task.getResult()){
+                            debt = debt + Integer.valueOf(documentSnapshot.getString("debito"));
+                        }
+                        getCredits(debt);
+                    }
+
+                });
+    }
+
+    private void getCredits(final Integer debt) {
+        fStore.collection("users").document(userID).collection("credits").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Integer credit = 0;
+                        for(DocumentSnapshot documentSnapshot: task.getResult()){
+                            credit = credit + Integer.valueOf(documentSnapshot.getString("credito"));
+                        }
+                        update(debt,credit);
+                    }
+
+                });
+    }
+
+    private void update(Integer debt, Integer credit) {
+        Integer balance = credit - debt;
+        String balanceString = ""+balance;
+        fStore.collection("users").document(userID).update("bilancio",balance);
     }
 
     private void canc(int bilancio2, int gruppi2, View view, final FirebaseUser user) {

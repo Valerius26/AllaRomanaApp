@@ -59,6 +59,7 @@
     <string name="NomeRichiesto">The name is required</string>
     <string name="GruppoCreato">The group was created successfully</string>
     <string name="pagaConto">Pay a cont</string>
+    <string name="mappa">Map</string>
 
     <string name="tieniPremutoConto">Press and hold to add to an account</string>
     <string name="aggiungiPartecipante">add member</string>

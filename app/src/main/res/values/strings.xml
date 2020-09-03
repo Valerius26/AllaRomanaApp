@@ -58,6 +58,7 @@
     <string name="NomeRichiesto">Il nome è richiesto</string>
     <string name="GruppoCreato">Il gruppo è stato creato con successo</string>
     <string name="pagaConto">Paga un conto</string>
+    <string name="mappa">Mappa</string>
 
     <string name="tieniPremutoConto">Tieni premuto per pagare a un conto</string>
     <string name="aggiungiPartecipante">aggiungi un partecipante</string>

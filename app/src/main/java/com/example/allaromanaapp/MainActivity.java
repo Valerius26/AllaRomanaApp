@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button profileBtn, balanceBtn, historyBtn, payBtn, messageBtn, settingsBtn;
+    Button profileBtn, balanceBtn, historyBtn, payBtn, messageBtn, settingsBtn, mapBtn, groupBtn;
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
     String currentUserID;
@@ -61,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         messageBtn = (Button) findViewById(R.id.buttonMessage);
         settingsBtn = (Button) findViewById(R.id.buttonImpostation);
         nuovaNotifica = (CardView) findViewById(R.id.notifyCounter);
+        mapBtn = (Button) findViewById(R.id.mapBtn);
+        groupBtn = (Button) findViewById(R.id.GroupBtn);
+
 
         nuovaNotifica.setVisibility(View.INVISIBLE);
 

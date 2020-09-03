@@ -33,7 +33,7 @@
             android:layout_below="@+id/groupTitle"
             android:layout_marginStart="4dp"
             android:layout_toRightOf="@+id/iconGroup"
-            android:text="sender name" />
+            android:text="description" />
 
         <TextView
             android:id="@+id/GoToGroup"
@@ -42,8 +42,7 @@
             android:layout_below="@+id/DescriptionName"
             android:layout_marginStart="75dp"
             android:singleLine="true"
-            android:text="Entra >"
-            android:textColor="@color/design_default_color_primary"
+            android:text="Premi per entrare"
             android:textSize="20dp"
             android:textStyle="italic" />
 

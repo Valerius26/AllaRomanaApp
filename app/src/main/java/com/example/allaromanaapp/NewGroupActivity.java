@@ -3,6 +3,7 @@ package com.example.allaromanaapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -45,6 +46,9 @@ public class NewGroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newgroup);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         NomeGruppo = findViewById(R.id.nomeGruppo);
         Descrizione = findViewById(R.id.descrizione);

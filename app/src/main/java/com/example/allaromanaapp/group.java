@@ -6,15 +6,7 @@ public class group {
     private String description;
     private String creatorID;
 
-    public String getCreatorID() {
-        return creatorID;
-    }
-
-    public void setCreatorID(String creatorID) {
-        this.creatorID = creatorID;
-    }
-
-    private group(){
+    public group(){
 
     }
 
@@ -24,6 +16,16 @@ public class group {
         this.groupID = GroupID;
         this.creatorID = creatorID;
     }
+
+    public String getCreatorID() {
+        return creatorID;
+    }
+
+    public void setCreatorID(String creatorID) {
+        this.creatorID = creatorID;
+    }
+
+
 
     public String getGroupID() {
         return groupID;

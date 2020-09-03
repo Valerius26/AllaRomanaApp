@@ -108,6 +108,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        groupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),groupActivity.class));
+            }
+        });
+
     }
 
     private void notifyNew(String currentUserID) {

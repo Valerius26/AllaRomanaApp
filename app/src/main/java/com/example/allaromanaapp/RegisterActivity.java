@@ -54,7 +54,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         loadLocale();
         setContentView(R.layout.activity_register);
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         // Initialize Firebase Auth
 
         Nome = findViewById(R.id.nome);

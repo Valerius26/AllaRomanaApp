@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,7 +46,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
+        // Add a marker in Bari and move the camera
         LatLng bari = new LatLng(41.112821, 16.870585);
         mMap.addMarker(new MarkerOptions().position(bari).title(getString(R.string.marker)));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(bari, 10));
@@ -73,6 +74,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return true;
             case R.id.terrain_map:
                 mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                return true;
+            case R.id.current_position:
+                startActivity(new Intent(getApplicationContext(),CurrentPosition.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

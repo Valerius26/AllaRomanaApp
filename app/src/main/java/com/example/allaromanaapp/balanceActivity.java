@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ComponentActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -41,6 +42,8 @@ public class balanceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_balance);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         fAuth = FirebaseAuth.getInstance();
         currentUserID = fAuth.getUid();

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -37,6 +38,8 @@ public class LoginAdminActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_admin_acctivity);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         //View objects
         buttonScan = (Button) findViewById(R.id.buttonScan);

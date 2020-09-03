@@ -1,7 +1,6 @@
 package com.example.allaromanaapp;
 import com.example.allaromanaapp.notificationActivity;
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -23,6 +22,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingActivity extends AppCompatActivity{
@@ -40,6 +40,8 @@ public class SettingActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         brightBar = (SeekBar) findViewById(R.id.brightBar);
         light = findViewById(R.id.lightSensor);

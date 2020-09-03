@@ -66,6 +66,7 @@
     <string name="terrain_map">Mappa del terreno</string>
     <string name="current_position">Posizione corrente</string>
     <string name="sonoQui">Io Sono Qui</string>
+    <string name="address">Ottieni indirizzo</string>
 
     <string name="tieniPremutoConto">Tieni premuto per pagare a un conto</string>
     <string name="aggiungiPartecipante">aggiungi un partecipante</string>

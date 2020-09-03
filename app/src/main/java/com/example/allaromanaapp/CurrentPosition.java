@@ -36,7 +36,6 @@ public class CurrentPosition extends AppCompatActivity implements OnMapReadyCall
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +93,7 @@ public class CurrentPosition extends AppCompatActivity implements OnMapReadyCall
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.map_options, menu);
+        inflater.inflate(R.menu.map_options2, menu);
         return true;
     }
 
@@ -117,6 +116,13 @@ public class CurrentPosition extends AppCompatActivity implements OnMapReadyCall
             case R.id.current_position:
                 startActivity(new Intent(getApplicationContext(),CurrentPosition.class));
                 return true;
+            case R.id.address:
+                Double lat = currentLocation.getLatitude();
+                Double lon = currentLocation.getLongitude();
+                Intent intent = new Intent(getApplicationContext(),AddressActivity.class);
+                intent.putExtra("latitude",""+lat);
+                intent.putExtra("longitude",""+lon);
+                startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);
         }

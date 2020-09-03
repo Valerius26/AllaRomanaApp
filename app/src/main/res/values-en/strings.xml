@@ -60,7 +60,13 @@
     <string name="GruppoCreato">The group was created successfully</string>
     <string name="pagaConto">Pay a cont</string>
     <string name="mappa">Map</string>
+    <string name="marker">Marker in Bari</string>
+    <string name="normal_map">Normal map</string>
+    <string name="hybrid_map">Hybrid map</string>
+    <string name="satellite_map">Satellite map</string>
+    <string name="terrain_map">Terrain map</string>
 
     <string name="tieniPremutoConto">Press and hold to add to an account</string>
     <string name="aggiungiPartecipante">add member</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

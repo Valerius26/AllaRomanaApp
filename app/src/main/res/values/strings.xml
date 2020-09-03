@@ -59,10 +59,16 @@
     <string name="GruppoCreato">Il gruppo è stato creato con successo</string>
     <string name="pagaConto">Paga un conto</string>
     <string name="mappa">Mappa</string>
+    <string name="marker">Segnale a Bari</string>
+    <string name="normal_map">Mappa normale</string>
+    <string name="hybrid_map">Mappa ibrida</string>
+    <string name="satellite_map">Mappa satellitare</string>
+    <string name="terrain_map">Mappa del terreno</string>
+
 
     <string name="tieniPremutoConto">Tieni premuto per pagare a un conto</string>
     <string name="aggiungiPartecipante">aggiungi un partecipante</string>
-
+    <string name="title_activity_maps">Mappa</string>
 
 
 </resources>

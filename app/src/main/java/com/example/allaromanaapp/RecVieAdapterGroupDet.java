@@ -22,7 +22,7 @@ public class RecVieAdapterGroupDet extends RecyclerView.Adapter<RecVieHolderGrou
     Context context;
     FirebaseFirestore db;
     ArrayList<User> partecipants = new ArrayList<>();
-
+    int contiene;
     public RecVieAdapterGroupDet(List<User> userList, Context context) {
         this.userList = userList;
         this.context = context;
@@ -53,10 +53,12 @@ public class RecVieAdapterGroupDet extends RecyclerView.Adapter<RecVieHolderGrou
                     partecipants.remove(userList.get(position));
                     Toast.makeText(context,userList.get(position).getNome() + " " + userList.get(position).getCognome() +
                             " " + "rimosso", Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
                 }else{
                     partecipants.add(userList.get(position));
                     Toast.makeText(context,userList.get(position).getNome() + " " + userList.get(position).getCognome() +
                             " " + "aggiunto", Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
                 }
 
             }
@@ -70,7 +72,11 @@ public class RecVieAdapterGroupDet extends RecyclerView.Adapter<RecVieHolderGrou
         String name = userList.get(position).getNome();
         String surname = userList.get(position).getCognome();
         holder.fullName.setText(name + " " + surname);
-
+        if(partecipants.contains(userList.get(position))){
+            holder.info.setText("Tieni premuto per rimuovere");
+        }else{
+            holder.info.setText("Tieni premuto per selezionare");
+        }
     }
 
     @Override

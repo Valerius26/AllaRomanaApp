@@ -8,37 +8,37 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="69dp"
         android:background="@color/cardview_light_background">
 
         <ImageView
             android:id="@+id/iconUser"
-            android:clickable="true"
             android:layout_width="70dp"
             android:layout_height="70dp"
+            android:clickable="true"
             android:src="@drawable/profiloimg" />
 
         <TextView
             android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginVertical="10dp"
             android:layout_marginStart="4dp"
             android:layout_toEndOf="@+id/iconUser"
             android:text="Name Surname"
-            android:textSize="22sp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginVertical="10dp"/>
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginVertical="40dp"
             android:layout_marginStart="4dp"
             android:layout_toEndOf="@+id/iconUser"
             android:text="Tieni premuto per selezionare"
-            android:textSize="15sp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginVertical="40dp"/>
+            android:textSize="15sp" />
 
 
     </RelativeLayout>

@@ -113,7 +113,7 @@ public class NewGroupActivity extends AppCompatActivity {
                 createGroupAll(userID,groupTitle,groupDescription,nome,cognome);
                 createFirstPartecipant(documentReference, nome, cognome);
                 Toast.makeText(NewGroupActivity.this, getString(R.string.GruppoCreato) , Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), GroupDetail.class));
                 IncrementGroup();
             }
         }).addOnFailureListener(new OnFailureListener() {

@@ -22,6 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="HardcodedDebugMode">
+        <activity android:name=".GroupDetail"></activity>
         <activity android:name=".AddressActivity" />
         <activity android:name=".CurrentPosition" />
         <!--
@@ -67,7 +68,7 @@
         <activity android:name=".SettingActivity" />
         <activity android:name=".payActivity" />
         <activity android:name=".NewGroupActivity" />
-        <activity android:name=".groupActivity"/>
+        <activity android:name=".groupActivity" />
     </application>
 
 </manifest>

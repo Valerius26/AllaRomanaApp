@@ -92,6 +92,7 @@ public class NewGroupActivity extends AppCompatActivity {
         hashMap.put("Nome gruppo", ""+groupTitle);
         hashMap.put("Descrizione", ""+groupDescription);
         hashMap.put("Creato da", ""+userID);
+        hashMap.put("Stato","Non creato");
 
         //recupera nome e cognome del creatore
         DocumentReference documentReference1 = fStore.collection("users").document(userID);
@@ -139,7 +140,7 @@ public class NewGroupActivity extends AppCompatActivity {
         hashMap.put("Nome gruppo", ""+groupTitle);
         hashMap.put("Descrizione", ""+groupDescription);
         hashMap.put("Creato da", ""+userID);
-
+        hashMap.put("Stato","Non creato");
 
         //crea il gruppo nell'utente
         CollectionReference collectionReference = fStore.collection("AllGroups");

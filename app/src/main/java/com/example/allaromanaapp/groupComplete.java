@@ -74,6 +74,7 @@ public class groupComplete extends AppCompatActivity {
 
 
 
+
     }
 
     private void showPartecipant() {
@@ -87,7 +88,7 @@ public class groupComplete extends AppCompatActivity {
                         for(DocumentSnapshot documentSnapshot: task.getResult()){
                             User user  =  new User(documentSnapshot.getString("nomePartecipante"),
                                     documentSnapshot.getString("cognomePartecipante"), documentSnapshot.getString("e-mail"),
-                                    documentSnapshot.getString("password"), documentSnapshot.getId(),(Long) documentSnapshot.get("bilancio"));
+                                    documentSnapshot.getString("password"), documentSnapshot.getId(),(Long) documentSnapshot.get("bilancio"), documentSnapshot.getString("idUtente"));
 
                             partecipants.add(user);
                         }

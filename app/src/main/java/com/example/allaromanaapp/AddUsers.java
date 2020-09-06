@@ -170,7 +170,7 @@ public class AddUsers extends AppCompatActivity {
                         fullName = name + " " + surname;
                         User utente = new User(name,
                                 surname, querySnapshot.getString("e-mail"),
-                                querySnapshot.getString("password"), userid,(Long) querySnapshot.get("bilancio"));
+                                querySnapshot.getString("password"), userid,(Long) querySnapshot.get("bilancio"), querySnapshot.getString("idUtente"));
 
 
                         if (fullName.toLowerCase().contains(searchedString.toLowerCase())) {
@@ -206,7 +206,7 @@ public class AddUsers extends AppCompatActivity {
                     if(!currentUserID.equals(currentID)) {
                         User user = new User(documentSnapshot.getString("nome"), documentSnapshot.getString("cognome"),
                                 documentSnapshot.getString("e-mail"), documentSnapshot.getString("password"),
-                                currentID, (Long) documentSnapshot.get("bilancio"));
+                                currentID, (Long) documentSnapshot.get("bilancio"), documentSnapshot.getString("idUtente"));
                         usersList.add(user);
                     }
                 }

@@ -57,10 +57,8 @@ public class GroupDetail extends AppCompatActivity {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(GroupDetail.this, groupComplete.class);
-                intent1.putExtra("idCreatore",currentUserID);
-                intent1.putExtra("idGruppo",groupID);
-                startActivity(intent1);
+                minTwoPartecipant();
+
             }
         });
         setUpRecyclerView();
@@ -111,7 +109,7 @@ public class GroupDetail extends AppCompatActivity {
                         fullName = name + " " + surname;
                         User utente = new User(name,
                                 surname, querySnapshot.getString("e-mail"),
-                                querySnapshot.getString("password"), userid,(Long) querySnapshot.get("bilancio"));
+                                querySnapshot.getString("password"), userid,(Long) querySnapshot.get("bilancio"), querySnapshot.getString("idUtente"));
 
 
                         if (fullName.toLowerCase().contains(toString.toLowerCase())) {
@@ -143,7 +141,7 @@ public class GroupDetail extends AppCompatActivity {
                     if(!querySnapshot.getId().equals(currentUserID)) {
                         User user = new User(querySnapshot.getString("nome"),
                                 querySnapshot.getString("cognome"), querySnapshot.getString("e-mail"),
-                                querySnapshot.getString("password"), querySnapshot.getId(), (Long) querySnapshot.get("bilancio"));
+                                querySnapshot.getString("password"), querySnapshot.getId(), (Long) querySnapshot.get("bilancio"), querySnapshot.getString("idUtente"));
                         users.add(user);
                     }
                 }
@@ -170,4 +168,28 @@ public class GroupDetail extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
     }
 
+    private void minTwoPartecipant() {
+        db.collection("users").document(currentUserID).collection("groups").document(groupID)
+                .collection("partecipants").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                ArrayList<String> partecipants = new ArrayList<>();
+                for(DocumentSnapshot documentSnapshot : task.getResult()){
+                    String id = documentSnapshot.getId();
+                    partecipants.add(id);
+                }
+                if(partecipants.size() < 2){
+                    Toast.makeText(GroupDetail.this,R.string.aggiungiPartecipante, Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+                    Intent intent1 = new Intent(GroupDetail.this, groupComplete.class);
+                    intent1.putExtra("idCreatore",currentUserID);
+                    intent1.putExtra("idGruppo",groupID);
+                    startActivity(intent1);
+                }
+
+            }
+        });
+    }
 }

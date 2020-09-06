@@ -1,7 +1,7 @@
 package com.example.allaromanaapp;
 
 public class User {
-    private String nome,cognome,email,password,idUser;
+    private String nome,cognome,email,password,idUser,idRef;
     Long bilancio = Long.valueOf(0);
 
     public String getIdUser() {
@@ -17,13 +17,14 @@ public class User {
     }
 
 
-    public User(String nome, String cognome, String email, String password, String idUser, Long bilancio){
+    public User(String nome, String cognome, String email, String password, String idUser, Long bilancio, String idRef){
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.password = password;
         this.bilancio = bilancio;
         this.idUser = idUser;
+        this.idRef = idRef;
     }
 
     public String getNome() {
@@ -62,7 +63,16 @@ public class User {
         return bilancio;
     }
 
-    public void setBilancio(Integer somma) {
-        this.bilancio = bilancio + somma;
+
+    public String getIdRef() {
+        return idRef;
+    }
+
+    public void setIdRef(String idRef) {
+        this.idRef = idRef;
+    }
+
+    public void setBilancio(Long bilancio) {
+        this.bilancio = bilancio;
     }
 }

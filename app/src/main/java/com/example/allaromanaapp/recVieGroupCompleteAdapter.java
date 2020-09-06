@@ -57,7 +57,7 @@ public class recVieGroupCompleteAdapter extends RecyclerView.Adapter<recVieGroup
             @Override
             public void onItemClick(View view, int position) {
                 db = FirebaseFirestore.getInstance();
-                String clickedUserID = userList.get(position).getIdUser();
+                String clickedUserID = userList.get(position).getIdRef();
                 Intent intent = new Intent(context,NotCurrentProfileActivity.class);
                 intent.putExtra("idUtente", clickedUserID);
                 context.startActivity(intent);
@@ -65,8 +65,14 @@ public class recVieGroupCompleteAdapter extends RecyclerView.Adapter<recVieGroup
 
             @Override
             public void onItemLongClick(View view, int position) {
-                db = FirebaseFirestore.getInstance();
-                minTwoPartecipant(userList.get(position).getIdUser(),position);
+                if(userList.get(position).getIdRef().equals(currentuserID))
+                {
+                    Toast.makeText(context,"non puoi eliminarti",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    db = FirebaseFirestore.getInstance();
+                    minTwoPartecipant(userList.get(position).getIdUser(), position);
+                }
             }
         });
 
@@ -105,6 +111,7 @@ public class recVieGroupCompleteAdapter extends RecyclerView.Adapter<recVieGroup
                 }
                 if(partecipants.size() < 3){
                     Toast.makeText(context,R.string.aggiungiPartecipante, Toast.LENGTH_SHORT).show();
+
                 }
                 else{
                     db.collection("users").document(currentuserID).collection("groups")

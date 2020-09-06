@@ -110,10 +110,13 @@ public class NewGroupActivity extends AppCompatActivity {
         collectionReference.add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
+                String group_id = documentReference.getId();
                 createGroupAll(userID,groupTitle,groupDescription,nome,cognome);
                 createFirstPartecipant(documentReference, nome, cognome);
                 Toast.makeText(NewGroupActivity.this, getString(R.string.GruppoCreato) , Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), GroupDetail.class));
+                Intent intent = new Intent(getApplicationContext(),GroupDetail.class);
+                intent.putExtra("idGruppo",group_id);
+                startActivity(intent);
                 IncrementGroup();
             }
         }).addOnFailureListener(new OnFailureListener() {

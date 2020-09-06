@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,20 +33,20 @@ public class GroupDetail extends AppCompatActivity {
     EditText searchUsers;
     FirebaseFirestore db;
     FirebaseAuth fAuth;
-    String currentUserID;
+    String currentUserID,groupID;
     ArrayList<User> users;
     Button create;
     RecyclerView recyclerView;
     RecVieAdapterGroupDet adapter;
-    private ArrayList<User> partecipants;
-
+    private ArrayList<User> usersSearched;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_detail);
 
-        partecipants = new ArrayList<>();
-        Toast.makeText(GroupDetail.this, "Una volta creato il gruppo non sarà più possibile modificarne i partecipanti", Toast.LENGTH_LONG).show();
+        Intent intent = getIntent();
+        groupID = intent.getStringExtra("idGruppo");
+
         title = findViewById(R.id.title);
         searchUsers = findViewById(R.id.searchUser);
         users = new ArrayList<>();
@@ -62,6 +65,68 @@ public class GroupDetail extends AppCompatActivity {
         loadDataFromFirebase();
 
 
+        searchUsers.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(!editable.toString().isEmpty())
+                    setAdapter(editable.toString());
+
+                else {
+                    usersSearched = new ArrayList<User>();
+                    usersSearched.clear();
+                    recyclerView.removeAllViews();
+                }
+            }
+        });
+
+    }
+
+    private void setAdapter(final String toString) {
+        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String fullName = "";
+                usersSearched = new ArrayList<User>();
+                usersSearched.clear();
+                recyclerView.removeAllViews();
+                for(DocumentSnapshot querySnapshot: task.getResult()){
+                    String userid =  querySnapshot.getId();
+
+                    if(!userid.equals(currentUserID)) {
+                        String name = querySnapshot.getString("nome");
+                        String surname = querySnapshot.getString("cognome");
+                        fullName = name + " " + surname;
+                        User utente = new User(name,
+                                surname, querySnapshot.getString("e-mail"),
+                                querySnapshot.getString("password"), userid,(Long) querySnapshot.get("bilancio"));
+
+
+                        if (fullName.toLowerCase().contains(toString.toLowerCase())) {
+                            usersSearched.add(utente);
+
+                        }
+                    }
+                }
+                adapter = new RecVieAdapterGroupDet(usersSearched, GroupDetail.this, groupID);
+                recyclerView.setAdapter(adapter);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
 
     }
 
@@ -79,7 +144,7 @@ public class GroupDetail extends AppCompatActivity {
                         users.add(user);
                     }
                 }
-                adapter = new RecVieAdapterGroupDet(users, GroupDetail.this, GroupDetail.this);
+                adapter = new RecVieAdapterGroupDet(users, GroupDetail.this, groupID);
                 recyclerView.setAdapter(adapter);
 
             }
@@ -102,11 +167,4 @@ public class GroupDetail extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
     }
 
-    public ArrayList<User> getPartecipants(){
-        return partecipants;
-    }
-
-    public void setPartecipants(ArrayList<User> partecipants){
-        this.partecipants = partecipants;
-    }
 }

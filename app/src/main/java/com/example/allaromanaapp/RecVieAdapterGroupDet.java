@@ -11,24 +11,37 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RecVieAdapterGroupDet extends RecyclerView.Adapter<RecVieHolderGroupDet>  {
 
-    List<User> userList;
+    ArrayList<User> userList;
     Context context;
     FirebaseFirestore db;
-    private ArrayList<User> partecipants;
-    GroupDetail groupDetail;
+    FirebaseAuth firebaseAuth;
+    String currentuserID,groupID;
 
-    public RecVieAdapterGroupDet(List<User> userList, Context context, GroupDetail groupDetail) {
+    public RecVieAdapterGroupDet(ArrayList userList, Context context, String groupID) {
         this.userList = userList;
         this.context = context;
-        this.groupDetail = groupDetail;
-        this.partecipants = this.groupDetail.getPartecipants();
+        this.groupID = groupID;
+        firebaseAuth = FirebaseAuth.getInstance();
+        currentuserID = firebaseAuth.getUid();
     }
 
     @NonNull
@@ -52,20 +65,9 @@ public class RecVieAdapterGroupDet extends RecyclerView.Adapter<RecVieHolderGrou
 
             @Override
             public void onItemLongClick(View view, int position) {
-                if(partecipants.contains(userList.get(position))){
-                    partecipants.remove(userList.get(position));
-                    groupDetail.setPartecipants(partecipants);
-                    Toast.makeText(context,userList.get(position).getNome() + " " + userList.get(position).getCognome() +
-                            " " + "rimosso", Toast.LENGTH_SHORT).show();
-                    notifyDataSetChanged();
-                }else{
-                    partecipants.add(userList.get(position));
-                    groupDetail.setPartecipants(partecipants);
-                    Toast.makeText(context,userList.get(position).getNome() + " " + userList.get(position).getCognome() +
-                            " " + "aggiunto", Toast.LENGTH_SHORT).show();
-                    notifyDataSetChanged();
-                }
-
+                db = FirebaseFirestore.getInstance();
+                partecipantExists(userList.get(position).getIdUser(),userList.get(position).getNome(),
+                        userList.get(position).getCognome());
             }
         });
 
@@ -77,17 +79,51 @@ public class RecVieAdapterGroupDet extends RecyclerView.Adapter<RecVieHolderGrou
         String name = userList.get(position).getNome();
         String surname = userList.get(position).getCognome();
         holder.fullName.setText(name + " " + surname);
-        if(partecipants.contains(userList.get(position))){
-            holder.info.setText("Rimuovi");
-            holder.info.setTextColor(Color.RED);
-        }else{
-            holder.info.setText("Tieni premuto per selezionare");
-            holder.info.setTextColor(Color.BLACK);
-        }
+
+
     }
 
     @Override
     public int getItemCount() {
         return userList.size();
     }
+
+    private void partecipantExists(final String selectedUserID, final String nome, final String cognome) {
+        db.collection("users").document(currentuserID).collection("groups")
+                .document(groupID).collection("partecipants").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                ArrayList<String> duplicate = new ArrayList<>();
+                for(DocumentSnapshot documentSnapshot: task.getResult()){
+                    String idUtente = documentSnapshot.getString("idUtente");
+                    if(idUtente.equals(selectedUserID)){
+                        duplicate.add(idUtente);
+                        Toast.makeText(context,"non puoi aggiungere un utente che già partecipa al gruppo",Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+                if(duplicate.size()==0) {
+                    createPartecipantInCreator(nome, cognome, selectedUserID);
+                }
+            }
+        });
+
+    }
+
+
+    public void createPartecipantInCreator(final String name, final String surname, String selectedUserID){
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("nomePartecipante",name);
+        hashMap.put("cognomePartecipante",surname);
+        hashMap.put("idUtente",selectedUserID);
+        db.collection("users").document(currentuserID).collection("groups")
+                .document(groupID).collection("partecipants").add(hashMap)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(context, name + " " + surname + " aggiunto", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 }

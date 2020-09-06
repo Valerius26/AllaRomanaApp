@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,16 +35,17 @@ public class GroupDetail extends AppCompatActivity {
     Button create;
     RecyclerView recyclerView;
     RecVieAdapterGroupDet adapter;
+    private ArrayList<User> partecipants;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_detail);
 
+        partecipants = new ArrayList<>();
         Toast.makeText(GroupDetail.this, "Una volta creato il gruppo non sarà più possibile modificarne i partecipanti", Toast.LENGTH_LONG).show();
         title = findViewById(R.id.title);
         searchUsers = findViewById(R.id.searchUser);
-
         users = new ArrayList<>();
         fAuth = FirebaseAuth.getInstance();
         currentUserID = fAuth.getCurrentUser().getUid();
@@ -58,6 +60,8 @@ public class GroupDetail extends AppCompatActivity {
         setUpRecyclerView();
         setUpFirestore();
         loadDataFromFirebase();
+
+
 
     }
 
@@ -75,8 +79,7 @@ public class GroupDetail extends AppCompatActivity {
                         users.add(user);
                     }
                 }
-
-                adapter = new RecVieAdapterGroupDet(users, GroupDetail.this);
+                adapter = new RecVieAdapterGroupDet(users, GroupDetail.this, GroupDetail.this);
                 recyclerView.setAdapter(adapter);
 
             }
@@ -97,5 +100,13 @@ public class GroupDetail extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
+    }
+
+    public ArrayList<User> getPartecipants(){
+        return partecipants;
+    }
+
+    public void setPartecipants(ArrayList<User> partecipants){
+        this.partecipants = partecipants;
     }
 }

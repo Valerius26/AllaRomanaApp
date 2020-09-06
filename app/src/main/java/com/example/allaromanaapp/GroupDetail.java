@@ -57,7 +57,10 @@ public class GroupDetail extends AppCompatActivity {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent1 = new Intent(GroupDetail.this, groupComplete.class);
+                intent1.putExtra("idCreatore",currentUserID);
+                intent1.putExtra("idGruppo",groupID);
+                startActivity(intent1);
             }
         });
         setUpRecyclerView();

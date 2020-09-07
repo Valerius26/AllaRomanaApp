@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,7 +34,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class NotCurrentProfileActivity extends AppCompatActivity {
 
-    TextView nome, cognome, email, bilancio, gruppi;
+    TextView nome, cognome, email, bilancio, gruppi, balanceTextTitle;
+    ImageView profileImage;
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
     String userID;
@@ -53,11 +56,13 @@ public class NotCurrentProfileActivity extends AppCompatActivity {
         bilancio = findViewById(R.id.balanceText);
         gruppi = findViewById(R.id.groupText);
         deleteProfile = findViewById(R.id.deleteProfile);
+        profileImage = findViewById(R.id.profileImage);
+        balanceTextTitle = findViewById(R.id.balanceTextTitle);
 
+        balanceTextTitle.setVisibility(View.INVISIBLE);
         deleteProfile.setVisibility(View.INVISIBLE);
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
-
 
         Intent intent = getIntent();
         userID = intent.getStringExtra("idUtente");
@@ -75,6 +80,7 @@ public class NotCurrentProfileActivity extends AppCompatActivity {
                     cognome.setText(value.getString("cognome"));
                     email.setText(value.getString("e-mail"));
                     bilancio.setVisibility(View.INVISIBLE);
+                    Glide.with(NotCurrentProfileActivity.this).load(value.getString("immagine")).circleCrop().into(profileImage);
                 }
             }
         });

@@ -35,7 +35,6 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
     FirebaseFirestore db;
     String creatorID, accountID;
 
-
     public ViewAdapterAddUsers(List<User> usersList, Context context, String creatorID, String accountID) {
         this.usersList = usersList;
         this.context = context;
@@ -81,6 +80,8 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
         String name = usersList.get(position).getNome();
         String surname = usersList.get(position).getCognome();
         holder.fullName.setText(name + " " + surname);
+
+
 
     }
 

@@ -6,9 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/money2img">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
     <TextView
         android:id="@+id/TitleInPay"
@@ -111,5 +109,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.93" />
 
-    </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -90,7 +90,6 @@
         android:layout_width="356dp"
         android:layout_height="61dp"
         android:text="Anche tonio tonino ha uno o più debiti con te?"
-        android:textColor="#2196F3"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -11,21 +11,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class payActivity extends AppCompatActivity{
 
-    TextView title,debt,totalDebt,orBtn;
+    TextView title,debt,totalDebt,orText;
     Switch payTotal;
     Button payBtn,difference;
     FirebaseAuth firebaseAuth;
@@ -61,21 +67,22 @@ public class payActivity extends AppCompatActivity{
         totalDebt = findViewById(R.id.totalDebt);
         payTotal = findViewById(R.id.switch1);
         payBtn = findViewById(R.id.payBtn);
-        orBtn = findViewById(R.id.oppure);
+        orText = findViewById(R.id.oppure);
         difference = findViewById(R.id.compensa);
+        orText.setText("Anche " +  CreditorName + " " + CreditorSurname + " ha un debito con te?");
 
         loadTotalDebt();
 
         difference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.collection("users").document(CreditorID).collection("debts")
+                db.collection("users").document(currentUserID).collection("credits")
                         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         int vero = 0;
                         for(DocumentSnapshot documentSnapshot: task.getResult()){
-                            if(documentSnapshot.getString("idCreditore").equals(currentUserID)){
+                            if(documentSnapshot.getString("idDebitore").equals(CreditorID)){
                                 vero = 1;
                                 break;
                             }
@@ -128,28 +135,137 @@ public class payActivity extends AppCompatActivity{
     }
 
     private void loadCreditorTotalDebt(final Long CreditorTotalC) {
-        db.collection("users").document(CreditorID).collection("debts")
+        db.collection("users").document(currentUserID).collection("credits")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 Long CreditorTotalD = Long.valueOf(0);
                 for(DocumentSnapshot documentSnapshot: task.getResult()){
-                    if(documentSnapshot.getString("idCreditore").equals(currentUserID)){
-                        CreditorTotalD = CreditorTotalD + Long.valueOf(documentSnapshot.getString("debito"));
+                    if(documentSnapshot.getString("idDebitore").equals(CreditorID)){
+                        CreditorTotalD = CreditorTotalD + Long.valueOf(documentSnapshot.getString("credito"));
                     }
                 }
 
-                Long total = CreditorTotalC - CreditorTotalD;
-                if(total < 0){
-                    //aggiorna con un unica tabella il suo di debito e il mio di credito
-                }else
-                    if(total > 0){
-                        //aggiorna con un unica tabella il mio di debito e il suo di credito
-                    }else{
-                        //elimina i crediti e i debiti di entrambi
-                    }
+                final Long total = CreditorTotalC - CreditorTotalD;
+                recoverCurrentUserName(total);
+
+
             }
         });
+
+
+    }
+
+    private void recoverCurrentUserName(final Long total) {
+        db.collection("users").document(currentUserID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(error != null){
+
+                }else{
+                    String currentName = value.getString("nome");
+                    String currentSurname = value.getString("cognome");
+                    updateDb(total,currentName,currentSurname);
+
+                }
+            }
+        });
+    }
+
+    private void updateDb(Long total, String currentName, String currentSurname) {
+        if(total < 0){
+            //aggiorna con un unica tabella il mio credito e il suo debito
+            updateDebt(CreditorID,(-total),currentName,currentSurname,currentUserID);
+            updateCredit(currentUserID,(-total),CreditorName,CreditorSurname,CreditorID);
+            Toast.makeText(payActivity.this,"Adesso hai un credito con " + CreditorName + " " + CreditorSurname + " pari a: "  + (-total) + "$", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(payActivity.this,MainActivity.class));
+        }else
+        if(total > 0){
+            //aggiorna con un unica tabella il mio di debito e il suo di credito
+            updateDebt(currentUserID,total,CreditorName,CreditorSurname,CreditorID);
+            updateCredit(CreditorID,total,currentName,currentSurname,currentUserID);
+            Toast.makeText(payActivity.this,"Adesso hai un debito con " + CreditorName + " " + CreditorSurname + " pari a: "  + total + "$", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(payActivity.this,MainActivity.class));
+        }else{
+            Toast.makeText(payActivity.this,"Il debito è stato compensato alla perfezione!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(payActivity.this,MainActivity.class));
+        }
+    }
+
+    private void updateCredit(String id_user, Long total, String name, String surname, String id_debtor) {
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("nome debitore",name);
+        hashMap.put("cognome debitore",surname);
+        hashMap.put("idDebitore",id_debtor);
+        hashMap.put("credito",""+total);
+
+        db.collection("users").document(id_user).collection("credits").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                String id = task.getResult().getId();
+                deleteCredits(currentUserID,CreditorID,id);
+                deleteCredits(CreditorID,currentUserID,id);
+            }
+        });
+
+    }
+
+    private void updateDebt(String id_user, Long total, String name, String surname, String id_creditor) {
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("cognome creditore",surname);
+        hashMap.put("nome creditore",name);
+        hashMap.put("debito",""+total);
+        hashMap.put("idCreditore",id_creditor);
+
+        db.collection("users").document(id_user).collection("debts")
+                .add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                String id = task.getResult().getId();
+                deleteDebts(CreditorID,currentUserID,id);
+                deleteDebts(currentUserID,CreditorID,id);
+            }
+        });
+
+    }
+
+
+    private void deleteDebts(final String id_user, final String id_compare, final String id_ref){
+        db.collection("users").document(id_user).collection("debts")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot documentSnapshot: task.getResult()){
+                    if(documentSnapshot.getString("idCreditore").equals(id_compare) && !documentSnapshot.getId().equals(id_ref)){
+                        deleteD(documentSnapshot.getId(),id_user);
+                    }
+                }
+            }
+        });
+    }
+
+    private void deleteD(String id, String id_user) {
+        db.collection("users").document(id_user).collection("debts")
+                .document(id).delete();
+    }
+
+    private void deleteCredits(final String id_user, final String id_compare, final String id_ref){
+        db.collection("users").document(id_user).collection("credits")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot documentSnapshot: task.getResult()){
+                    if(documentSnapshot.getString("idDebitore").equals(id_compare) && !documentSnapshot.getId().equals(id_ref)){
+                        deleteC(documentSnapshot.getId(), id_user);
+                    }
+                }
+            }
+        });
+    }
+
+    private void deleteC(String id, String id_user) {
+        db.collection("users").document(id_user).collection("credits")
+                .document(id).delete();
     }
 
     private void goNow(final Long creditorTotalC) {

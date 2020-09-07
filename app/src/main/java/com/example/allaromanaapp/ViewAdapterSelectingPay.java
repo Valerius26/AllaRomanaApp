@@ -49,7 +49,7 @@ public class ViewAdapterSelectingPay extends RecyclerView.Adapter<ViewHolderAddU
                 payingUser = partecipants.get(position).getIdPartecipante();
                 String name = partecipants.get(position).getNomeP();
                 String surname = partecipants.get(position).getCognomeP();
-                Toast.makeText(context,name + " " + surname + "sarà il pagante", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,name + " " + surname + " sarà il pagante", Toast.LENGTH_SHORT).show();
             }
         });
 

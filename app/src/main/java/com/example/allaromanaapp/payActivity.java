@@ -177,6 +177,9 @@ public class payActivity extends AppCompatActivity{
             //aggiorna con un unica tabella il mio credito e il suo debito
             updateDebt(CreditorID,(-total),currentName,currentSurname,currentUserID);
             updateCredit(currentUserID,(-total),CreditorName,CreditorSurname,CreditorID);
+            String text = "Il debito con me è stato compensato grazie ai nostri debiti reciproci\n" +
+                    "Il tuo debito ora risale a " + (-total) + " $";
+            sendNotification(currentName,currentSurname,(-total),currentUserID,text);
             Toast.makeText(payActivity.this,"Adesso hai un credito con " + CreditorName + " " + CreditorSurname + " pari a: "  + (-total) + "$", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(payActivity.this,MainActivity.class));
         }else
@@ -184,12 +187,32 @@ public class payActivity extends AppCompatActivity{
             //aggiorna con un unica tabella il mio di debito e il suo di credito
             updateDebt(currentUserID,total,CreditorName,CreditorSurname,CreditorID);
             updateCredit(CreditorID,total,currentName,currentSurname,currentUserID);
+            String text = "Il mio debito con te è stato compensato grazie ai nostri debiti reciproci\n" +
+                    "Il mio debito ora risale a " + total + " $";
+            sendNotification(currentName,currentSurname,total,currentUserID,text);
             Toast.makeText(payActivity.this,"Adesso hai un debito con " + CreditorName + " " + CreditorSurname + " pari a: "  + total + "$", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(payActivity.this,MainActivity.class));
         }else{
+            String text = "I nostri debiti sono stati compensati alla perfezione!\n" +
+                    "Non abbiamo più debiti l'uno con l'altro";
+            sendNotification(currentName,currentSurname,total,currentUserID,text);
             Toast.makeText(payActivity.this,"Il debito è stato compensato alla perfezione!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(payActivity.this,MainActivity.class));
         }
+    }
+
+    private void sendNotification(String currentName, String currentSurname, long daPagare, String currentUserID, String text) {
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("nomeMittente",currentName);
+        hashMap.put("cognomeMittente",currentSurname);
+        hashMap.put("idMittente",currentUserID);
+        hashMap.put("daPagare",""+daPagare);
+        hashMap.put("letto","no");
+        hashMap.put("testo", text);
+
+        db.collection("users").document(CreditorID).collection("notify")
+                .add(hashMap);
+        startActivity(new Intent(payActivity.this,MainActivity.class));
     }
 
     private void updateCredit(String id_user, Long total, String name, String surname, String id_debtor) {
@@ -288,6 +311,10 @@ public class payActivity extends AppCompatActivity{
                 }
             }
         });
+
+
+
+
     }
 
 

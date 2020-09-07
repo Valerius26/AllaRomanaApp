@@ -74,8 +74,7 @@ public class NotCurrentProfileActivity extends AppCompatActivity {
                     nome.setText(value.getString("nome"));
                     cognome.setText(value.getString("cognome"));
                     email.setText(value.getString("e-mail"));
-                    bilancio2 = Math.toIntExact((Long) value.get("bilancio"));
-                    bilancio.setText(String.valueOf(bilancio2));
+                    bilancio.setVisibility(View.INVISIBLE);
                 }
             }
         });

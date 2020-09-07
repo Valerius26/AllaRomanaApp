@@ -61,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         userID = fAuth.getCurrentUser().getUid();
 
-        //updateBalance();
+        updateBalance();
 
         final DocumentReference documentReference = fStore.collection("users").document(userID);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {

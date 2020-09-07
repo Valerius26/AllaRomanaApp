@@ -35,7 +35,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         recyclerViewHolder.setOnClickListener(new RecyclerViewHolder.ClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                Intent intent = new Intent(context,SelectPayingInGroup.class);
+                intent.putExtra("idGruppo",groupList.get(position).getGroupID());
+                context.startActivity(intent);
             }
 
             @Override

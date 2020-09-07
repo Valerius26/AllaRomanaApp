@@ -117,6 +117,8 @@ public class NewGroupActivity extends AppCompatActivity {
                 Toast.makeText(NewGroupActivity.this, getString(R.string.GruppoCreato) , Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(),GroupDetail.class);
                 intent.putExtra("idGruppo",group_id);
+                intent.putExtra("NomeGruppo",groupTitle);
+                intent.putExtra("DescrizioneGruppo",groupDescription);
                 startActivity(intent);
                 IncrementGroup();
             }

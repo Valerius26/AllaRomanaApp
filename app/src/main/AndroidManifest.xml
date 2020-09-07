@@ -22,7 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="HardcodedDebugMode">
-        <activity android:name=".groupComplete"></activity>
+        <activity android:name=".SelectPayingInGroup"></activity>
+        <activity android:name=".groupComplete" />
         <activity android:name=".GroupDetail" />
         <activity android:name=".AddressActivity" />
         <activity android:name=".CurrentPosition" />

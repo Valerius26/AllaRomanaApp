@@ -39,6 +39,7 @@ public class GroupDetail extends AppCompatActivity {
     RecyclerView recyclerView;
     RecVieAdapterGroupDet adapter;
     private ArrayList<User> usersSearched;
+    String groupTitle,groupDescription;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +47,8 @@ public class GroupDetail extends AppCompatActivity {
 
         Intent intent = getIntent();
         groupID = intent.getStringExtra("idGruppo");
-
+        groupTitle = intent.getStringExtra("NomeGruppo");
+        groupDescription = intent.getStringExtra("DescrizioneGruppo");
         title = findViewById(R.id.title);
         searchUsers = findViewById(R.id.searchUser);
         users = new ArrayList<>();
@@ -186,6 +188,8 @@ public class GroupDetail extends AppCompatActivity {
                     Intent intent1 = new Intent(GroupDetail.this, groupComplete.class);
                     intent1.putExtra("idCreatore",currentUserID);
                     intent1.putExtra("idGruppo",groupID);
+                    intent1.putExtra("NomeGruppo",groupTitle);
+                    intent1.putExtra("DescrizioneGruppo",groupDescription);
                     startActivity(intent1);
                 }
 

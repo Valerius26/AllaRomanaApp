@@ -19,11 +19,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class groupComplete extends AppCompatActivity {
 
@@ -35,6 +37,7 @@ public class groupComplete extends AppCompatActivity {
     FirebaseFirestore db;
     recVieGroupCompleteAdapter adapter;
     FirebaseAuth firebaseAuth;
+    String groupTitle,groupDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +54,13 @@ public class groupComplete extends AppCompatActivity {
         title = findViewById(R.id.Title);
         list = findViewById(R.id.ListaPart);
         retAdd = findViewById(R.id.addPartecipant);
+        finish = findViewById(R.id.groupComplete);
         recyclerView = findViewById(R.id.recycler2);
 
         Intent intent = getIntent();
         groupID = intent.getStringExtra("idGruppo");
+        groupTitle = intent.getStringExtra("NomeGruppo");
+        groupDescription = intent.getStringExtra("DescrizioneGruppo");
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -73,9 +79,56 @@ public class groupComplete extends AppCompatActivity {
         });
 
 
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<User> partecipantsList = adapter.getPartecipantsList();
+                for(User partecipant : partecipantsList){
+                    if(!partecipant.getIdRef().equals(currentUserID)) {
+                        createGroupIn(partecipant, partecipantsList);
+                    }else{
+                        setGroupState();
+                    }
+                }
+                Toast.makeText(groupComplete.this,"Il gruppo è stato completato!",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(groupComplete.this,MainActivity.class));
+            }
+        });
 
 
     }
+
+    private void setGroupState() {
+        db.collection("users").document(currentUserID).collection("groups")
+                .document(groupID).update("Stato","Creato");
+    }
+
+    private void createGroupIn(final User partecipante, final ArrayList<User> partecipantsList) {
+
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("Stato","Creato");
+        hashMap.put("Creato da", currentUserID);
+        hashMap.put("Nome gruppo", groupTitle);
+        hashMap.put("Descrizione", groupDescription);
+
+        db.collection("users").document(partecipante.getIdRef()).collection("groups")
+                .add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                String groupInUserID = task.getResult().getId();
+                for(User p : partecipantsList){
+                    HashMap<String,String> hashMap = new HashMap<>();
+                    hashMap.put("idUtente",p.getIdRef());
+                    hashMap.put("nomePartecipante",p.getNome());
+                    hashMap.put("cognomePartecipante",p.getCognome());
+
+                    db.collection("users").document(partecipante.getIdRef()).collection("groups")
+                            .document(groupInUserID).collection("partecipants").add(hashMap);
+                }
+            }
+        });
+    }
+
 
     private void showPartecipant() {
 

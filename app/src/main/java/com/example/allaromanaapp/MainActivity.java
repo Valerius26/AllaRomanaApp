@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         currentUserID = firebaseAuth.getUid();
         account_delete(currentUserID);
-
+        group_delete();
 
         profileBtn = (Button) findViewById(R.id.buttonProfile);
         balanceBtn = (Button) findViewById(R.id.buttonDebitoCredito);
@@ -115,6 +115,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void group_delete() {
+        db.collection("users").document(currentUserID).collection("groups")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot documentSnapshot : task.getResult()){
+                    if(documentSnapshot.getString("Stato").equals("Non creato")){
+                        String id = documentSnapshot.getId();
+                        deleteNonCreated(id);
+                    }
+                }
+            }
+        });
+    }
+
+    private void deleteNonCreated(String id) {
+        db.collection("users").document(currentUserID).collection("groups")
+                .document(id).delete();
     }
 
     private void notifyNew(String currentUserID) {

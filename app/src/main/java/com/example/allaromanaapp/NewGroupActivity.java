@@ -120,7 +120,7 @@ public class NewGroupActivity extends AppCompatActivity {
                 intent.putExtra("NomeGruppo",groupTitle);
                 intent.putExtra("DescrizioneGruppo",groupDescription);
                 startActivity(intent);
-                IncrementGroup();
+                //IncrementGroup();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

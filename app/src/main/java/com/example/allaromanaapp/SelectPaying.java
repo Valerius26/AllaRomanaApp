@@ -100,32 +100,35 @@ public class SelectPaying extends AppCompatActivity {
 
                     try {
                         int num = Integer.parseInt(importo);
+                    } catch (NumberFormatException e) {
+                        editImport.setError("Inserisci un intero");
+                    }
                         if (TextUtils.isEmpty(importo)) {
                             editImport.setError("L'importo è richiesto");
                             return;
                         }else {
+                            try {
                                 importNumber = (Long) Long.valueOf(importo);
                                 partecipantsSize = adapter.getItemCount();
                                 if (importNumber < partecipantsSize) {
-                                   editImport.setError("L'importo dev'essere maggiore o ugale numero di partecipanti");
-                                }else {
+                                    editImport.setError("L'importo dev'essere maggiore o ugale numero di partecipanti");
+                                } else {
                                     ArrayList<String> debtors = new ArrayList<>();
                                     debtors = adapter.getDebtors();
                                     for (int position = 0; position < debtors.size(); position++) {
                                         String id_debtor = debtors.get(position);
-                                        recupera_nome_debitore(id_debtor,pagante,importNumber,partecipantsSize);
+                                        recupera_nome_debitore(id_debtor, pagante, importNumber, partecipantsSize);
                                     }
-                                    deletePartecipants(creatorID,accountID);
-                                    deleteAccount(creatorID,accountID);
+                                    deletePartecipants(creatorID, accountID);
+                                    deleteAccount(creatorID, accountID);
                                 }
                                 return;
+                            } catch (Exception e) {
+
                             }
-                    } catch (NumberFormatException e) {
-                        editImport.setError("Inserisci un intero");
-                    }
 
 
-                    return;
+                        }
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"Seleziona un pagante", Toast.LENGTH_SHORT).show();

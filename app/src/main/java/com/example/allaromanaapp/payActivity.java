@@ -196,6 +196,11 @@ public class payActivity extends AppCompatActivity{
             String text = "I nostri debiti sono stati compensati alla perfezione!\n" +
                     "Non abbiamo più debiti l'uno con l'altro";
             sendNotification(currentName,currentSurname,total,currentUserID,text);
+            deleteDebts(CreditorID,currentUserID,"0");
+            deleteDebts(currentUserID,CreditorID,"0");
+            deleteCredits(currentUserID,CreditorID,"0");
+            deleteCredits(CreditorID,currentUserID,"0");
+
             Toast.makeText(payActivity.this,"Il debito è stato compensato alla perfezione!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(payActivity.this,MainActivity.class));
         }

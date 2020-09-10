@@ -115,17 +115,23 @@ public class CurrentPosition extends AppCompatActivity implements OnMapReadyCall
                 googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
                 return true;
             case R.id.current_position:
-                startActivity(new Intent(getApplicationContext(),CurrentPosition.class));
+                restartActivity();
                 return true;
             case R.id.address:
                 Double lat = currentLocation.getLatitude();
                 Double lon = currentLocation.getLongitude();
-                Intent intent = new Intent(getApplicationContext(),AddressActivity.class);
+                Intent intent = new Intent(CurrentPosition.this,AddressActivity.class);
                 intent.putExtra("latitude",""+lat);
                 intent.putExtra("longitude",""+lon);
                 startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void restartActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 }

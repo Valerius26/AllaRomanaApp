@@ -22,7 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="HardcodedDebugMode">
-        <activity android:name=".SelectPayingInGroup"></activity>
+        <activity android:name=".SelectUser"></activity>
+        <activity android:name=".SelectPayingInGroup" />
         <activity android:name=".groupComplete" />
         <activity android:name=".GroupDetail" />
         <activity android:name=".AddressActivity" />
@@ -71,6 +72,7 @@
         <activity android:name=".payActivity" />
         <activity android:name=".NewGroupActivity" />
         <activity android:name=".groupActivity" />
+        <activity android:name=".SelectUser"/>
     </application>
 
 </manifest>

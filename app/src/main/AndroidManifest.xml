@@ -73,6 +73,7 @@
         <activity android:name=".NewGroupActivity" />
         <activity android:name=".groupActivity" />
         <activity android:name=".SelectUser"/>
+        <activity android:name=".PosActivity"/>
     </application>
 
 </manifest>

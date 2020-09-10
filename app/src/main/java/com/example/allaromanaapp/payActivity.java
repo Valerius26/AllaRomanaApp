@@ -98,6 +98,13 @@ public class payActivity extends AppCompatActivity{
             }
         });
 
+
+        payBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(payActivity.this, PosActivity.class));
+            }
+        });
     }
 
     private void loadTotalDebt() {

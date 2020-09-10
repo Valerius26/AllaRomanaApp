@@ -85,6 +85,10 @@ public class NotDetailActivity extends AppCompatActivity {
                         info.setVisibility(View.INVISIBLE);
                         indicate.setVisibility(View.INVISIBLE);
                     }
+                    if(testo.contains("Questa è la mia posizione")){
+                        info.setVisibility(View.INVISIBLE);
+                        indicate.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
         });

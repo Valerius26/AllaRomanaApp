@@ -37,7 +37,7 @@ public class SelectUser extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     SelectUserAdapter adapter;
     String currentUserID;
-
+    String address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class SelectUser extends AppCompatActivity {
         actionBar.hide();
 
         Intent intent = getIntent();
-
+        address = intent.getStringExtra("FullAddress");
         usersList = new ArrayList<>();
         usersSearched = new ArrayList<>();
 
@@ -115,7 +115,7 @@ public class SelectUser extends AppCompatActivity {
                         usersList.add(user);
                     }
                 }
-                adapter = new SelectUserAdapter(usersList, SelectUser.this );
+                adapter = new SelectUserAdapter(usersList, SelectUser.this, address );
                 recyclerView.setAdapter(adapter);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -159,7 +159,7 @@ public class SelectUser extends AppCompatActivity {
                         }
                     }
                 }
-                adapter = new SelectUserAdapter(usersSearched, SelectUser.this);
+                adapter = new SelectUserAdapter(usersSearched, SelectUser.this, address);
                 recyclerView.setAdapter(adapter);
             }
         }).addOnFailureListener(new OnFailureListener() {

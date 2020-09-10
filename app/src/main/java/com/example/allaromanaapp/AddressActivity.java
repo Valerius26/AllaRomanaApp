@@ -21,6 +21,7 @@ public class AddressActivity extends AppCompatActivity {
     Geocoder geocoder;
     List<Address> addresses;
     Button sendPosBtn;
+    String fullAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class AddressActivity extends AppCompatActivity {
             String address = addresses.get(0).getAddressLine(0);
             String city = addresses.get(0).getAdminArea();
 
-            String fullAddress = address + ", " + city;
+            fullAddress = address + ", " + city;
             textView.setText(fullAddress);
 
         }catch (IOException e){
@@ -53,7 +54,9 @@ public class AddressActivity extends AppCompatActivity {
         sendPosBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(AddressActivity.this, SelectUser.class));
+                Intent intent = new Intent(AddressActivity.this, SelectUser.class);
+                intent.putExtra("FullAddress",fullAddress);
+                startActivity(intent);
             }
         });
     }

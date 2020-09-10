@@ -11,13 +11,22 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class SelectUserAdapter extends RecyclerView.Adapter<SelectUserHolder> {
@@ -25,10 +34,13 @@ public class SelectUserAdapter extends RecyclerView.Adapter<SelectUserHolder> {
     List<User> usersList;
     Context context;
     FirebaseFirestore db;
+    FirebaseAuth firebaseAuth;
+    String address;
 
-    public SelectUserAdapter(List<User> usersList,Context context) {
+    public SelectUserAdapter(List<User> usersList,Context context, String address) {
         this.usersList = usersList;
         this.context = context;
+        this.address = address;
     }
 
 
@@ -53,7 +65,7 @@ public class SelectUserAdapter extends RecyclerView.Adapter<SelectUserHolder> {
             @Override
             public void onItemLongClick(View view, int position) {
                 db = FirebaseFirestore.getInstance();
-
+                final String id = usersList.get(position).getIdUser();
                 final EditText resetMail = new EditText(view.getContext());
                 final AlertDialog.Builder confirm = new AlertDialog.Builder(view.getContext());
                 confirm.setTitle("Invio Posizione");
@@ -62,6 +74,9 @@ public class SelectUserAdapter extends RecyclerView.Adapter<SelectUserHolder> {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // extract the email and send reset link
+                        firebaseAuth = FirebaseAuth.getInstance();
+                        String currentUserID = firebaseAuth.getUid();
+                        recoverSender(currentUserID,id);
 
                     }
                 });
@@ -80,6 +95,45 @@ public class SelectUserAdapter extends RecyclerView.Adapter<SelectUserHolder> {
         });
 
         return selectUserHolder;
+    }
+
+    private void recoverSender(final String currentUserID, final String id) {
+        db.collection("users").document(currentUserID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                if(error!=null){
+
+                }else{
+                    String name = value.getString("nome");
+                    String surname = value.getString("cognome");
+                    sendNotification(name,surname,currentUserID,id,address);
+                }
+            }
+        });
+    }
+
+    private void sendNotification(String name, String surname, String currentUserID, String id, String address) {
+        int da_pagare = 0;
+
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("nomeMittente",name);
+        hashMap.put("cognomeMittente",surname);
+        hashMap.put("idMittente",currentUserID);
+        hashMap.put("daPagare",""+da_pagare);
+        hashMap.put("letto","no");
+        hashMap.put("testo","Questa è la mia posizione attuale:" +
+                "\n" + address);
+
+        db.collection("users").document(id).collection("notify").add(hashMap)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+
+                        Toast.makeText(context,"Posizione inviata",Toast.LENGTH_SHORT).show();
+                        context.startActivity(new Intent(context,MainActivity.class));
+                    }
+                });
     }
 
     @Override

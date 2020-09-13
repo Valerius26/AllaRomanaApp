@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     String name,surname;
     CardView nuovaNotifica;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
         currentUserID = firebaseAuth.getUid();
         account_delete(currentUserID);
         group_delete();

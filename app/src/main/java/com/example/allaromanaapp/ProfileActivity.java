@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
@@ -164,12 +165,12 @@ public class ProfileActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
-                                Toast.makeText(getApplicationContext(),"Profilo cancellato",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity.this,"Profilo cancellato",Toast.LENGTH_SHORT).show();
                                 finish();
                                 startActivity(new Intent(ProfileActivity.this,LoginActivity.class));
                             }
                             else{
-                                Toast.makeText(getApplicationContext(),"Non è stato possibie eliminare il profilo",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity.this,"Non è stato possibie eliminare il profilo",Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

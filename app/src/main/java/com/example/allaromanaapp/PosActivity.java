@@ -34,6 +34,8 @@ public class PosActivity extends AppCompatActivity {
 
         if(nfcAdapter==null){
             Toast.makeText(PosActivity.this,"NFC non supported",Toast.LENGTH_LONG).show();
+        } else{
+            Toast.makeText(PosActivity.this,"supported",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -49,10 +51,6 @@ public class PosActivity extends AppCompatActivity {
         super.onPause();
 
         disableForegroundDispatchSystem();
-        Intent intent = new Intent(this, MainActivity.class).addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,0);
-        IntentFilter[] intentFilters = new IntentFilter[] {};
-        nfcAdapter.enableForegroundDispatch(this,pendingIntent,intentFilters,null);
 
     }
 
@@ -84,10 +82,22 @@ public class PosActivity extends AppCompatActivity {
     private void disableForegroundDispatchSystem(){
 
         nfcAdapter.disableForegroundDispatch(this);
+        Intent intent = new Intent(PosActivity.this, MainActivity.class).addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+        PendingIntent pendingIntent = PendingIntent.getActivity(PosActivity.this,0,intent,0);
+        IntentFilter[] intentFilters = new IntentFilter[] {};
+        nfcAdapter.enableForegroundDispatch(this,pendingIntent,intentFilters,null);
     }
 
     private void enableForegroundDispatchSystem() {
+        try {
+            Intent intent = new Intent(PosActivity.this, MainActivity.class).addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+            PendingIntent pendingIntent = PendingIntent.getActivity(PosActivity.this, 0, intent, 0);
+            IntentFilter[] intentFilters = new IntentFilter[]{};
+            nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilters, null);
+        }catch (Exception e){
+            Toast.makeText(PosActivity.this,e.toString(),Toast.LENGTH_LONG).show();
 
+        }
     }
 
     private void formatTag(Tag tag, NdefMessage ndefMessage) {

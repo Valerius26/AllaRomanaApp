@@ -24,9 +24,7 @@ import org.json.JSONObject;
 public class LoginAdminActivity extends AppCompatActivity implements View.OnClickListener {
 
     //View Objects
-    private Button buttonScan,goAdmin;
-    private TextView textViewName;
-    private EditText stringAdmin;
+    private Button buttonScan;
 
 
     //qr code scanner object
@@ -43,9 +41,6 @@ public class LoginAdminActivity extends AppCompatActivity implements View.OnClic
 
         //View objects
         buttonScan = (Button) findViewById(R.id.buttonScan);
-        textViewName = (TextView) findViewById(R.id.TextViewName);
-        stringAdmin = (EditText) findViewById(R.id.stringInput);
-        goAdmin = (Button) findViewById(R.id.goAdmin);
 
         //intializing scan object
         qrScan = new IntentIntegrator(this);
@@ -53,23 +48,6 @@ public class LoginAdminActivity extends AppCompatActivity implements View.OnClic
         //attaching onclick listener
         buttonScan.setOnClickListener(this);
 
-        goAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String stringa = stringAdmin.getText().toString().trim();
-
-                if(TextUtils.isEmpty(stringa)){
-                    stringAdmin.setError("Inserire la stringa dopo aver scansionato il qr-code");
-                    return;
-                }
-
-                if(stringa.equals(admin)){
-                    startActivity(new Intent(getApplicationContext(),AdminActivity.class));
-                }else{
-                    stringAdmin.setError("Non sei l'amministratore!");
-                }
-            }
-        });
     }
 
     //Getting the scan results
@@ -92,9 +70,14 @@ public class LoginAdminActivity extends AppCompatActivity implements View.OnClic
                     //that means the encoded format not matches
                     //in this case you can display whatever data is available on the qrcode
                     //to a toast
-                    textViewName.setText(result.getContents());
                     Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
-                    admin = textViewName.getText().toString().trim();
+                    admin = result.getContents();
+
+                    if(admin.equals("ADMIN00214872648723649")){
+                        startActivity(new Intent(LoginAdminActivity.this,AdminActivity.class));
+                    }else{
+                        Toast.makeText(this, "Non sei l'amministratore!", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         } else {

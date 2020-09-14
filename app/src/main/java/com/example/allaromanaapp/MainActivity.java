@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         profileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
             }
         });
 
@@ -83,35 +83,35 @@ public class MainActivity extends AppCompatActivity {
         messageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), notificationActivity.class));
+                startActivity(new Intent(MainActivity.this, notificationActivity.class));
             }
         });
 
         balanceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), balanceActivity.class));
+                startActivity(new Intent(MainActivity.this, balanceActivity.class));
             }
         });
 
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),SettingActivity.class));
+                startActivity(new Intent(MainActivity.this,SettingActivity.class));
             }
         });
 
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),MapsActivity.class));
+                startActivity(new Intent(MainActivity.this,MapsActivity.class));
             }
         });
 
         groupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),groupActivity.class));
+                startActivity(new Intent(MainActivity.this,groupActivity.class));
             }
         });
 

@@ -25,6 +25,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 
@@ -37,7 +38,7 @@ public class NotDetailActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
     String debito,name,surname,nomeMittente,cognomeMittente;
-    String sendID;
+    String sendID,testo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +80,11 @@ public class NotDetailActivity extends AppCompatActivity {
                     cognomeMittente = value.getString("cognomeMittente");
                     userName.setText(nomeMittente + " " + cognomeMittente);
                     debito = (value.getString("daPagare"));
-                    String testo = value.getString("testo");
+                    testo = value.getString("testo");
                     message.setText(testo);
                     if(testo.contains("Ti ho segnalato per un debito")){
-                        info.setVisibility(View.INVISIBLE);
-                        indicate.setVisibility(View.INVISIBLE);
+                        info.setText("Vuoi annullare questo debito?");
+                        indicate.setText("Annulla il debito");
                     }
                     if(testo.contains("Questa è la mia posizione")){
                         info.setVisibility(View.INVISIBLE);
@@ -97,38 +98,65 @@ public class NotDetailActivity extends AppCompatActivity {
         indicate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder indicateDialog = new AlertDialog.Builder(view.getContext());
-                indicateDialog.setTitle("Segnalazione");
-                indicateDialog.setMessage("Sei sicuro di voler segnalare " + nomeMittente +" "+cognomeMittente+"?");
+                if (testo.contains("Ti ho segnalato per un debito")) {
+                    final AlertDialog.Builder indicateDialog = new AlertDialog.Builder(view.getContext());
+                    indicateDialog.setTitle("Annulla il debito");
+                    indicateDialog.setMessage("Sei sicuro di voler annullare il debito di " + nomeMittente + " " + cognomeMittente + "?");
 
-                indicateDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        HashMap<String,String> hashMap = new HashMap<>();
-                        hashMap.put("idUtente",sendID);
+                    indicateDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            deleteDebt();
+                            deleteCredit();
+                            startActivity(new Intent(NotDetailActivity.this,notificationActivity.class));
+                        }
+                    });
 
-                        db.collection("reports").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentReference> task) {
-                                sendToCreditor();
-                            }
-                        });
+                    indicateDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                });
-
-                indicateDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
+                        }
+                    });
 
 
-                indicateDialog.create().show();
+                    indicateDialog.create().show();
 
+                } else {
+                    final AlertDialog.Builder indicateDialog = new AlertDialog.Builder(view.getContext());
+                    indicateDialog.setTitle("Segnalazione");
+                    indicateDialog.setMessage("Sei sicuro di voler segnalare " + nomeMittente + " " + cognomeMittente + "?");
+
+                    indicateDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("idUtente", sendID);
+
+                            db.collection("reports").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentReference> task) {
+                                    sendToCreditor();
+                                }
+                            });
+
+                        }
+                    });
+
+                    indicateDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+
+
+                    indicateDialog.create().show();
+
+                }
             }
         });
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,12 +169,33 @@ public class NotDetailActivity extends AppCompatActivity {
         userName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),NotCurrentProfileActivity.class);
+                Intent intent = new Intent(NotDetailActivity.this,NotCurrentProfileActivity.class);
                 intent.putExtra("idUtente", sendID);
-                getApplicationContext().startActivity(intent);
+                startActivity(intent);
             }
         });
 
+    }
+
+    private void deleteCredit() {
+        db.collection("users").document(currentUserID).collection("credits")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(!task.getResult().isEmpty()){
+                for(DocumentSnapshot documentSnapshot : task.getResult()){
+                    if(documentSnapshot.getString("credito").equals(debito) && documentSnapshot.getString("idDebitore").equals(sendID)){
+                        String id = documentSnapshot.getId();
+                        delete(id,2);
+                        break;
+                    }
+                }
+
+                }else{
+                    Toast.makeText(NotDetailActivity.this, "Questo debito non esiste più", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void recoversData() {
@@ -187,5 +236,56 @@ public class NotDetailActivity extends AppCompatActivity {
         DocumentReference documentReference = db.collection("users").document(currentUserID)
                 .collection("notify").document(idNotification);
         documentReference.update("letto", "si");
+    }
+
+    private void sendToDebtor() {
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("idMittente",currentUserID);
+        hashMap.put("testo","Ti ho annulato un debito pari a euro " + debito);
+        hashMap.put("nomeMittente",name);
+        hashMap.put("cognomeMittente",surname);
+        hashMap.put("letto","no");
+        hashMap.put("daPagare",""+0);
+
+        db.collection("users").document(sendID).collection("notify").add(hashMap);
+    }
+
+    private void deleteDebt(){
+        db.collection("users").document(sendID).collection("debts")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                int trovato = 0;
+                if(!task.getResult().isEmpty()){
+                 for(DocumentSnapshot documentSnapshot : task.getResult()){
+                     if(documentSnapshot.getString("debito").equals(debito) && documentSnapshot.getString("idCreditore").equals(currentUserID)){
+                         trovato = 1;
+                         String id = documentSnapshot.getId();
+                         delete(id,trovato);
+                         break;
+                     }
+                 }
+                }else{
+
+                }
+            }
+        });
+    }
+
+    private void delete(String id, int trovato) {
+        if(trovato == 1){
+            db.collection("users").document(sendID).collection("debts")
+                    .document(id).delete();
+            sendToDebtor();
+            Toast.makeText(NotDetailActivity.this, "Il debito è stato cancellato", Toast.LENGTH_SHORT).show();
+        }else
+            if(trovato == 2){
+                db.collection("users").document(currentUserID).collection("credits")
+                        .document(id).delete();
+            }
+        else{
+            Toast.makeText(NotDetailActivity.this, "Questo debito non esiste più", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

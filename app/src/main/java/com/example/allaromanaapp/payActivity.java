@@ -40,6 +40,7 @@ public class payActivity extends AppCompatActivity{
     String CreditorName,CreditorSurname;
     Long CreditorCredit;
     Long toPay;
+    boolean total = false;
 
     ArrayList<Long> debts = new ArrayList();
 
@@ -102,7 +103,16 @@ public class payActivity extends AppCompatActivity{
         payBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(payActivity.this, PosActivity.class));
+                Intent intent1 = new Intent(payActivity.this, PosActivity.class);
+                intent1.putExtra("idCreditore",CreditorID);
+                if(total){
+                    intent1.putExtra("Totale","si");
+                    intent1.putExtra("daPagare",""+0);
+                }else{
+                    intent1.putExtra("Totale","no");
+                    intent1.putExtra("daPagare",""+CreditorCredit);
+                }
+                startActivity(intent1);
             }
         });
     }
@@ -316,10 +326,11 @@ public class payActivity extends AppCompatActivity{
                 if(payTotal.isChecked()){
                     payBtn.setText("Salda il debito totale");
                     toPay = creditorTotalC;
-                    Log.d("asdasdasd",""+toPay);
+                    total = true;
                 }else{
                     payBtn.setText("Salda il debito");
                     toPay = CreditorCredit;
+                    total = false;
                 }
             }
         });

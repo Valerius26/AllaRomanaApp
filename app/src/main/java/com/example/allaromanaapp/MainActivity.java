@@ -115,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        historyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,historyActivity.class));
+            }
+        });
     }
 
     private void group_delete() {

@@ -9,14 +9,23 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
 
 public class PosActivity extends AppCompatActivity {
 
@@ -25,24 +34,25 @@ public class PosActivity extends AppCompatActivity {
     String creditorID,total,toPay;
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
-    String currentUserID;
+    String currentUserID,currentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pos);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
+        Calendar calendar = Calendar.getInstance();
+        currentDate = DateFormat.getDateInstance().format(calendar.getTime());
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserID = firebaseAuth.getUid();
         db = FirebaseFirestore.getInstance();
 
         Intent intent = getIntent();
         creditorID = intent.getStringExtra("idCreditore");
-        Toast.makeText(PosActivity.this,""+creditorID,Toast.LENGTH_SHORT).show();
         total = intent.getStringExtra("Totale");
-        Toast.makeText(PosActivity.this,""+total,Toast.LENGTH_SHORT).show();
         toPay = intent.getStringExtra("daPagare");
-        Toast.makeText(PosActivity.this,""+toPay,Toast.LENGTH_SHORT).show();
 
         card = findViewById(R.id.cardNum);
         pass = findViewById(R.id.passwordCard);
@@ -68,10 +78,11 @@ public class PosActivity extends AppCompatActivity {
                 if (number.equals("123456") && password.equals("123456")) {
                     deleteDebt();
                     deleteCredit();
-                    //sendNotification();
+                    sendNotification();
                     //updatecurrentCard();
                     //updatecreditorCard();
-                    //updatePayment();
+                    updatePayment();
+                    Toast.makeText(PosActivity.this,"Il debito è stato saldato",Toast.LENGTH_SHORT).show();
                 }else{
 
                     Toast.makeText(PosActivity.this,"Errore!", Toast.LENGTH_SHORT).show();
@@ -80,6 +91,36 @@ public class PosActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void updatePayment() {
+        recoverDataforPayment(creditorID);
+    }
+
+    private void recoverDataforPayment(String id) {
+        db.collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                if(error!=null){
+
+                }else{
+                    writePayment(value.getString("nome"),value.getString("cognome"));
+                }
+            }
+        });
+    }
+
+    private void writePayment(String nome, String cognome) {
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("idPagato",creditorID);
+        hashMap.put("totalePagato",toPay);
+        hashMap.put("nomePagato",nome);
+        hashMap.put("cognomePagato",cognome);
+        hashMap.put("data",currentDate);
+
+        db.collection("users").document(currentUserID).collection("payment")
+                .add(hashMap);
     }
 
 
@@ -91,6 +132,40 @@ public class PosActivity extends AppCompatActivity {
     }
 
     private void sendNotification() {
+        recoverData(currentUserID);
+    }
+
+    private void recoverData(String id) {
+        db.collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                if(error!=null){
+
+                }else{
+                    send(value.getString("nome"),value.getString("cognome"));
+                }
+            }
+        });
+    }
+
+    private void send(String nome, String cognome) {
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("nomeMittente",nome);
+        hashMap.put("cognomeMittente",cognome);
+        hashMap.put("idMittente",currentUserID);
+        hashMap.put("daPagare",toPay);
+        hashMap.put("letto","no");
+        hashMap.put("testo","Ti ho pagato un debito pari a euro" + toPay);
+
+        db.collection("users").document(creditorID).collection("notify").add(hashMap)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+
+                        startActivity(new Intent(PosActivity.this,MainActivity.class));
+                    }
+                });
     }
 
     private void deleteCredit() {
@@ -164,7 +239,7 @@ public class PosActivity extends AppCompatActivity {
                 .document(id).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(PosActivity.this,"Il debito è stato saldato2",Toast.LENGTH_SHORT).show();
+
             }
         });
 

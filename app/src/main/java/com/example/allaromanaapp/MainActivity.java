@@ -7,17 +7,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -30,7 +35,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button profileBtn, balanceBtn, historyBtn, payBtn, messageBtn, settingsBtn, mapBtn, groupBtn;
+    Button profileBtn, balanceBtn, historyBtn, payBtn, messageBtn, settingsBtn, mapBtn, groupBtn,logout;
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
     String currentUserID;
@@ -60,7 +65,15 @@ public class MainActivity extends AppCompatActivity {
         nuovaNotifica = (CardView) findViewById(R.id.notifyCounter);
         mapBtn = (Button) findViewById(R.id.mapBtn);
         groupBtn = (Button) findViewById(R.id.GroupBtn);
+        logout = (Button) findViewById(R.id.logout);
 
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,"Disconnessione...", Toast.LENGTH_LONG).show();
+                logout();
+            }
+        });
 
         nuovaNotifica.setVisibility(View.INVISIBLE);
 
@@ -199,11 +212,20 @@ public class MainActivity extends AppCompatActivity {
         collectionReference1.document(id_partecipant).delete();
     }
 
-    public void logout(View view){
+    public void logout(){
 
-       /* FirebaseAuth.getInstance().signOut(); //logout
-        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        finish(); */
+
+        Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this,1000,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 1000 , pendingIntent);
+        firebaseAuth.signOut(); //logout
+
+        System.exit(0);
+
+
+
+
     }
 
 

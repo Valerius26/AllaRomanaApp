@@ -41,13 +41,12 @@ import java.io.IOException;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView nome, cognome, email, bilancio, gruppi;
+    TextView nome, cognome, email;
     ImageView profilePicture;
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
     String userID;
     Button deleteProfile;
-    int bilancio2, gruppi2;
     private static final int PICK_IMAGE = 1;
     Uri imageUri;
 
@@ -62,8 +61,6 @@ public class ProfileActivity extends AppCompatActivity {
         nome = findViewById(R.id.nomeText);
         cognome = findViewById(R.id.cognomeText);
         email = findViewById(R.id.emailText);
-        bilancio = findViewById(R.id.balanceText);
-        gruppi = findViewById(R.id.groupText);
         deleteProfile = findViewById(R.id.deleteProfile);
         profilePicture = findViewById(R.id.profileImage);
         fAuth = FirebaseAuth.getInstance();
@@ -72,7 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         userID = fAuth.getCurrentUser().getUid();
 
-        updateBalance();
+        //updateBalance();
 
         final DocumentReference documentReference = fStore.collection("users").document(userID);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
@@ -86,8 +83,6 @@ public class ProfileActivity extends AppCompatActivity {
                     nome.setText(value.getString("nome"));
                     cognome.setText(value.getString("cognome"));
                     email.setText(value.getString("e-mail"));
-                    bilancio2 = Math.toIntExact((Long) value.get("bilancio"));
-                    bilancio.setText(String.valueOf(bilancio2));
                     Glide.with(ProfileActivity.this).load(value.getString("immagine")).circleCrop().into(profilePicture);
                 }
             }
@@ -99,7 +94,7 @@ public class ProfileActivity extends AppCompatActivity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if(user != null)
                 {
-                    canc(bilancio2,gruppi2,view,user);
+                    canc(view,user);
                 }
             }
         });
@@ -151,42 +146,59 @@ public class ProfileActivity extends AppCompatActivity {
         fStore.collection("users").document(userID).update("bilancio",balance);
     }
 
-    private void canc(int bilancio2, int gruppi2, View view, final FirebaseUser user) {
-        if(bilancio2 != 0 || gruppi2 != 0){
-            Toast.makeText(ProfileActivity.this, "non puoi cancellare un profilo quando partecipi ad un gruppo o hai un bilancio diverso da zero", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            final AlertDialog.Builder cancelDialog = new AlertDialog.Builder(view.getContext());
-            cancelDialog.setTitle("Cancellare il profilo?");
-            cancelDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+    private void canc(final View view, final FirebaseUser user) {
+        fStore.collection("users").document(userID).collection("debts")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.getResult().size() != 0) {
+                    Toast.makeText(ProfileActivity.this, "non puoi cancellare un profilo quando hai dei debiti", Toast.LENGTH_SHORT).show();
+                } else {
+                    fStore.collection("users").document(userID).collection("credits")
+                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                Toast.makeText(ProfileActivity.this,"Profilo cancellato",Toast.LENGTH_SHORT).show();
-                                finish();
-                                startActivity(new Intent(ProfileActivity.this,LoginActivity.class));
-                            }
-                            else{
-                                Toast.makeText(ProfileActivity.this,"Non è stato possibie eliminare il profilo",Toast.LENGTH_SHORT).show();
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.getResult().size() != 0) {
+                                Toast.makeText(ProfileActivity.this, "non puoi cancellare un profilo quando hai dei crediti", Toast.LENGTH_SHORT).show();
+                            } else {
+                                final AlertDialog.Builder cancelDialog = new AlertDialog.Builder(view.getContext());
+                                cancelDialog.setTitle("Cancellare il profilo?");
+                                cancelDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(ProfileActivity.this, "Profilo cancellato", Toast.LENGTH_SHORT).show();
+                                                    finish();
+                                                    startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                                                } else {
+                                                    Toast.makeText(ProfileActivity.this, "Non è stato possibie eliminare il profilo", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+
+                                cancelDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                });
+
+                                cancelDialog.create().show();
                             }
                         }
+
                     });
                 }
-            });
+            }
+        });
 
-            cancelDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            });
-
-            cancelDialog.create().show();
-        }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

@@ -107,7 +107,7 @@ public class payActivity extends AppCompatActivity{
                 intent1.putExtra("idCreditore",CreditorID);
                 if(total){
                     intent1.putExtra("Totale","si");
-                    intent1.putExtra("daPagare",""+0);
+                    intent1.putExtra("daPagare",""+toPay);
                 }else{
                     intent1.putExtra("Totale","no");
                     intent1.putExtra("daPagare",""+CreditorCredit);

@@ -8,6 +8,7 @@ import androidx.cardview.widget.CardView;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -199,9 +200,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logout(View view){
-        FirebaseAuth.getInstance().signOut(); //logout
-        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-        finish();
+
+       /* FirebaseAuth.getInstance().signOut(); //logout
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish(); */
     }
 
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/imageAdmin"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/io"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_oval="true" />
+
+    <View
+        android:id="@+id/viewSupporter"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageAdmin"
+        app:layout_constraintEnd_toEndOf="@+id/imageAdmin"
+        app:layout_constraintStart_toStartOf="@+id/imageAdmin"
+        app:layout_constraintTop_toTopOf="@id/imageAdmin"/>
+
+    <TextView
+        android:id="@+id/valerio"
+        android:layout_width="197dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="8dp"
+        android:text="Valerio Valente"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/viewSupporter"
+        app:layout_constraintStart_toEndOf="@id/imageAdmin" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Amministratore"
+        android:textColor="@color/colorGreen"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/imageAdmin"
+        app:layout_constraintTop_toBottomOf="@+id/viewSupporter" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/admin_activity_main"
+    app:startDestination="@id/Debitori">
+
+    <fragment
+        android:id="@+id/Debitori"
+        android:name="com.example.allaromanaapp.DebtorsFragment"
+        android:label="Utenti debitori"
+        tools:layout="@layout/fragment_debtors" />
+    <fragment
+        android:id="@+id/Segnalati"
+        android:name="com.example.allaromanaapp.ReportedFragment"
+        android:label="Utenti segnalati"
+        tools:layout="@layout/fragment_reported" />
+    <fragment
+        android:id="@+id/Bloccati"
+        android:name="com.example.allaromanaapp.LockedFragment"
+        android:label="Utenti bloccati"
+        tools:layout="@layout/fragment_locked" />
+    <fragment
+        android:id="@+id/Esci"
+        android:name="com.example.allaromanaapp.BlankFragment"
+        android:label="Arrivederci"
+        tools:layout="@layout/fragment_blank" />
+
+</navigation>

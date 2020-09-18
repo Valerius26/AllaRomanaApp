@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#000000</color>
+    <color name="colorPrimary2">#673AB7</color>
     <color name="colorPrimaryDark">#000000</color>
+    <color name="colorPrimaryDark2">#512DA8</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="colorAccent2">#FF5252</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorGreen">#32CD32</color>
     <drawable name="colorBlue">#061EF2</drawable>
 </resources>

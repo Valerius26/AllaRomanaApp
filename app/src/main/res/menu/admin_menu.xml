@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/Debitori"
+        android:icon="@drawable/baseline_account_balance_black_18dp"
+        android:title="Utenti debitori"/>
+
+    <item
+        android:id="@+id/Segnalati"
+        android:icon="@drawable/baseline_admin_panel_settings_black_18dp"
+        android:title="Utenti segnalati"/>
+
+    <item
+        android:id="@+id/Bloccati"
+        android:icon="@drawable/baseline_pan_tool_black_18dp"
+        android:title="Utenti bloccati"/>
+
+    <item
+        android:id="@+id/Esci"
+        android:icon="@drawable/logout"
+        android:title="Esci"/>
+
+</menu>

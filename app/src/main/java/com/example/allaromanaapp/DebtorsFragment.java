@@ -2,11 +2,26 @@ package com.example.allaromanaapp;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,6 +30,11 @@ import android.view.ViewGroup;
  */
 public class DebtorsFragment extends Fragment {
 
+    FirebaseFirestore db;
+    ArrayList<Creditors> debtors = new ArrayList<>();
+    RecyclerView re;
+    View v;
+    debtorsAdminAdapter adapter;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -59,6 +79,59 @@ public class DebtorsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_debtors, container, false);
+        View view = inflater.inflate(R.layout.fragment_debtors, container, false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.v = view;
+
+        init();
+        loadData();
+    }
+
+    private void loadData() {
+        db = FirebaseFirestore.getInstance();
+        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                 for(DocumentSnapshot documentSnapshot: task.getResult()){
+                     totalDebt(documentSnapshot.getId(),documentSnapshot.getString("nome"),documentSnapshot.getString("cognome"));
+                 }
+
+            }
+        });
+    }
+
+    private void totalDebt(final String id, final String name, final String surname) {
+        db.collection("users").document(id).collection("debts")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(!task.getResult().isEmpty()){
+                    Long total = Long.valueOf(0);
+                    for(DocumentSnapshot documentSnapshot : task.getResult()){
+                        total = total + Long.valueOf(documentSnapshot.getString("debito"));
+                    }
+                    if(total > 99){
+                        debtors.add(new Creditors(id,name,surname,total));
+                    }
+                    adapter = new debtorsAdminAdapter(debtors, getContext());
+                    re.setAdapter(adapter);
+                }
+            }
+        });
+    }
+
+    private void init() {
+
+        re = (RecyclerView)v.findViewById(R.id.recyclerDebtor);
+        re.setHasFixedSize(true);
+        re.setLayoutManager(new LinearLayoutManager(getContext()));
+        re.addItemDecoration(new DividerItemDecoration(getContext(),LinearLayoutManager.VERTICAL));
+
+
     }
 }

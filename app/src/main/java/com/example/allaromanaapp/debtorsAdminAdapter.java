@@ -1,0 +1,87 @@
+package com.example.allaromanaapp;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder> {
+
+    ArrayList<Creditors> debtsList;
+    Context context;
+    AdminActivity adminActivity;
+    FirebaseFirestore db;
+
+    public debtorsAdminAdapter(ArrayList debtsList, Context context) {
+        this.debtsList = debtsList;
+        this.context = context;
+    }
+
+
+    @NonNull
+    @Override
+    public debtorsAdminHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.balancelist,parent,false);
+
+        debtorsAdminHolder debtorsAdminHolder = new debtorsAdminHolder(itemView);
+
+        debtorsAdminHolder.setOnClickListener(new debtorsAdminHolder.ClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                String clickedUserID = debtsList.get(position).getId();
+                Intent intent = new Intent(context,NotCurrentProfileActivity.class);
+                intent.putExtra("idUtente", clickedUserID);
+                context.startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
+
+
+
+        return debtorsAdminHolder;
+    }
+
+
+    @Override
+    public void onBindViewHolder(@NonNull debtorsAdminHolder holder, int position) {
+        String name = debtsList.get(position).getName();
+        String surname = debtsList.get(position).getSurname();
+        Long debt = debtsList.get(position).getDebt();
+        holder.userName.setText(name + " " + surname);
+        holder.debtNum.setText(debt+" $");
+        holder.info.setText("Tieni premuto per bloccare questo utente");
+    }
+
+    @Override
+    public int getItemCount() {
+        return debtsList.size();
+    }
+}

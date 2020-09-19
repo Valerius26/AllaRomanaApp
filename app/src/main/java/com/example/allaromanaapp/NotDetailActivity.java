@@ -86,10 +86,11 @@ public class NotDetailActivity extends AppCompatActivity {
                         info.setText("Vuoi annullare questo debito?");
                         indicate.setText("Annulla il debito");
                     }
-                    if(testo.contains("Questa è la mia posizione")){
+                    if(testo.contains("Questa è la mia posizione") || testo.contains("Ti ho pagato")){
                         info.setVisibility(View.INVISIBLE);
                         indicate.setVisibility(View.INVISIBLE);
                     }
+
                 }
             }
         });

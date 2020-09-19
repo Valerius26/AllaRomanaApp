@@ -7,13 +7,15 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the "MyLocation" functionality.
     -->
-    <uses-feature android:name="android.hardware.bluetooth"/>
+    <uses-feature android:name="android.hardware.bluetooth" />
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED"
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_PRIVILEGED"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
@@ -30,6 +32,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="HardcodedDebugMode">
+        <activity android:name=".byeActivity"></activity>
         <activity android:name=".SelectPayingInGroup" />
         <activity android:name=".groupComplete" />
         <activity android:name=".GroupDetail" />
@@ -55,20 +58,20 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".SpashScreenActivity"
+        <activity
+            android:name=".SpashScreenActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
-
         </activity>
-
-        <activity android:name=".LoginActivity" android:noHistory="true"/>
+        <activity
+            android:name=".LoginActivity"
+            android:noHistory="true" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".NotCurrentProfileActivity" />
         <activity android:name=".AddUsers" />
@@ -84,9 +87,10 @@
         <activity android:name=".payActivity" />
         <activity android:name=".NewGroupActivity" />
         <activity android:name=".groupActivity" />
-        <activity android:name=".SelectUser"/>
-        <activity android:name=".PosActivity"/>
-        <activity android:name=".historyActivity"/>
+        <activity android:name=".SelectUser" />
+        <activity android:name=".PosActivity" />
+        <activity android:name=".historyActivity" />
+        <activity android:name=".byeActivity"/>
     </application>
 
 </manifest>

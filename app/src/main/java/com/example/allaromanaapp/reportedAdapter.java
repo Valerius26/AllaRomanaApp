@@ -28,15 +28,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder> {
+public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
 
-    ArrayList<Creditors> debtsList;
+    ArrayList<Reported> reportedList;
     Context context;
     AdminActivity adminActivity;
     FirebaseFirestore db;
 
-    public debtorsAdminAdapter(ArrayList debtsList, Context context) {
-        this.debtsList = debtsList;
+    public reportedAdapter(ArrayList reportedList, Context context) {
+        this.reportedList = reportedList;
         this.context = context;
         db = FirebaseFirestore.getInstance();
     }
@@ -44,16 +44,16 @@ public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder
 
     @NonNull
     @Override
-    public debtorsAdminHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public reportedHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.balancelist,parent,false);
 
-        debtorsAdminHolder debtorsAdminHolder = new debtorsAdminHolder(itemView);
+        reportedHolder reportedHolder = new reportedHolder(itemView);
 
-        debtorsAdminHolder.setOnClickListener(new debtorsAdminHolder.ClickListener() {
+        reportedHolder.setOnClickListener(new reportedHolder.ClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                String clickedUserID = debtsList.get(position).getId();
+                String clickedUserID = reportedList.get(position).getId_ref();
                 Intent intent = new Intent(context,NotCurrentProfileActivity.class);
                 intent.putExtra("idUtente", clickedUserID);
                 context.startActivity(intent);
@@ -61,29 +61,29 @@ public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder
 
             @Override
             public void onItemLongClick(View view, int position) {
-                saveLocked(debtsList.get(position).getId(),debtsList.get(position).getName(),
-                        debtsList.get(position).getSurname());
+                saveLocked(reportedList.get(position).getId_ref(),reportedList.get(position).getName(),
+                        reportedList.get(position).getSurname());
             }
         });
 
 
 
-        return debtorsAdminHolder;
+        return reportedHolder;
     }
 
     private void saveLocked(final String id, final String nome, final String cognome) {
         db.collection("blocked").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    int vero = 0;
-                    for (DocumentSnapshot documentSnapshot : task.getResult()){
-                        if(documentSnapshot.getString("idUtente").equals(id)){
-                            vero = 1;
-                            Toast.makeText(context,"L'utente è stato già bloccato",Toast.LENGTH_SHORT).show();
-                            break;
-                        }
+                int vero = 0;
+                for (DocumentSnapshot documentSnapshot : task.getResult()){
+                    if(documentSnapshot.getString("idUtente").equals(id)){
+                        vero = 1;
+                        Toast.makeText(context,"L'utente è stato già bloccato",Toast.LENGTH_SHORT).show();
+                        break;
                     }
-                    save(id,nome,cognome,vero);
+                }
+                save(id,nome,cognome,vero);
             }
         });
     }
@@ -106,17 +106,18 @@ public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder
 
 
     @Override
-    public void onBindViewHolder(@NonNull debtorsAdminHolder holder, int position) {
-        String name = debtsList.get(position).getName();
-        String surname = debtsList.get(position).getSurname();
-        Long debt = debtsList.get(position).getDebt();
+    public void onBindViewHolder(@NonNull reportedHolder holder, int position) {
+        String e_mail = reportedList.get(position).getE_mail();
+        String name = reportedList.get(position).getName();
+        String surname = reportedList.get(position).getSurname();
         holder.userName.setText(name + " " + surname);
-        holder.debtNum.setText(debt+" $");
+        holder.email.setText(e_mail);
+        holder.debtNum.setVisibility(View.INVISIBLE);
         holder.info.setText("Tieni premuto per bloccare questo utente");
     }
 
     @Override
     public int getItemCount() {
-        return debtsList.size();
+        return reportedList.size();
     }
 }

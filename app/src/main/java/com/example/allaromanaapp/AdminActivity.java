@@ -49,4 +49,14 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+
+        if (getFragmentManager().getBackStackEntryCount() == 1 ) {
+            this.finish();
+        } else {
+            getFragmentManager().popBackStack();
+        }
+    }
 }

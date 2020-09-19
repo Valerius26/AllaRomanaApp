@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -214,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void logout(){
 
+        startActivity(new Intent(MainActivity.this,byeActivity.class));
 
         Intent intent = new Intent(MainActivity.this,LoginActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this,1000,intent,PendingIntent.FLAG_CANCEL_CURRENT);
@@ -279,6 +281,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK) {
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 }

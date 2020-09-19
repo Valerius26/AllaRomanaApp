@@ -3,10 +3,13 @@ package com.example.allaromanaapp;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +18,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +34,11 @@ import java.util.ArrayList;
  */
 public class ReportedFragment extends Fragment {
 
+    FirebaseFirestore db;
+    ArrayList<Reported> reporteds = new ArrayList<>();
+    RecyclerView re;
+    View v;
+    reportedAdapter adapter;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -74,6 +87,59 @@ public class ReportedFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_reported, container, false);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.v = view;
+
+        init();
+        loadData();
+    }
+
+    private void loadData() {
+        db = FirebaseFirestore.getInstance();
+        db.collection("reports").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot documentSnapshot : task.getResult()){
+                    recoverData(documentSnapshot.getString("idUtente"),documentSnapshot.getId());
+                }
+            }
+        });
+    }
+
+    private void recoverData(final String idUtente, final String idReport) {
+        db.collection("users").document(idUtente).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                if(error!=null){
+
+                }else{
+                    Reported repUser = new Reported(idReport,value.getString("nome"),
+                            value.getString("cognome"),value.getString("e-mail"),idUtente);
+                    reporteds.add(repUser);
+                }
+                Collections.sort(reporteds, new Comparator<Reported>() {
+                    @Override
+                    public int compare(Reported r, Reported r1) {
+                        return r.getE_mail().compareTo(r1.getE_mail());
+                    }
+                });
+                adapter = new reportedAdapter(reporteds,getContext());
+                re.setAdapter(adapter);
+            }
+        });
+    }
+
+    private void init() {
+
+        re = (RecyclerView)v.findViewById(R.id.recyclerDebtor);
+        re.setHasFixedSize(true);
+        re.setLayoutManager(new LinearLayoutManager(getContext()));
+        re.addItemDecoration(new DividerItemDecoration(getContext(),LinearLayoutManager.VERTICAL));
+
+    }
 
 
 }

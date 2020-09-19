@@ -134,6 +134,7 @@ public class NotDetailActivity extends AppCompatActivity {
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("idUtente", sendID);
 
+
                             db.collection("reports").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentReference> task) {

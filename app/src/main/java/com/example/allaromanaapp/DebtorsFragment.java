@@ -22,6 +22,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -118,6 +120,13 @@ public class DebtorsFragment extends Fragment {
                     if(total > 99){
                         debtors.add(new Creditors(id,name,surname,total));
                     }
+
+                    Collections.sort(debtors, new Comparator<Creditors>() {
+                        @Override
+                        public int compare(Creditors d, Creditors d1) {
+                            return d.getName().compareTo(d1.getName());
+                        }
+                    });
                     adapter = new debtorsAdminAdapter(debtors, getContext());
                     re.setAdapter(adapter);
                 }

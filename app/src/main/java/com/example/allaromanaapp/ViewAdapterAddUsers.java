@@ -102,6 +102,7 @@ public class ViewAdapterAddUsers extends RecyclerView.Adapter<ViewHolderAddUsers
 
                 }
                 if(duplicate.size()==0) {
+
                     createPartecipantInCreator(nome, cognome, selectedUserID);
                 }
             }

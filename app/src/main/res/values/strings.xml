@@ -71,8 +71,11 @@
     <string name="tieniPremutoConto">Tieni premuto per pagare a un conto</string>
     <string name="aggiungiPartecipante">aggiungi un partecipante</string>
     <string name="title_activity_maps">Mappa</string>
+    <string name="deleteProfile">ELIMINA PROFILO</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 
 </resources>

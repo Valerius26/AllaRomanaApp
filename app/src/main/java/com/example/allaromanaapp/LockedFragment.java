@@ -13,9 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,10 +31,10 @@ import java.util.ArrayList;
 public class LockedFragment extends Fragment {
 
     FirebaseFirestore db;
-    ArrayList<Reported> reporteds = new ArrayList<>();
+    ArrayList<Creditors> lockedes = new ArrayList<>();
     RecyclerView re;
     View v;
-    reportedAdapter adapter;
+    LockedAdapter adapter;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -81,12 +87,50 @@ public class LockedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.v = view;
 
-/*        init();
-        loadData();*/
+        init();
+        loadData();
     }
 
     private void loadData() {
+        db = FirebaseFirestore.getInstance();
+        db.collection("blocked").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot documentSnapshot: task.getResult()){
+                    totalDebt(documentSnapshot.getString("idUtente"),documentSnapshot.getString("nome"),documentSnapshot.getString("cognome"));
+                }
+
+            }
+        });
     }
+
+    private void totalDebt(final String id, final String name, final String surname) {
+        db.collection("users").document(id).collection("debts")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(!task.getResult().isEmpty()){
+                    Long total = Long.valueOf(0);
+                    for(DocumentSnapshot documentSnapshot : task.getResult()){
+                        total = total + Long.valueOf(documentSnapshot.getString("debito"));
+                    }
+
+                    lockedes.add(new Creditors(id,name,surname,total));
+
+
+                    Collections.sort(lockedes, new Comparator<Creditors>() {
+                        @Override
+                        public int compare(Creditors d, Creditors d1) {
+                            return d.getName().compareTo(d1.getName());
+                        }
+                    });
+                    adapter = new LockedAdapter(lockedes, getContext());
+                    re.setAdapter(adapter);
+                }
+            }
+        });
+    }
+
 
     private void init() {
 

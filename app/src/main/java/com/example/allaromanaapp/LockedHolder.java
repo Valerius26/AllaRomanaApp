@@ -7,16 +7,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class notificationHolde extends RecyclerView.ViewHolder {
+public class LockedHolder extends RecyclerView.ViewHolder {
 
-    ImageView iconMsg;
-    TextView info,userName;
-    View notificationView;
+    ImageView iconUser;
+    TextView info,userName,debt,debtNum;
+    View lockedView;
 
-    public notificationHolde(@NonNull View itemView) {
+    public LockedHolder(@NonNull View itemView) {
         super(itemView);
 
-        notificationView = itemView;
+        lockedView = itemView;
 
 
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -37,17 +37,19 @@ public class notificationHolde extends RecyclerView.ViewHolder {
 
         userName = itemView.findViewById(R.id.userName);
         info = itemView.findViewById(R.id.info);
-        iconMsg = itemView.findViewById(R.id.iconMessage);
+        iconUser = itemView.findViewById(R.id.iconUser);
+        debt = itemView.findViewById(R.id.debt);
+        debtNum = itemView.findViewById(R.id.debtNum);
     }
 
-    private notificationHolde.ClickListener clickListener;
+    private LockedHolder.ClickListener clickListener;
 
     public interface ClickListener{
         void onItemClick(View view,int position);
         void onItemLongClick(View view,int position);
     }
 
-    public void setOnClickListener(notificationHolde.ClickListener clickListener){
+    public void setOnClickListener(LockedHolder.ClickListener clickListener){
         this.clickListener = clickListener;
     }
 

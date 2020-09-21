@@ -62,7 +62,7 @@ public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
             @Override
             public void onItemLongClick(View view, int position) {
                 saveLocked(reportedList.get(position).getId_ref(),reportedList.get(position).getName(),
-                        reportedList.get(position).getSurname());
+                        reportedList.get(position).getSurname(), position);
             }
         });
 
@@ -71,7 +71,7 @@ public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
         return reportedHolder;
     }
 
-    private void saveLocked(final String id, final String nome, final String cognome) {
+    private void saveLocked(final String id, final String nome, final String cognome, final int position) {
         db.collection("blocked").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -83,12 +83,12 @@ public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
                         break;
                     }
                 }
-                save(id,nome,cognome,vero);
+                save(id,nome,cognome,vero,position);
             }
         });
     }
 
-    private void save(String id, final String nome, final String cognome, int esistente) {
+    private void save(final String id, final String nome, final String cognome, int esistente, final int position) {
         if(esistente==0) {
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("idUtente", id);
@@ -99,9 +99,33 @@ public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
                     Toast.makeText(context, "" + nome + " " + cognome + " bloccato", Toast.LENGTH_SHORT).show();
+                    deleteReport(id,position);
                 }
             });
         }
+    }
+
+    private void deleteReport(final String id, final int position) {
+        db.collection("reports").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                for(DocumentSnapshot documentSnapshot: task.getResult()){
+                    if(documentSnapshot.getString("idUtente").equals(id)){
+                        deleteR(documentSnapshot.getId(), position);
+                    }
+                }
+
+                sendNotification(id);
+            }
+        });
+    }
+
+    private void deleteR(String id, int position) {
+        db.collection("reports").document(id).delete();
+        reportedList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, reportedList.size());
     }
 
 
@@ -119,5 +143,18 @@ public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
     @Override
     public int getItemCount() {
         return reportedList.size();
+    }
+
+    private void sendNotification(String id) {
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("idMittente","Admin");
+        hashMap.put("testo","Sei stato bloccato a causa delle troppe segnalazioni\n" +
+                "Verrai sbloccato tra qualche giorno");
+        hashMap.put("nomeMittente","Admin");
+        hashMap.put("cognomeMittente","");
+        hashMap.put("letto","no");
+        hashMap.put("daPagare",""+0);
+
+        db.collection("users").document(id).collection("notify").add(hashMap);
     }
 }

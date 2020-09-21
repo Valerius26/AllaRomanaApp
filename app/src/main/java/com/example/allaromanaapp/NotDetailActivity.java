@@ -86,7 +86,8 @@ public class NotDetailActivity extends AppCompatActivity {
                         info.setText("Vuoi annullare questo debito?");
                         indicate.setText("Annulla il debito");
                     }
-                    if(testo.contains("Questa è la mia posizione") || testo.contains("Ti ho pagato")){
+                    if(testo.contains("Questa è la mia posizione") || testo.contains("Ti ho pagato") ||
+                     testo.contains("Sei stato bloccato") || testo.contains("Sei stato sbloccato")){
                         info.setVisibility(View.INVISIBLE);
                         indicate.setVisibility(View.INVISIBLE);
                     }

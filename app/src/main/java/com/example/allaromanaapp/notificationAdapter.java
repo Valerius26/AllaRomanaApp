@@ -37,7 +37,7 @@ public class notificationAdapter extends RecyclerView.Adapter<notificationHolde>
 
         notificationHolde ntHolder = new notificationHolde(itemView);
 
-        ntHolder.setOnClickListener(new creditsHolder.ClickListener() {
+        ntHolder.setOnClickListener(new notificationHolde.ClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 String notID = notificationList.get(position).getId();

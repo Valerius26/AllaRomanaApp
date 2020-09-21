@@ -88,7 +88,7 @@ public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder
         });
     }
 
-    private void save(String id, final String nome, final String cognome, int esistente) {
+    private void save(final String id, final String nome, final String cognome, int esistente) {
         if(esistente==0) {
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("idUtente", id);
@@ -99,6 +99,7 @@ public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
                     Toast.makeText(context, "" + nome + " " + cognome + " bloccato", Toast.LENGTH_SHORT).show();
+                    sendNotification(id);
                 }
             });
         }
@@ -118,5 +119,18 @@ public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder
     @Override
     public int getItemCount() {
         return debtsList.size();
+    }
+
+    private void sendNotification(String id) {
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("idMittente","Admin");
+        hashMap.put("testo","Sei stato bloccato a causa dei troppi debiti\n" +
+                "Verrai sbloccato quando i tuoi debiti diminuiranno");
+        hashMap.put("nomeMittente","Admin");
+        hashMap.put("cognomeMittente","");
+        hashMap.put("letto","no");
+        hashMap.put("daPagare",""+0);
+
+        db.collection("users").document(id).collection("notify").add(hashMap);
     }
 }

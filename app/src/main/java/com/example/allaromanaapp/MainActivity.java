@@ -90,8 +90,25 @@ public class MainActivity extends AppCompatActivity {
         payBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("asfagfas",currentUserID);
-                createAccount(currentUserID);
+                db.collection("blocked").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                int bloccato = 0;
+                        for(DocumentSnapshot documentSnapshot: task.getResult()){
+                            if(currentUserID.equals(documentSnapshot.getString("idUtente"))){
+                                Toast.makeText(MainActivity.this,"Sei stato bloccato!",Toast.LENGTH_SHORT).show();
+                                bloccato = 1;
+                                break;
+                            }
+
+
+                        }
+                        if(bloccato==0){
+                            createAccount(currentUserID);
+                        }
+                    }
+                });
+
             }
         });
 
@@ -126,7 +143,23 @@ public class MainActivity extends AppCompatActivity {
         groupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,groupActivity.class));
+                db.collection("blocked").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    int bloccato = 0;
+                        for(DocumentSnapshot documentSnapshot: task.getResult()){
+                            if(currentUserID.equals(documentSnapshot.getString("idUtente"))){
+                                bloccato = 1;
+                                Toast.makeText(MainActivity.this,"Sei stato bloccato!",Toast.LENGTH_SHORT).show();
+                                break;
+                            }
+                        }
+                        if(bloccato==0){
+                            startActivity(new Intent(MainActivity.this,groupActivity.class));
+                        }
+                    }
+                });
+
             }
         });
 

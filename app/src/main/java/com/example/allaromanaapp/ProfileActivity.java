@@ -42,6 +42,7 @@ import java.io.IOException;
 public class ProfileActivity extends AppCompatActivity {
 
     TextView nome, cognome, email;
+    ImageView addFoto;
     ImageView profilePicture;
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
@@ -63,8 +64,11 @@ public class ProfileActivity extends AppCompatActivity {
         email = findViewById(R.id.emailText);
         deleteProfile = findViewById(R.id.deleteProfile);
         profilePicture = findViewById(R.id.profileImage);
+        addFoto = findViewById(R.id.addFoto);
+
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
+
 
 
         userID = fAuth.getCurrentUser().getUid();
@@ -99,7 +103,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        profilePicture.setOnClickListener(new View.OnClickListener() {
+        addFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent gallery = new Intent();
@@ -152,14 +156,14 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.getResult().size() != 0) {
-                    Toast.makeText(ProfileActivity.this, "non puoi cancellare un profilo quando hai dei debiti", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity.this, R.string.haveDebt, Toast.LENGTH_SHORT).show();
                 } else {
                     fStore.collection("users").document(userID).collection("credits")
                             .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.getResult().size() != 0) {
-                                Toast.makeText(ProfileActivity.this, "non puoi cancellare un profilo quando hai dei crediti", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity.this, R.string.haveCredit, Toast.LENGTH_SHORT).show();
                             } else {
                                 final AlertDialog.Builder cancelDialog = new AlertDialog.Builder(view.getContext());
                                 cancelDialog.setTitle("Cancellare il profilo?");
@@ -228,6 +232,8 @@ public class ProfileActivity extends AppCompatActivity {
         finish();
         startActivity(intent);
     }
+
+
 
 }
 

@@ -65,12 +65,12 @@ public class PosActivity extends AppCompatActivity {
                 String password = pass.getText().toString().trim();
 
                 if (TextUtils.isEmpty(number)) {
-                    card.setError("Inserisci il numero di carta");
+                    card.setError(getString(R.string.insertCardNum));
                     return;
                 }
 
                 if (TextUtils.isEmpty(password)) {
-                    pass.setError("Inserisci la password");
+                    pass.setError(getString(R.string.insertPassword));
                     return;
                 }
 
@@ -82,10 +82,10 @@ public class PosActivity extends AppCompatActivity {
                     //updatecurrentCard();
                     //updatecreditorCard();
                     updatePayment();
-                    Toast.makeText(PosActivity.this,"Il debito è stato saldato",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PosActivity.this, getString(R.string.debtSolved) ,Toast.LENGTH_SHORT).show();
                 }else{
 
-                    Toast.makeText(PosActivity.this,"Errore!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PosActivity.this,getString(R.string.errore), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -156,7 +156,11 @@ public class PosActivity extends AppCompatActivity {
         hashMap.put("idMittente",currentUserID);
         hashMap.put("daPagare",toPay);
         hashMap.put("letto","no");
-        hashMap.put("testo","Ti ho pagato un debito pari a euro" + toPay);
+        if(!toPay.equals(1)) {
+            hashMap.put("testo", getString(R.string.yourDebtSolved) + " " + toPay + " " + getString(R.string.valute));
+        }else{
+            hashMap.put("testo", getString(R.string.yourDebtSolved) + " " + toPay + " " + getString(R.string.valuteS));
+        }
 
         db.collection("users").document(creditorID).collection("notify").add(hashMap)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {

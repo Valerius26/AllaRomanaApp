@@ -38,7 +38,7 @@
             android:layout_marginVertical="70dp"
             android:layout_marginStart="4dp"
             android:layout_toEndOf="@+id/iconUser"
-            android:text="@string/tieniPremutoConto"
+            android:text="@string/paymentIfPress"
             android:textSize="15sp" />
 
         <TextView
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="74dp"
             android:layout_marginTop="35dp"
-            android:text="Debito"
+            android:text="@string/debtString"
             android:textSize="30dp" />
 
         <TextView

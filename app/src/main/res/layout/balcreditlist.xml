@@ -38,7 +38,7 @@
             android:layout_marginVertical="70dp"
             android:layout_marginStart="4dp"
             android:layout_toEndOf="@+id/iconUser"
-            android:text="Tieni premuto per inviare una notifica"
+            android:text="@string/sendIfPress"
             android:textSize="15sp" />
 
         <TextView

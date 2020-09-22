@@ -59,10 +59,10 @@ public class creditsAdapter extends RecyclerView.Adapter<creditsHolder>{
             @Override
             public void onItemLongClick(View view, int position) {
                 final AlertDialog.Builder notificationDialog = new AlertDialog.Builder(view.getContext());
-                notificationDialog.setTitle("Invio notifica");
-                notificationDialog.setMessage("Sei sicuro di voler inviare una notifica a " + Debtorname +" "+Debtorsurname+"?");
+                notificationDialog.setTitle(context.getString(R.string.sendNotTitle));
+                notificationDialog.setMessage(context.getString(R.string.sendNotBody) + " " + Debtorname +" "+Debtorsurname+"?");
 
-                notificationDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                notificationDialog.setPositiveButton(context.getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         sendNotification(id_dest);
@@ -113,7 +113,12 @@ public class creditsAdapter extends RecyclerView.Adapter<creditsHolder>{
     private void send(String currentUserName, String currentUserSurname) {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("idMittente",currentUserID);
-        hashMap.put("testo","Pagami il debito di euro " + credit + "!");
+        if(credit != 1){
+            hashMap.put("testo",context.getString(R.string.payMeDebt) + " " + credit + " " + context.getString(R.string.valute));
+        }else{
+            hashMap.put("testo",context.getString(R.string.payMeDebt) + " " + credit + " " + context.getString(R.string.valuteS));
+        }
+
         hashMap.put("nomeMittente",currentUserName);
         hashMap.put("cognomeMittente",currentUserSurname);
         hashMap.put("letto","no");
@@ -124,7 +129,7 @@ public class creditsAdapter extends RecyclerView.Adapter<creditsHolder>{
                 .add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
-                Toast.makeText(context,"Notifica inviata", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,R.string.notificationSended, Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -143,7 +148,9 @@ public class creditsAdapter extends RecyclerView.Adapter<creditsHolder>{
         id_dest = creditsList.get(position).getId();
         credit = creditsList.get(position).getDebt();
         holder.userName.setText(Debtorname + " " + Debtorsurname);
-        holder.creditNum.setText(credit+" $");
+        holder.credit.setText(context.getString(R.string.creditString));
+        holder.creditNum.setText(credit + " " + context.getString(R.string.simbol));
+        holder.info.setText(context.getString(R.string.sendIfPress));
     }
 
     @Override

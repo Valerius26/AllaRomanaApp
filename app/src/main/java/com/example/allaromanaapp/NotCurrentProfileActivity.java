@@ -35,7 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 public class NotCurrentProfileActivity extends AppCompatActivity {
 
     TextView nome, cognome, email, bilancio, gruppi, balanceTextTitle;
-    ImageView profileImage;
+    ImageView profileImage,addFoto;
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
     String userID;
@@ -58,6 +58,9 @@ public class NotCurrentProfileActivity extends AppCompatActivity {
         deleteProfile = findViewById(R.id.deleteProfile);
         profileImage = findViewById(R.id.profileImage);
         balanceTextTitle = findViewById(R.id.balanceTextTitle);
+        addFoto = findViewById(R.id.addFoto);
+
+        addFoto.setVisibility(View.INVISIBLE);
 
         balanceTextTitle.setVisibility(View.INVISIBLE);
         deleteProfile.setVisibility(View.INVISIBLE);

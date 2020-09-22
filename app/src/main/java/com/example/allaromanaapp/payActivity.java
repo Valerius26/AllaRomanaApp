@@ -70,7 +70,7 @@ public class payActivity extends AppCompatActivity{
         payBtn = findViewById(R.id.payBtn);
         orText = findViewById(R.id.oppure);
         difference = findViewById(R.id.compensa);
-        orText.setText("Anche " +  CreditorName + " " + CreditorSurname + " ha un debito con te?");
+        orText.setText(getString(R.string.anche) + " " +  CreditorName + " " + CreditorSurname + " " + getString(R.string.conTe));
 
         loadTotalDebt();
 
@@ -89,7 +89,7 @@ public class payActivity extends AppCompatActivity{
                             }
                         }
                         if(vero == 0){
-                            Toast.makeText(payActivity.this, CreditorName + " " + CreditorSurname + " non ha nessun debito con te",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(payActivity.this, CreditorName + " " + CreditorSurname + " " + getString(R.string.noDebtTo),Toast.LENGTH_SHORT).show();
                         }
                         else{
                             loadTotalDebtTwo();
@@ -194,31 +194,31 @@ public class payActivity extends AppCompatActivity{
             //aggiorna con un unica tabella il mio credito e il suo debito
             updateDebt(CreditorID,(-total),currentName,currentSurname,currentUserID);
             updateCredit(currentUserID,(-total),CreditorName,CreditorSurname,CreditorID);
-            String text = "Il debito con me è stato compensato grazie ai nostri debiti reciproci\n" +
-                    "Il tuo debito ora risale a " + (-total) + " $";
+            String text = R.string.compensationFirst + "\n" +
+                    R.string.yourDebtNow + " " + (-total) + R.string.simbol;
             sendNotification(currentName,currentSurname,(-total),currentUserID,text);
-            Toast.makeText(payActivity.this,"Adesso hai un credito con " + CreditorName + " " + CreditorSurname + " pari a: "  + (-total) + "$", Toast.LENGTH_SHORT).show();
+            Toast.makeText(payActivity.this,getString(R.string.compensationSecond) + " " + CreditorName + " " + CreditorSurname + " " + getString(R.string.pariA) + " "  + (-total) + getString(R.string.simbol), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(payActivity.this,MainActivity.class));
         }else
         if(total > 0){
             //aggiorna con un unica tabella il mio di debito e il suo di credito
             updateDebt(currentUserID,total,CreditorName,CreditorSurname,CreditorID);
             updateCredit(CreditorID,total,currentName,currentSurname,currentUserID);
-            String text = "Il mio debito con te è stato compensato grazie ai nostri debiti reciproci\n" +
-                    "Il mio debito ora risale a " + total + " $";
+            String text =  R.string.compensationThird + "\n" +
+                    R.string.myDebtNow + " " + total + " " + R.string.simbol;
             sendNotification(currentName,currentSurname,total,currentUserID,text);
-            Toast.makeText(payActivity.this,"Adesso hai un debito con " + CreditorName + " " + CreditorSurname + " pari a: "  + total + "$", Toast.LENGTH_SHORT).show();
+            Toast.makeText(payActivity.this, getString(R.string.yourDebtNow2) + " " + CreditorName + " " + CreditorSurname + " " + getString(R.string.pariA) + " "  + total + getString(R.string.simbol), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(payActivity.this,MainActivity.class));
         }else{
-            String text = "I nostri debiti sono stati compensati alla perfezione!\n" +
-                    "Non abbiamo più debiti l'uno con l'altro";
+            String text =  R.string.perfectCompensation + "\n" +
+                    R.string.totalDebtSolved;
             sendNotification(currentName,currentSurname,total,currentUserID,text);
             deleteDebts(CreditorID,currentUserID,"0");
             deleteDebts(currentUserID,CreditorID,"0");
             deleteCredits(currentUserID,CreditorID,"0");
             deleteCredits(CreditorID,currentUserID,"0");
 
-            Toast.makeText(payActivity.this,"Il debito è stato compensato alla perfezione!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(payActivity.this,getString(R.string.perfectCompensation2), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(payActivity.this,MainActivity.class));
         }
     }
@@ -314,9 +314,9 @@ public class payActivity extends AppCompatActivity{
     }
 
     private void goNow(final Long creditorTotalC) {
-        debt.setText("Debito con " + CreditorName + " " + CreditorSurname + " : " + CreditorCredit + "$");
+        debt.setText(getString(R.string.debtTo) + " " + CreditorName + " " + CreditorSurname + " : " + CreditorCredit + getString(R.string.simbol));
 
-        totalDebt.setText("Debito totale con " + CreditorName + " " + CreditorSurname + " : " + creditorTotalC + "$");
+        totalDebt.setText(getString(R.string.totalDebtTo) + " " + CreditorName + " " + CreditorSurname + " : " + creditorTotalC + getString(R.string.simbol));
 
         //l'importo da pagare dovrebbe corrispondere al debito che si seleziona a questo punto
 
@@ -324,11 +324,11 @@ public class payActivity extends AppCompatActivity{
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(payTotal.isChecked()){
-                    payBtn.setText("Salda il debito totale");
+                    payBtn.setText(R.string.payTotalDebtBtn);
                     toPay = creditorTotalC;
                     total = true;
                 }else{
-                    payBtn.setText("Salda il debito");
+                    payBtn.setText(R.string.payDebtBtn);
                     toPay = CreditorCredit;
                     total = false;
                 }

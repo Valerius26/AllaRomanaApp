@@ -115,6 +115,8 @@
     <string name="insertPassword">Inserisci la password</string>
     <string name="debtSolved">Il debito è stato saldato</string>
     <string name="yourDebtSolved">Ti ho pagato un debito pari a</string>
+    <string name="cardNumber">Numero di carta</string>
+    <string name="confirm">CONFERMA</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

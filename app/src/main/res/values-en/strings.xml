@@ -117,4 +117,6 @@
     <string name="insertPassword">Enter your password</string>
     <string name="debtSolved">The debt has been paid</string>
     <string name="yourDebtSolved">I paid you a debt equal to</string>
+    <string name="cardNumber">Card number</string>
+    <string name="confirm">Confirmation</string>
 </resources>

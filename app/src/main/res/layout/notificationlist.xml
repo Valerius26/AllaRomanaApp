@@ -38,7 +38,7 @@
             android:layout_marginVertical="40dp"
             android:layout_marginHorizontal="75dp"
             android:layout_toEndOf="@+id/iconUser"
-            android:text="Tocca per aprire"
+            android:text="@string/openIfTouch"
             android:textSize="15sp" />
 
 

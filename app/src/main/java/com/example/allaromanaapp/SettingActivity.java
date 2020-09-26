@@ -110,7 +110,7 @@ public class SettingActivity extends AppCompatActivity{
             @Override
             public void onSensorChanged(SensorEvent sensorEvent) {
                 float value = sensorEvent.values[0];
-                light.setText("Luminosità: " + " " + value + "lx");
+                light.setText(getString(R.string.brightness) + " " + value + "lx");
             }
 
             @Override

@@ -1,12 +1,15 @@
 package com.example.allaromanaapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,12 +91,20 @@ public class SelectPaying extends AppCompatActivity {
         });
 
 
+        editImport.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                ScrollView scrollView = findViewById(R.id.ScrollPart
+                );
+                scrollView.scrollTo(100,100);
+            }
+        });
+
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String pagante = adapter.getPayingUser();
                 if(!TextUtils.isEmpty(pagante)) {
-
                     String importo = editImport.getText().toString().trim();
                     Long importNumber = Long.valueOf(0);
                     int partecipantsSize = 0;
@@ -101,17 +112,17 @@ public class SelectPaying extends AppCompatActivity {
                     try {
                         int num = Integer.parseInt(importo);
                     } catch (NumberFormatException e) {
-                        editImport.setError("Inserisci un intero");
+                        editImport.setError(getString(R.string.integerRequested));
                     }
                         if (TextUtils.isEmpty(importo)) {
-                            editImport.setError("L'importo è richiesto");
+                            editImport.setError(getString(R.string.amountRequested));
                             return;
                         }else {
                             try {
                                 importNumber = (Long) Long.valueOf(importo);
                                 partecipantsSize = adapter.getItemCount();
                                 if (importNumber < partecipantsSize) {
-                                    editImport.setError("L'importo dev'essere maggiore o ugale numero di partecipanti");
+                                    editImport.setError(getString(R.string.importominoreouguale));
                                 } else {
                                     ArrayList<String> debtors = new ArrayList<>();
                                     debtors = adapter.getDebtors();
@@ -131,7 +142,7 @@ public class SelectPaying extends AppCompatActivity {
                         }
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"Seleziona un pagante", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),getString(R.string.selectPayer), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -203,7 +214,7 @@ public class SelectPaying extends AppCompatActivity {
                 .add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                 Toast.makeText(getApplicationContext(),"importo Pagato", Toast.LENGTH_SHORT).show();
+                 Toast.makeText(getApplicationContext(),getString(R.string.amountPaied), Toast.LENGTH_SHORT).show();
                  String id_credito = documentReference.getId();
                  //updateBalanceCredit(pagante,credit); //devo pensare a qualcos altro...
                  recupera_nome_creditore(pagante,debtor,credit,id_credito);
@@ -277,9 +288,13 @@ public class SelectPaying extends AppCompatActivity {
         hashMap.put("idMittente",pagante);
         hashMap.put("daPagare",""+credit);
         hashMap.put("letto","no");
-        hashMap.put("testo","Ti ricordo che hai un debito con me pari a euro " +
-                credit + ".\nRimborsami al più presto, grazie.");
-
+        if(credit!=1) {
+            hashMap.put("testo", " " + getString(R.string.rememberDebt) +
+                    credit + getString(R.string.valute) + ".\n" + getString(R.string.rimborsamiPresto));
+        }else{
+            hashMap.put("testo", " " + getString(R.string.rememberDebt) +
+                    credit + getString(R.string.valute) + ".\n" + getString(R.string.rimborsamiPresto));
+        }
         db.collection("users").document(debtor).collection("notify")
                 .add(hashMap);
     }
@@ -309,4 +324,8 @@ public class SelectPaying extends AppCompatActivity {
         documentReference.update("bilancio", FieldValue.increment(credit));
 
     }
+
+
+
+
 }

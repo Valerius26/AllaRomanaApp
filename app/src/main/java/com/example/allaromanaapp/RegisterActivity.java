@@ -1,6 +1,7 @@
 package com.example.allaromanaapp;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 
@@ -34,6 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -47,8 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     String userID;
     Long bilancio = Long.valueOf(0);
-
-
+    DatabaseHelper cardDB;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
         actionBar.hide();
         // Initialize Firebase Auth
 
+        cardDB = new DatabaseHelper(this);
         Nome = findViewById(R.id.nome);
         Cognome = findViewById(R.id.cognome);
         Email = findViewById(R.id.email);
@@ -100,6 +102,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
 
+                //Register card in Sql
+                Random rnd = new Random();
+                int number = rnd.nextInt(999999);
+                String card = String.format("%06d", number);
+                boolean insert = cardDB.insertData(card, password);
 
                 //Register the user in firebase
 

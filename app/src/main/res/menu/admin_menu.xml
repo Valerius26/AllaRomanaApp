@@ -5,21 +5,21 @@
     <item
         android:id="@+id/Debitori"
         android:icon="@drawable/baseline_account_balance_black_18dp"
-        android:title="Utenti debitori"/>
+        android:title="@string/debtors"/>
 
     <item
         android:id="@+id/Segnalati"
         android:icon="@drawable/baseline_admin_panel_settings_black_18dp"
-        android:title="Utenti segnalati"/>
+        android:title="@string/reports"/>
 
     <item
         android:id="@+id/Bloccati"
         android:icon="@drawable/baseline_pan_tool_black_18dp"
-        android:title="Utenti bloccati"/>
+        android:title="@string/blockeds"/>
 
     <item
         android:id="@+id/Esci"
         android:icon="@drawable/logout"
-        android:title="Esci"/>
+        android:title="@string/esci"/>
 
 </menu>

@@ -42,7 +42,7 @@
             android:layout_below="@+id/DescriptionName"
             android:layout_marginStart="75dp"
             android:singleLine="true"
-            android:text="Premi per entrare"
+            android:text="@string/enterIfPress"
             android:textSize="20dp"
             android:textStyle="italic" />
 

@@ -196,4 +196,10 @@ public class GroupDetail extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(GroupDetail.this, NewGroupActivity.class));
+    }
 }

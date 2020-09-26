@@ -82,12 +82,12 @@ public class NotDetailActivity extends AppCompatActivity {
                     debito = (value.getString("daPagare"));
                     testo = value.getString("testo");
                     message.setText(testo);
-                    if(testo.contains("Ti ho segnalato per un debito")){
-                        info.setText("Vuoi annullare questo debito?");
-                        indicate.setText("Annulla il debito");
+                    if(testo.contains(getString(R.string.IhaveRepYou))){
+                        info.setText(R.string.deleteDebt);
+                        indicate.setText(R.string.deleteDebtYes);
                     }
-                    if(testo.contains("Questa è la mia posizione") || testo.contains("Ti ho pagato") ||
-                     testo.contains("Sei stato bloccato") || testo.contains("Sei stato sbloccato")){
+                    if(testo.contains(getString(R.string.thisIsMyPosi)) || testo.contains(getString(R.string.IpaidYou)) ||
+                     testo.contains(getString(R.string.youLocked)) || testo.contains(getString(R.string.youNoLocked))){
                         info.setVisibility(View.INVISIBLE);
                         indicate.setVisibility(View.INVISIBLE);
                     }
@@ -100,12 +100,12 @@ public class NotDetailActivity extends AppCompatActivity {
         indicate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (testo.contains("Ti ho segnalato per un debito")) {
+                if (testo.contains(getString(R.string.IhaveRepYou))) {
                     final AlertDialog.Builder indicateDialog = new AlertDialog.Builder(view.getContext());
-                    indicateDialog.setTitle("Annulla il debito");
-                    indicateDialog.setMessage("Sei sicuro di voler annullare il debito di " + nomeMittente + " " + cognomeMittente + "?");
+                    indicateDialog.setTitle(getString(R.string.deleteDebtYes));
+                    indicateDialog.setMessage(getString(R.string.areYouSure) + " " + nomeMittente + " " + cognomeMittente + "?");
 
-                    indicateDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    indicateDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             deleteDebt();
@@ -126,10 +126,10 @@ public class NotDetailActivity extends AppCompatActivity {
 
                 } else {
                     final AlertDialog.Builder indicateDialog = new AlertDialog.Builder(view.getContext());
-                    indicateDialog.setTitle("Segnalazione");
-                    indicateDialog.setMessage("Sei sicuro di voler segnalare " + nomeMittente + " " + cognomeMittente + "?");
+                    indicateDialog.setTitle(getString(R.string.report));
+                    indicateDialog.setMessage(R.string.areYouSure2 + " " + nomeMittente + " " + cognomeMittente + "?");
 
-                    indicateDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    indicateDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             HashMap<String, String> hashMap = new HashMap<>();
@@ -195,7 +195,7 @@ public class NotDetailActivity extends AppCompatActivity {
                 }
 
                 }else{
-                    Toast.makeText(NotDetailActivity.this, "Questo debito non esiste più", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NotDetailActivity.this, R.string.debtDoesntExi, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -219,8 +219,12 @@ public class NotDetailActivity extends AppCompatActivity {
     private void sendToCreditor() {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("idMittente",currentUserID);
-        hashMap.put("testo","Ti ho segnalato per un debito di euro " + debito + ".\nNon so nulla di " +
-                    "questo debito.");
+        if(!debito.equals(1)) {
+            hashMap.put("testo", getString(R.string.iHaveRepYou) + " " + debito + " " + getString(R.string.valute) + ".\n" +
+                    getString(R.string.IdontKnow));
+        }else{
+            hashMap.put("testo", getString(R.string.iHaveRepYou) + " " + debito + " " + getString(R.string.valuteS) + ".\n" + getString(R.string.IdontKnow));
+        }
         hashMap.put("nomeMittente",name);
         hashMap.put("cognomeMittente",surname);
         hashMap.put("letto","no");
@@ -229,7 +233,7 @@ public class NotDetailActivity extends AppCompatActivity {
         db.collection("users").document(sendID).collection("notify").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
-                Toast.makeText(getApplicationContext(),"Segnalazione inviata", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),getString(R.string.reportSent), Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(),notificationActivity.class));
             }
         });
@@ -244,7 +248,11 @@ public class NotDetailActivity extends AppCompatActivity {
     private void sendToDebtor() {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("idMittente",currentUserID);
-        hashMap.put("testo","Ti ho annulato un debito pari a euro " + debito);
+        if(!debito.equals(1)) {
+            hashMap.put("testo", getString(R.string.iHaveDelDeb) + " " + debito + " " + getString(R.string.valute));
+        }else{
+            hashMap.put("testo", getString(R.string.iHaveDelDeb) + " " + debito + " " + getString(R.string.valuteS));
+        }
         hashMap.put("nomeMittente",name);
         hashMap.put("cognomeMittente",surname);
         hashMap.put("letto","no");
@@ -280,14 +288,14 @@ public class NotDetailActivity extends AppCompatActivity {
             db.collection("users").document(sendID).collection("debts")
                     .document(id).delete();
             sendToDebtor();
-            Toast.makeText(NotDetailActivity.this, "Il debito è stato cancellato", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NotDetailActivity.this, getString(R.string.debtDeleted), Toast.LENGTH_SHORT).show();
         }else
             if(trovato == 2){
                 db.collection("users").document(currentUserID).collection("credits")
                         .document(id).delete();
             }
         else{
-            Toast.makeText(NotDetailActivity.this, "Questo debito non esiste più", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NotDetailActivity.this, getString(R.string.debtDoesntExi), Toast.LENGTH_SHORT).show();
         }
 
     }

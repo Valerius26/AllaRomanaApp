@@ -8,17 +8,17 @@
     <fragment
         android:id="@+id/Debitori"
         android:name="com.example.allaromanaapp.DebtorsFragment"
-        android:label="Utenti debitori"
+        android:label="@string/debtors"
         tools:layout="@layout/fragment_debtors" />
     <fragment
         android:id="@+id/Segnalati"
         android:name="com.example.allaromanaapp.ReportedFragment"
-        android:label="Utenti segnalati"
+        android:label="@string/reports"
         tools:layout="@layout/fragment_reported" />
     <fragment
         android:id="@+id/Bloccati"
         android:name="com.example.allaromanaapp.LockedFragment"
-        android:label="Utenti bloccati"
+        android:label="@string/blockeds"
         tools:layout="@layout/fragment_locked" />
     <fragment
         android:id="@+id/Esci"

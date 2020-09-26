@@ -79,7 +79,7 @@ public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder
                     for (DocumentSnapshot documentSnapshot : task.getResult()){
                         if(documentSnapshot.getString("idUtente").equals(id)){
                             vero = 1;
-                            Toast.makeText(context,"L'utente è stato già bloccato",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context,context.getString(R.string.userBlocked),Toast.LENGTH_SHORT).show();
                             break;
                         }
                     }
@@ -98,7 +98,7 @@ public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder
             db.collection("blocked").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
-                    Toast.makeText(context, "" + nome + " " + cognome + " bloccato", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "" + nome + " " + cognome + " " + context.getString(R.string.blocked), Toast.LENGTH_SHORT).show();
                     sendNotification(id);
                 }
             });
@@ -113,7 +113,7 @@ public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder
         Long debt = debtsList.get(position).getDebt();
         holder.userName.setText(name + " " + surname);
         holder.debtNum.setText(debt+" $");
-        holder.info.setText("Tieni premuto per bloccare questo utente");
+        holder.info.setText(context.getString(R.string.stuckIfHold));
     }
 
     @Override
@@ -124,8 +124,8 @@ public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder
     private void sendNotification(String id) {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("idMittente","Admin");
-        hashMap.put("testo","Sei stato bloccato a causa dei troppi debiti\n" +
-                "Verrai sbloccato quando i tuoi debiti diminuiranno");
+        hashMap.put("testo", context.getString(R.string.youAreStuck) + "\n" +
+                context.getString(R.string.youWillSb));
         hashMap.put("nomeMittente","Admin");
         hashMap.put("cognomeMittente","");
         hashMap.put("letto","no");

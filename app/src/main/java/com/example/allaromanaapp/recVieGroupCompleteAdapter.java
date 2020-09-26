@@ -67,7 +67,7 @@ public class recVieGroupCompleteAdapter extends RecyclerView.Adapter<recVieGroup
             public void onItemLongClick(View view, int position) {
                 if(userList.get(position).getIdRef().equals(currentuserID))
                 {
-                    Toast.makeText(context,"non puoi eliminarti",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,context.getString(R.string.youCannotDelete),Toast.LENGTH_SHORT).show();
                 }
                 else {
                     db = FirebaseFirestore.getInstance();
@@ -116,7 +116,7 @@ public class recVieGroupCompleteAdapter extends RecyclerView.Adapter<recVieGroup
                 else{
                     db.collection("users").document(currentuserID).collection("groups")
                             .document(groupID).collection("partecipants").document(id).delete();
-                    Toast.makeText(context,"utente eliminato", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,context.getString(R.string.userDeleted), Toast.LENGTH_SHORT).show();
                     userList.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, userList.size());

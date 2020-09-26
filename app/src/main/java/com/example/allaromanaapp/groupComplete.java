@@ -90,7 +90,7 @@ public class groupComplete extends AppCompatActivity {
                         setGroupState();
                     }
                 }
-                Toast.makeText(groupComplete.this,"Il gruppo è stato completato!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(groupComplete.this, getString(R.string.groupCompleted),Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(groupComplete.this,MainActivity.class));
             }
         });
@@ -149,5 +149,11 @@ public class groupComplete extends AppCompatActivity {
                         recyclerView.setAdapter(adapter);
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(groupComplete.this, GroupDetail.class));
     }
 }

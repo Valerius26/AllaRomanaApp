@@ -79,7 +79,7 @@ public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
                 for (DocumentSnapshot documentSnapshot : task.getResult()){
                     if(documentSnapshot.getString("idUtente").equals(id)){
                         vero = 1;
-                        Toast.makeText(context,"L'utente è stato già bloccato",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getString(R.string.userBlocked),Toast.LENGTH_SHORT).show();
                         break;
                     }
                 }
@@ -98,7 +98,7 @@ public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
             db.collection("blocked").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
-                    Toast.makeText(context, "" + nome + " " + cognome + " bloccato", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "" + nome + " " + cognome + " " + context.getString(R.string.blocked), Toast.LENGTH_SHORT).show();
                     deleteReport(id,position);
                 }
             });
@@ -137,7 +137,7 @@ public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
         holder.userName.setText(name + " " + surname);
         holder.email.setText(e_mail);
         holder.debtNum.setVisibility(View.INVISIBLE);
-        holder.info.setText("Tieni premuto per bloccare questo utente");
+        holder.info.setText(context.getString(R.string.stuckIfHold));
     }
 
     @Override
@@ -148,8 +148,8 @@ public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
     private void sendNotification(String id) {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("idMittente","Admin");
-        hashMap.put("testo","Sei stato bloccato a causa delle troppe segnalazioni\n" +
-                "Verrai sbloccato tra qualche giorno");
+        hashMap.put("testo",context.getString(R.string.youAreStuckS) + "\n" +
+                R.string.youWillSbD);
         hashMap.put("nomeMittente","Admin");
         hashMap.put("cognomeMittente","");
         hashMap.put("letto","no");

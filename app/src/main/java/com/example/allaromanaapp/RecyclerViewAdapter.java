@@ -57,9 +57,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
             @Override
             public void onItemLongClick(View view, final int position) {
                 final AlertDialog.Builder notificationDialog = new AlertDialog.Builder(view.getContext());
-                notificationDialog.setTitle("Cancella il gruppo");
-                notificationDialog.setMessage("Sei sicuro di voler cancellare questo gruppo?");
-                notificationDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                notificationDialog.setTitle(context.getString(R.string.deleteGroup));
+                notificationDialog.setMessage(context.getString(R.string.areYouSureGr));
+                notificationDialog.setPositiveButton(context.getString(R.string.si), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -91,12 +91,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
                      for(DocumentSnapshot documentSnapshot: task.getResult()){
                          deleteInPartecipant(documentSnapshot.getString("idUtente"),title,description);
                      }
-                   Toast.makeText(context,"Il gruppo è stato eliminato",Toast.LENGTH_SHORT).show();
+                   Toast.makeText(context,context.getString(R.string.groupDeleted),Toast.LENGTH_SHORT).show();
                    context.startActivity(new Intent(context,MainActivity.class));
                }
            });
        }else{
-           Toast.makeText(context,"Non sei il creatore di questo gruppo",Toast.LENGTH_SHORT).show();
+           Toast.makeText(context,context.getString(R.string.noCreator),Toast.LENGTH_SHORT).show();
        }
     }
 

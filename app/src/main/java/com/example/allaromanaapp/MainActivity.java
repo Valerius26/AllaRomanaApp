@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 int bloccato = 0;
                         for(DocumentSnapshot documentSnapshot: task.getResult()){
                             if(currentUserID.equals(documentSnapshot.getString("idUtente"))){
-                                Toast.makeText(MainActivity.this,"Sei stato bloccato!",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this,getString(R.string.youLocked),Toast.LENGTH_SHORT).show();
                                 bloccato = 1;
                                 break;
                             }
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                         for(DocumentSnapshot documentSnapshot: task.getResult()){
                             if(currentUserID.equals(documentSnapshot.getString("idUtente"))){
                                 bloccato = 1;
-                                Toast.makeText(MainActivity.this,"Sei stato bloccato!",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this,getString(R.string.youLocked),Toast.LENGTH_SHORT).show();
                                 break;
                             }
                         }
@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 if(error!=null){
-                    Log.d("ErroreBanaleEStupido", ""+error.getMessage());
+
                 }
                 else {
                     name = value.getString("nome");

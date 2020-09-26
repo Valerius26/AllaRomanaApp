@@ -111,7 +111,7 @@ public class SearchInAddUsersAdapter extends RecyclerView.Adapter<ViewHolderAddU
                     String idUtente = documentSnapshot.getString("idUtente");
                     if(idUtente.equals(selectedUserID)){
                         duplicate.add(idUtente);
-                        Toast.makeText(context,"non puoi aggiungere un utente che già partecipa al conto",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,context.getString(R.string.notAdd),Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -132,7 +132,7 @@ public class SearchInAddUsersAdapter extends RecyclerView.Adapter<ViewHolderAddU
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(context, name + " " + surname + " aggiunto", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, name + " " + surname + " " + context.getString(R.string.added), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

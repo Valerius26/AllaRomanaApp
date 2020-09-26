@@ -35,6 +35,7 @@ public class PosActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
     String currentUserID,currentDate;
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class PosActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        databaseHelper = new DatabaseHelper(this);
         Calendar calendar = Calendar.getInstance();
         currentDate = DateFormat.getDateInstance().format(calendar.getTime());
         firebaseAuth = FirebaseAuth.getInstance();
@@ -75,7 +77,17 @@ public class PosActivity extends AppCompatActivity {
                 }
 
 
-                if (number.equals("123456") && password.equals("123456")) {
+                if(databaseHelper.isCorrectCard(number, password)){
+                    deleteDebt();
+                    deleteCredit();
+                    sendNotification();
+                    updatePayment();
+                    Toast.makeText(PosActivity.this, getString(R.string.debtSolved) ,Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(PosActivity.this,getString(R.string.errore), Toast.LENGTH_SHORT).show();
+                }
+
+               /* if (number.equals("123456") && password.equals("123456")) {
                     deleteDebt();
                     deleteCredit();
                     sendNotification();
@@ -86,7 +98,7 @@ public class PosActivity extends AppCompatActivity {
                 }else{
 
                     Toast.makeText(PosActivity.this,getString(R.string.errore), Toast.LENGTH_SHORT).show();
-                }
+                }*/
             }
         });
 

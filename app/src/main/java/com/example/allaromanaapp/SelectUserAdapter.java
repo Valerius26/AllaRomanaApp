@@ -68,8 +68,8 @@ public class SelectUserAdapter extends RecyclerView.Adapter<SelectUserHolder> {
                 final String id = usersList.get(position).getIdUser();
                 final EditText resetMail = new EditText(view.getContext());
                 final AlertDialog.Builder confirm = new AlertDialog.Builder(view.getContext());
-                confirm.setTitle("Invio Posizione");
-                confirm.setMessage("Vuoi inviare la posizione a " + usersList.get(position).getNome() + " " + usersList.get(position).getCognome()+"?");
+                confirm.setTitle(context.getString(R.string.posSendTitle));
+                confirm.setMessage(context.getString(R.string.doYouWantSePo) + " " + usersList.get(position).getNome() + " " + usersList.get(position).getCognome()+"?");
                 confirm.setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -122,7 +122,7 @@ public class SelectUserAdapter extends RecyclerView.Adapter<SelectUserHolder> {
         hashMap.put("idMittente",currentUserID);
         hashMap.put("daPagare",""+da_pagare);
         hashMap.put("letto","no");
-        hashMap.put("testo","Questa è la mia posizione attuale:" +
+        hashMap.put("testo",context.getString(R.string.thisIsMyPosi) +
                 "\n" + address);
 
         db.collection("users").document(id).collection("notify").add(hashMap)
@@ -130,7 +130,7 @@ public class SelectUserAdapter extends RecyclerView.Adapter<SelectUserHolder> {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
 
-                        Toast.makeText(context,"Posizione inviata",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,context.getString(R.string.posSent),Toast.LENGTH_SHORT).show();
                         context.startActivity(new Intent(context,MainActivity.class));
                     }
                 });
@@ -141,7 +141,7 @@ public class SelectUserAdapter extends RecyclerView.Adapter<SelectUserHolder> {
         String name = usersList.get(position).getNome();
         String surname = usersList.get(position).getCognome();
         holder.fullName.setText(name + " " + surname);
-        holder.info.setText("Tieni premuto per selezionare");
+        holder.info.setText(context.getString(R.string.selectIfPress));
     }
 
     @Override

@@ -79,7 +79,7 @@ public class LockedAdapter extends RecyclerView.Adapter<LockedHolder> {
                 for(DocumentSnapshot documentSnapshot: task.getResult()){
                     if(documentSnapshot.getString("idUtente").equals(clickedId)){
                         db.collection("blocked").document(documentSnapshot.getId()).delete();
-                        Toast.makeText(context,"L'utente è stato sbloccato",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,context.getString(R.string.userUnlocked),Toast.LENGTH_SHORT).show();
                         lockedList.remove(position);
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position, lockedList.size());
@@ -98,7 +98,7 @@ public class LockedAdapter extends RecyclerView.Adapter<LockedHolder> {
         Long debt = lockedList.get(position).getDebt();
         holder.userName.setText(name + " " + surname);
         holder.debtNum.setText(debt+" $");
-        holder.info.setText("Tieni premuto per sbloccare");
+        holder.info.setText(context.getString(R.string.unlockedIfHold));
     }
 
     @Override
@@ -109,7 +109,7 @@ public class LockedAdapter extends RecyclerView.Adapter<LockedHolder> {
     private void sendNotification(String id) {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("idMittente","Admin");
-        hashMap.put("testo","Sei stato sbloccato");
+        hashMap.put("testo",context.getString(R.string.youAreUnlocked));
         hashMap.put("nomeMittente","Admin");
         hashMap.put("cognomeMittente","");
         hashMap.put("letto","no");

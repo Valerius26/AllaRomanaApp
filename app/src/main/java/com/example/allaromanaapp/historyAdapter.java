@@ -55,9 +55,9 @@ public class historyAdapter extends RecyclerView.Adapter<historyHolder> {
             @Override
             public void onItemLongClick(View view, final int position) {
                 final AlertDialog.Builder notificationDialog = new AlertDialog.Builder(view.getContext());
-                notificationDialog.setTitle("Elimina pagamento");
-                notificationDialog.setMessage("Sei sicuro di voler eliminare questo pagamento?");
-                notificationDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                notificationDialog.setTitle(context.getString(R.string.deletePayment));
+                notificationDialog.setMessage(context.getString(R.string.areYouSureDel));
+                notificationDialog.setPositiveButton(context.getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -101,7 +101,7 @@ public class historyAdapter extends RecyclerView.Adapter<historyHolder> {
         String surname = historyList.get(position).getSurname();
         String payment = historyList.get(position).getDebt().toString();
         holder.userName.setText(name + " " + surname);
-        holder.sold.setText(payment + " $");
+        holder.sold.setText(payment + " " + context.getString(R.string.simbol));
 
     }
 

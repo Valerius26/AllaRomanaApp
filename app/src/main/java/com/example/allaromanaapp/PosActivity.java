@@ -90,6 +90,11 @@ public class PosActivity extends AppCompatActivity {
                     Toast.makeText(PosActivity.this,getString(R.string.insertCardT), Toast.LENGTH_SHORT).show();
                 }
 
+                if(!databaseHelper.updateCreditinDB(toPay,number)){
+                    Toast.makeText(PosActivity.this, getString(R.string.youAreDown), Toast.LENGTH_SHORT).show();
+                }
+
+
                 if(databaseHelper.isCorrectCard(number, password,cardType)){
                     deleteDebt();
                     deleteCredit();

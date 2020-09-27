@@ -2,9 +2,11 @@ package com.example.allaromanaapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -39,12 +41,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return false;
     }
 
-    public boolean insertData(String number, String password, String cardType){
+    public boolean insertData(String number, String password, String cardType, String credit){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_2,number);
         contentValues.put(COL_3,password);
         contentValues.put(COL_4,cardType);
+        contentValues.put(COL_5,credit);
         long result = db.insert(TABLE_NAME, "", contentValues);
         if(result == -1){
             return false;
@@ -53,6 +56,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean updateCreditinDB(String toPay, String card_num){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "select CREDIT from " + TABLE_NAME + " where CARD_NUM='" + card_num + "'";
+        Cursor cursor = db.rawQuery(sql,null);
+        String credit = null;
+        if(cursor.moveToFirst()){
+            credit = cursor.getString(0);
+        }
+        Long value = Long.valueOf(credit);
+        Long newCredit = value - Long.valueOf(toPay);
+        if(newCredit < 0){
+            return false;
+        }else{
+
+            String sql2 = "UPDATE "+TABLE_NAME +" SET " + COL_5+ " = '"+newCredit.toString()+"' WHERE "+COL_2+ " = "+card_num;
+            db.execSQL(sql2);
+        }
+
+        return true;
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

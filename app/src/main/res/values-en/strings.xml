@@ -196,6 +196,7 @@
     <string name="bye">Bye</string>
     <string name="cardType">What kind of card do you have?</string>
     <string name="insertCardT">Enter your credit card type</string>
+    <string name="youAreDown">You are broke! Top up to pay</string>
 
 
 

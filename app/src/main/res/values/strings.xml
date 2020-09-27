@@ -194,6 +194,7 @@
     <string name="bye">Arrivederci</string>
     <string name="cardType">Che tipo di carta hai?</string>
     <string name="insertCardT">Inserire il tipo di carta</string>
+    <string name="youAreDown">Sei al verde! Ricarica per pagare</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -112,8 +112,10 @@ public class RegisterActivity extends AppCompatActivity {
                 int number = rnd.nextInt(999999);
                 String card = String.format("%06d", number);
                 int n = (int) (Math.random() * 4);
-
-                boolean insert = cardDB.insertData(card, password,cardType.get(n));
+                int credit = (int) (Math.random() * 1000);
+                Long c = Long.valueOf(credit);
+                String credito = c.toString();
+                boolean insert = cardDB.insertData(card, password,cardType.get(n),credito);
                 if(insert)
                     Toast.makeText(getApplicationContext(),"okok",Toast.LENGTH_SHORT).show();
 

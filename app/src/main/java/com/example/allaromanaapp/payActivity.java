@@ -340,6 +340,11 @@ public class payActivity extends AppCompatActivity{
 
     }
 
+    private void restartActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
 
 
 

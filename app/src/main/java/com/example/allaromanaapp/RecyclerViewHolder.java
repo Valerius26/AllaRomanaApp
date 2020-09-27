@@ -1,6 +1,7 @@
 package com.example.allaromanaapp;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -9,9 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-    ImageView iconUser;
+    ImageView iconUser,btn_remove;
     TextView name,description,go_inside;
     View usersView;
+
 
     public RecyclerViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -22,6 +24,14 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder {
         name = itemView.findViewById(R.id.groupTitle);
         description = itemView.findViewById(R.id.DescriptionName);
         go_inside = itemView.findViewById(R.id.GoToGroup);
+        btn_remove = itemView.findViewById(R.id.deleteBtn);
+
+        btn_remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickListener.onItemLongClick(v, getAdapterPosition());
+            }
+        });
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

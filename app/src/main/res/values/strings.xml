@@ -99,7 +99,7 @@
     <string name="compensationSecond">Adesso hai un credito con </string>
     <string name="pariA">pari a:</string>
     <string name="compensationThird">Il mio debito con te è stato compensato grazie ai nostri debiti reciproci</string>
-    <string name="yourDebtNow2">Adesso hai un debito con me</string>
+    <string name="yourDebtNow2">Adesso hai un debito con</string>
     <string name="perfectCompensation">I nostri debiti sono stati compensati alla perfezione</string>
     <string name="totalDebtSolved">Non abbiamo più debiti reciproci</string>
     <string name="perfectCompensation2">Il debito è stato compensato alla perfezione</string>
@@ -165,7 +165,7 @@
     <string name="emptyList">La lista è vuota! Crea un gruppo</string>
     <string name="enterIfPress">Premi per entrare</string>
     <string name="deleteGroup">Cancella il gruppo</string>
-    <string name="areYouSureGr">Sei sicuro di voler cancellare questo gruppo?</string>
+    <string name="areYouSureGr">Sei sicuro di voler cancellare questo gruppo? Se non sei il creatore del gruppo verrai semplicemente rimosso</string>
     <string name="groupDeleted">Il gruppo è stato eliminato</string>
     <string name="noCreator">Non sei il creatore di questo gruppo</string>
     <string name="partExists">Non puoi aggiungere un utente che già partecipa al gruppo</string>
@@ -195,7 +195,8 @@
     <string name="cardType">Che tipo di carta hai?</string>
     <string name="insertCardT">Inserire il tipo di carta</string>
     <string name="youAreDown">Sei al verde! Ricarica per pagare</string>
-
+    <string name="dontRemove">Non puoi rimuoverti! Siete solo due partecipanti.</string>
+    <string name="partecipantDelete">Ti sei rimosso da questo gruppo</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -167,7 +167,7 @@
     <string name="emptyList">The list is empty! Create a group</string>
     <string name="enterIfPress">Press to enter</string>
     <string name="deleteGroup">Delete the group</string>
-    <string name="areYouSureGr">Are you sure you want to delete this group?</string>
+    <string name="areYouSureGr">Are you sure you want to delete this group? If you are not the creator of the group you will simply be removed</string>
     <string name="groupDeleted">The group has been deleted</string>
     <string name="noCreator">You are not the creator of this group</string>
     <string name="partExists">You cannot add a user who already joins the group</string>
@@ -197,6 +197,8 @@
     <string name="cardType">What kind of card do you have?</string>
     <string name="insertCardT">Enter your credit card type</string>
     <string name="youAreDown">You are broke! Top up to pay</string>
+    <string name="dontRemove">You cannot remove yourself! You are only two participants.</string>
+    <string name="partecipantDelete">You have removed yourself from this group</string>
 
 
 

@@ -80,13 +80,12 @@ public class groupActivity extends AppCompatActivity {
                             querySnapshot.getId(), querySnapshot.getString("Creato da"));
                     groups.add(gruppo);
                 }
-                Collections.sort(groups, new Comparator<group>() {
-                    @Override
-                    public int compare(group g, group g1) {
-                        return g.getTitle().compareTo(g1.getTitle());
-                    }
-                });
-
+                    Collections.sort(groups, new Comparator<group>() {
+                        @Override
+                        public int compare(group g, group g1) {
+                            return g.getTitle().compareTo(g1.getTitle());
+                        }
+                    });
                 adapter = new RecyclerViewAdapter(groups, groupActivity.this);
                 recyclerView.setAdapter(adapter);
 

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -63,7 +64,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        deleteG(groupList.get(position).getGroupID(),groupList.get(position).getTitle(),groupList.get(position).getDescription(),groupList.get(position).getCreatorID());
+                        deleteG(position, groupList.get(position).getGroupID(),groupList.get(position).getTitle(),groupList.get(position).getDescription(),groupList.get(position).getCreatorID());
                     }
                 });
                 notificationDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -75,13 +76,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
                 notificationDialog.create().show();
             }
+
         });
 
         return recyclerViewHolder;
     }
 
 
-    private void deleteG(String group_id, final String title, final String description, String creator){
+    private void deleteG(final int position, final String group_id, final String title, final String description, String creator){
 
        if(id.equals(creator)){
            db.collection("users").document(id).collection("groups").document(group_id).collection("partecipants")
@@ -92,13 +94,76 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
                          deleteInPartecipant(documentSnapshot.getString("idUtente"),title,description);
                      }
                    Toast.makeText(context,context.getString(R.string.groupDeleted),Toast.LENGTH_SHORT).show();
-                   context.startActivity(new Intent(context,MainActivity.class));
+                   groupList.remove(position);
+                   notifyItemRemoved(position);
+                   notifyItemRangeChanged(position, groupList.size());
                }
            });
        }else{
-           Toast.makeText(context,context.getString(R.string.noCreator),Toast.LENGTH_SHORT).show();
+           db.collection("users").document(id).collection("groups").document(group_id)
+                   .collection("partecipants").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+               @Override
+               public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                   int partNum = task.getResult().size();
+                   if(partNum != 2) {
+                       for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                           String id_utente = documentSnapshot.getString("idUtente");
+                           if (id_utente.equals(id)) {
+
+                           } else {
+                               deletePInPartecipant(title, description, id_utente);
+                           }
+                       }
+                       delete(group_id, id);
+                       Toast.makeText(context, context.getString(R.string.partecipantDelete), Toast.LENGTH_SHORT).show();
+                       groupList.remove(position);
+                       notifyItemRemoved(position);
+                       notifyItemRangeChanged(position, groupList.size());
+                   }
+                   else{
+                           Toast.makeText(context, context.getString(R.string.dontRemove), Toast.LENGTH_SHORT).show();
+                       }
+
+               }
+           });
        }
     }
+
+    private void deletePInPartecipant(final String title, final String description, final String id_part) {
+        db.collection("users").document(id_part).collection("groups")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(final DocumentSnapshot documentSnapshot : task.getResult()){
+                    if(documentSnapshot.getString("Nome gruppo").equals(title) && documentSnapshot.getString("Descrizione").equals(description))
+                    {
+                        final String groupID = documentSnapshot.getId();
+                        db.collection("users").document(id_part).collection("groups")
+                                .document(groupID).collection("partecipants")
+                                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                 for(DocumentSnapshot documentSnapshot1: task.getResult()){
+                                     if(documentSnapshot1.getString("idUtente").equals(id)){
+                                         deleteP(id_part,groupID,documentSnapshot1.getId());
+                                         break;
+                                     }
+                                 }
+                            }
+                        });
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
+    private void deleteP(String id_part, String group_id, String idUtente) {
+        db.collection("users").document(id_part).collection("groups")
+                .document(group_id).collection("partecipants").document(idUtente).delete();
+
+    }
+
 
     private void deleteInPartecipant(final String idUtente, final String title, final String description) {
         db.collection("users").document(idUtente).collection("groups").get()

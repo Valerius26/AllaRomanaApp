@@ -25,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SelectUser extends AppCompatActivity {
@@ -115,6 +117,12 @@ public class SelectUser extends AppCompatActivity {
                         usersList.add(user);
                     }
                 }
+                Collections.sort(usersList, new Comparator<User>() {
+                    @Override
+                    public int compare(User u, User u1) {
+                        return u.getNome().compareTo(u1.getCognome());
+                    }
+                });
                 adapter = new SelectUserAdapter(usersList, SelectUser.this, address );
                 recyclerView.setAdapter(adapter);
             }
@@ -159,6 +167,12 @@ public class SelectUser extends AppCompatActivity {
                         }
                     }
                 }
+                Collections.sort(usersSearched, new Comparator<User>() {
+                    @Override
+                    public int compare(User u, User u1) {
+                        return u.getNome().compareTo(u1.getCognome());
+                    }
+                });
                 adapter = new SelectUserAdapter(usersSearched, SelectUser.this, address);
                 recyclerView.setAdapter(adapter);
             }

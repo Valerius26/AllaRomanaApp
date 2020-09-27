@@ -25,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class balCreditActivity extends AppCompatActivity {
     ImageButton back;
@@ -82,7 +84,12 @@ public class balCreditActivity extends AppCompatActivity {
                             documentSnapshot.getString("cognome debitore"),
                             Long.valueOf(documentSnapshot.getString("credito")));
                     creditsList.add(creditor);
-                }
+                }  Collections.sort(creditsList, new Comparator<Creditors>() {
+                    @Override
+                    public int compare(Creditors d, Creditors d1) {
+                        return d.getName().compareTo(d1.getName());
+                    }
+                });
                 adapter = new creditsAdapter(creditsList, getApplicationContext(), balCreditActivity.this);
                 recyclerView.setAdapter(adapter);
             }

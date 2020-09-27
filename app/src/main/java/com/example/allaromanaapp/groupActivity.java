@@ -22,6 +22,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static androidx.constraintlayout.solver.widgets.ConstraintWidget.INVISIBLE;
 
@@ -78,6 +80,12 @@ public class groupActivity extends AppCompatActivity {
                             querySnapshot.getId(), querySnapshot.getString("Creato da"));
                     groups.add(gruppo);
                 }
+                Collections.sort(groups, new Comparator<group>() {
+                    @Override
+                    public int compare(group g, group g1) {
+                        return g.getTitle().compareTo(g1.getTitle());
+                    }
+                });
 
                 adapter = new RecyclerViewAdapter(groups, groupActivity.this);
                 recyclerView.setAdapter(adapter);

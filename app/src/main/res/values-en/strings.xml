@@ -82,7 +82,7 @@
     <string name="goToDebts">Go to debts</string>
     <string name="creditString">Credit</string>
     <string name="sendIfPress">Hold to send a notification</string>
-    <string name="notificationSended">Notifica inviata</string>
+    <string name="notificationSended">Notification sent</string>
     <string name="notificationNoSended">The notification could not be sent</string>
     <string name="payTitle">Pay the bill</string>
     <string name="payTotalDebt">Pay off the total debt</string>

@@ -35,6 +35,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -180,6 +182,12 @@ public class AddUsers extends AppCompatActivity {
                         }
                     }
                 }
+                Collections.sort(usersSearched, new Comparator<User>() {
+                    @Override
+                    public int compare(User u, User u1) {
+                        return u.getNome().compareTo(u1.getCognome());
+                    }
+                });
                 searchAdapter = new SearchInAddUsersAdapter(usersSearched, AddUsers.this,creatorID,accountID);
                 recyclerView.setAdapter(searchAdapter);
             }
@@ -211,6 +219,12 @@ public class AddUsers extends AppCompatActivity {
                         usersList.add(user);
                     }
                 }
+                Collections.sort(usersList, new Comparator<User>() {
+                    @Override
+                    public int compare(User u, User u1) {
+                        return u.getNome().compareTo(u1.getCognome());
+                    }
+                });
                 adapter = new ViewAdapterAddUsers( usersList, AddUsers.this,creatorID,accountID);
                 recyclerView.setAdapter(adapter);
             }

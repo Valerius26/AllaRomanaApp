@@ -25,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class groupComplete extends AppCompatActivity {
@@ -145,6 +147,12 @@ public class groupComplete extends AppCompatActivity {
 
                             partecipants.add(user);
                         }
+                        Collections.sort(partecipants, new Comparator<User>() {
+                            @Override
+                            public int compare(User u, User u1) {
+                                return u.getNome().compareTo(u1.getCognome());
+                            }
+                        });
                         adapter = new recVieGroupCompleteAdapter(partecipants, groupComplete.this , groupID);
                         recyclerView.setAdapter(adapter);
                     }

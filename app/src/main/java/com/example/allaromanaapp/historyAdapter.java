@@ -102,6 +102,7 @@ public class historyAdapter extends RecyclerView.Adapter<historyHolder> {
         String payment = historyList.get(position).getDebt().toString();
         holder.userName.setText(name + " " + surname);
         holder.sold.setText(payment + " " + context.getString(R.string.simbol));
+        holder.data.setText(historyList.get(position).getDate());
 
     }
 

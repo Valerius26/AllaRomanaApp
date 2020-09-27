@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class historyHolder extends RecyclerView.ViewHolder {
 
     ImageView icon_payment;
-    TextView sold,userName;
+    TextView sold,userName,data;
     View historyView;
 
     public historyHolder(@NonNull View itemView) {
@@ -38,6 +38,7 @@ public class historyHolder extends RecyclerView.ViewHolder {
         userName = itemView.findViewById(R.id.userName);
         sold = itemView.findViewById(R.id.sold);
         icon_payment = itemView.findViewById(R.id.iconPayment);
+        data = itemView.findViewById(R.id.data);
     }
 
     private historyHolder.ClickListener clickListener;

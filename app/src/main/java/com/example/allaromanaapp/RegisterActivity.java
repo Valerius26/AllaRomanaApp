@@ -32,6 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
     Button RegisterBtn, ChangeBtn;
     TextView LoginBtn;
     FirebaseAuth fAuth;
-
+    ArrayList<String> cardType = new ArrayList<>();
     ProgressBar progressBar;
     FirebaseFirestore fStore;
     String userID;
@@ -74,6 +75,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
 
+        cardType.add("VISA");
+        cardType.add("MASTERCARD");
+        cardType.add("POSTPAY");
+        cardType.add("PAYPAL");
         RegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,7 +111,11 @@ public class RegisterActivity extends AppCompatActivity {
                 Random rnd = new Random();
                 int number = rnd.nextInt(999999);
                 String card = String.format("%06d", number);
-                boolean insert = cardDB.insertData(card, password);
+                int n = (int) (Math.random() * 4);
+
+                boolean insert = cardDB.insertData(card, password,cardType.get(n));
+                if(insert)
+                    Toast.makeText(getApplicationContext(),"okok",Toast.LENGTH_SHORT).show();
 
                 //Register the user in firebase
 

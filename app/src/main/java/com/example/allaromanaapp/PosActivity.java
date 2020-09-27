@@ -6,6 +6,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +39,11 @@ public class PosActivity extends AppCompatActivity {
     FirebaseFirestore db;
     String currentUserID,currentDate;
     DatabaseHelper databaseHelper;
+    RadioGroup radioGroup;
+    RadioButton radioButton;
+    TextView title;
+    String cardType = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +64,8 @@ public class PosActivity extends AppCompatActivity {
         total = intent.getStringExtra("Totale");
         toPay = intent.getStringExtra("daPagare");
 
+        title = findViewById(R.id.cardType);
+        radioGroup = findViewById(R.id.radiogroup);
         card = findViewById(R.id.cardNum);
         pass = findViewById(R.id.passwordCard);
         confirm = findViewById(R.id.confirmBtn);
@@ -76,8 +86,11 @@ public class PosActivity extends AppCompatActivity {
                     return;
                 }
 
+                if(TextUtils.isEmpty(cardType)){
+                    Toast.makeText(PosActivity.this,getString(R.string.insertCardT), Toast.LENGTH_SHORT).show();
+                }
 
-                if(databaseHelper.isCorrectCard(number, password)){
+                if(databaseHelper.isCorrectCard(number, password,cardType)){
                     deleteDebt();
                     deleteCredit();
                     sendNotification();
@@ -259,5 +272,14 @@ public class PosActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void checkButton(View v){
+        int radioID = radioGroup.getCheckedRadioButtonId();
+
+        radioButton = findViewById(radioID);
+
+        CharSequence text = radioButton.getText();
+        cardType = text.toString();
     }
 }

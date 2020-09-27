@@ -10,12 +10,14 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "Card.db";
+    public static final String DATABASE_NAME = "CreditCard.db";
     public static final String TABLE_NAME = "card_table";
     public static final String COL_1 = "USER_ID";
     public static final String COL_2 = "CARD_NUM";
     public static final String COL_3 = "PASSWORD";
-    String createTabCard = "create table if not exists " + TABLE_NAME + " (USER_ID INTEGER PRIMARY KEY AUTOINCREMENT, CARD_NUM TEXT, PASSWORD TEXT)";
+    public static final String COL_4 = "TYPE";
+    public static final String COL_5 = "CREDIT";
+     String createTabCard = "create table if not exists " + TABLE_NAME + " (USER_ID INTEGER PRIMARY KEY AUTOINCREMENT, CARD_NUM TEXT, PASSWORD TEXT, TYPE TEXT, CREDIT TEXT)";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -25,8 +27,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         getWritableDatabase().insert(TABLE_NAME,"",contentValues);
     }
 
-    public boolean isCorrectCard(String number, String password){
-        String sql = "Select count(*) from " + TABLE_NAME + " where CARD_NUM='" + number +  "' and PASSWORD='" + password + "'";
+    public boolean isCorrectCard(String number, String password, String cardType){
+        String sql = "Select count(*) from " + TABLE_NAME + " where CARD_NUM='" + number +  "' and PASSWORD='" + password + "' and TYPE='" + cardType + "'" ;
         SQLiteStatement statement = getReadableDatabase().compileStatement(sql);
         long l = statement.simpleQueryForLong();
         statement.close();
@@ -37,11 +39,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return false;
     }
 
-    public boolean insertData(String number, String password){
+    public boolean insertData(String number, String password, String cardType){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_2,number);
         contentValues.put(COL_3,password);
+        contentValues.put(COL_4,cardType);
         long result = db.insert(TABLE_NAME, "", contentValues);
         if(result == -1){
             return false;
@@ -49,6 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
         }
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {

@@ -192,6 +192,8 @@
     <string name="unlockedIfHold">Tieni premuto per sbloccare</string>
     <string name="youAreUnlocked">Sei stato sbloccato</string>
     <string name="bye">Arrivederci</string>
+    <string name="cardType">Che tipo di carta hai?</string>
+    <string name="insertCardT">Inserire il tipo di carta</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

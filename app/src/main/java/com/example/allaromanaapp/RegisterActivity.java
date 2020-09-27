@@ -115,9 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
                 int credit = (int) (Math.random() * 1000);
                 Long c = Long.valueOf(credit);
                 String credito = c.toString();
-                boolean insert = cardDB.insertData(card, password,cardType.get(n),credito);
-                if(insert)
-                    Toast.makeText(getApplicationContext(),"okok",Toast.LENGTH_SHORT).show();
+                boolean insert = cardDB.insertData(card, password,cardType.get(n),credito,email);
 
                 //Register the user in firebase
 

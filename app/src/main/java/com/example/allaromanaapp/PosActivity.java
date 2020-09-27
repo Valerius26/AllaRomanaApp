@@ -73,8 +73,8 @@ public class PosActivity extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String number = card.getText().toString().trim();
-                String password = pass.getText().toString().trim();
+                final String number = card.getText().toString().trim();
+                final String password = pass.getText().toString().trim();
 
                 if (TextUtils.isEmpty(number)) {
                     card.setError(getString(R.string.insertCardNum));
@@ -90,20 +90,33 @@ public class PosActivity extends AppCompatActivity {
                     Toast.makeText(PosActivity.this,getString(R.string.insertCardT), Toast.LENGTH_SHORT).show();
                 }
 
-                if(!databaseHelper.updateCreditinDB(toPay,number)){
-                    Toast.makeText(PosActivity.this, getString(R.string.youAreDown), Toast.LENGTH_SHORT).show();
-                }
+                db.collection("users").document(creditorID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if(error!=null)
+                        {
+
+                        }else{
+                            String email = value.getString("e-mail");
+                            if(databaseHelper.isCorrectCard(number, password,cardType)){
+                                if(!databaseHelper.updateCreditinDB(toPay,number)){
+                                    Toast.makeText(PosActivity.this, getString(R.string.youAreDown), Toast.LENGTH_SHORT).show();
+                                }else {
+                                    databaseHelper.updateCreditCreditorDB(toPay,email);
+                                    deleteDebt();
+                                    deleteCredit();
+                                    sendNotification();
+                                    updatePayment();
+                                    Toast.makeText(PosActivity.this, getString(R.string.debtSolved), Toast.LENGTH_SHORT).show();
+                                }
+                            }else{
+                                Toast.makeText(PosActivity.this,getString(R.string.errore), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
 
 
-                if(databaseHelper.isCorrectCard(number, password,cardType)){
-                    deleteDebt();
-                    deleteCredit();
-                    sendNotification();
-                    updatePayment();
-                    Toast.makeText(PosActivity.this, getString(R.string.debtSolved) ,Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(PosActivity.this,getString(R.string.errore), Toast.LENGTH_SHORT).show();
-                }
 
                /* if (number.equals("123456") && password.equals("123456")) {
                     deleteDebt();

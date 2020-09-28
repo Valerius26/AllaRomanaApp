@@ -33,7 +33,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="HardcodedDebugMode">
         <activity android:name=".byeActivity"></activity>
-        <activity android:name=".SelectPayingInGroup" />
+        <activity android:name=".SelectPayingInGroup"
+            android:windowSoftInputMode= "adjustPan"></activity>
         <activity android:name=".groupComplete" />
         <activity android:name=".GroupDetail" />
         <activity android:name=".AddressActivity" />
@@ -75,7 +76,8 @@
         <activity android:name=".ProfileActivity" />
         <activity android:name=".NotCurrentProfileActivity" />
         <activity android:name=".AddUsers" />
-        <activity android:name=".SelectPaying" />
+        <activity android:name=".SelectPaying"
+            android:windowSoftInputMode= "adjustPan"/>
         <activity android:name=".confirmActivity" />
         <activity android:name=".balanceActivity" />
         <activity android:name=".balCreditActivity" />
@@ -84,7 +86,8 @@
         <activity android:name=".LoginAdminActivity" />
         <activity android:name=".AdminActivity" />
         <activity android:name=".SettingActivity" />
-        <activity android:name=".payActivity" />
+
+        <activity android:name=".payActivity"/>
         <activity android:name=".NewGroupActivity" />
         <activity android:name=".groupActivity" />
         <activity android:name=".SelectUser" />

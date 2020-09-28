@@ -26,6 +26,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class GroupDetail extends AppCompatActivity {
 
@@ -120,6 +122,12 @@ public class GroupDetail extends AppCompatActivity {
                         }
                     }
                 }
+                Collections.sort(users, new Comparator<User>() {
+                            @Override
+                            public int compare(User u, User u1) {
+                                return u.getNome().compareTo(u1.getCognome());
+                            }
+                        });
                 adapter = new RecVieAdapterGroupDet(usersSearched, GroupDetail.this, groupID);
                 recyclerView.setAdapter(adapter);
             }
@@ -147,6 +155,12 @@ public class GroupDetail extends AppCompatActivity {
                         users.add(user);
                     }
                 }
+                Collections.sort(users, new Comparator<User>() {
+                    @Override
+                    public int compare(User u, User u1) {
+                        return u.getNome().compareTo(u1.getCognome());
+                    }
+                });
                 adapter = new RecVieAdapterGroupDet(users, GroupDetail.this, groupID);
                 recyclerView.setAdapter(adapter);
 

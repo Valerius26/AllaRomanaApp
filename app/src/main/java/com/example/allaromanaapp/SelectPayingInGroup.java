@@ -250,8 +250,13 @@ public class SelectPayingInGroup extends AppCompatActivity {
         hashMap.put("idMittente",pagante);
         hashMap.put("daPagare",""+credit);
         hashMap.put("letto","no");
-        hashMap.put("testo","Ti ricordo che hai un debito con me pari a euro " +
-                credit + ".\nRimborsami al più presto, grazie.");
+        if(credit!=1) {
+            hashMap.put("testo",getString(R.string.rememberDebt) + " " +
+                    credit + " " + getString(R.string.valute) + ".\n" + getString(R.string.rimborsamiPresto));
+        }else{
+            hashMap.put("testo", getString(R.string.rememberDebt) + " " +
+                    credit + " " + getString(R.string.valute) + ".\n" + getString(R.string.rimborsamiPresto));
+        }
 
         db.collection("users").document(debtor).collection("notify")
                 .add(hashMap);

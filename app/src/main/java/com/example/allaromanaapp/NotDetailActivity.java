@@ -30,8 +30,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 
 public class NotDetailActivity extends AppCompatActivity {
-
-    ImageButton back;
+    
     String idNotification,currentUserID;
     Long debt;
     TextView userName,message,info,indicate;
@@ -63,7 +62,6 @@ public class NotDetailActivity extends AppCompatActivity {
         message = findViewById(R.id.message);
         info = findViewById(R.id.info);
         indicate = findViewById(R.id.indicate);
-        back = findViewById(R.id.back);
 
         final DocumentReference documentReference = db.collection("users").document(currentUserID)
                 .collection("notify").document(idNotification);
@@ -157,14 +155,6 @@ public class NotDetailActivity extends AppCompatActivity {
                     indicateDialog.create().show();
 
                 }
-            }
-        });
-
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),notificationActivity.class));
             }
         });
 
@@ -298,5 +288,10 @@ public class NotDetailActivity extends AppCompatActivity {
             Toast.makeText(NotDetailActivity.this, getString(R.string.debtDoesntExi), Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(NotDetailActivity.this, notificationActivity.class));
     }
 }

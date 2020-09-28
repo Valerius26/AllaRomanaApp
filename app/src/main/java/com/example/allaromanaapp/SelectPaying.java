@@ -289,11 +289,11 @@ public class SelectPaying extends AppCompatActivity {
         hashMap.put("daPagare",""+credit);
         hashMap.put("letto","no");
         if(credit!=1) {
-            hashMap.put("testo", " " + getString(R.string.rememberDebt) +
-                    credit + getString(R.string.valute) + ".\n" + getString(R.string.rimborsamiPresto));
+            hashMap.put("testo",getString(R.string.rememberDebt) + " " +
+                    credit + " " + getString(R.string.valute) + ".\n" + getString(R.string.rimborsamiPresto));
         }else{
-            hashMap.put("testo", " " + getString(R.string.rememberDebt) +
-                    credit + getString(R.string.valute) + ".\n" + getString(R.string.rimborsamiPresto));
+            hashMap.put("testo", getString(R.string.rememberDebt) + " " +
+                    credit + " " + getString(R.string.valute) + ".\n" + getString(R.string.rimborsamiPresto));
         }
         db.collection("users").document(debtor).collection("notify")
                 .add(hashMap);

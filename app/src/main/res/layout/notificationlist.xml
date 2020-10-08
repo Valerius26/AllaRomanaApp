@@ -41,6 +41,20 @@
             android:text="@string/openIfTouch"
             android:textSize="15sp" />
 
+        <TextView
+            android:id="@+id/data"
+            android:layout_width="110dp"
+            android:layout_height="36dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="277dp"
+            android:layout_marginTop="43dp"
+            android:layout_marginEnd="19dp"
+            android:layout_marginBottom="-7dp"
+            android:text="TextView" />
+
 
     </RelativeLayout>
 

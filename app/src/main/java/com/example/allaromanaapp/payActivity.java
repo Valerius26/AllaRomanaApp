@@ -236,6 +236,7 @@ public class payActivity extends AppCompatActivity{
         hashMap.put("daPagare",""+daPagare);
         hashMap.put("letto","no");
         hashMap.put("testo", text);
+        hashMap.put("date",currentDate);
 
         db.collection("users").document(CreditorID).collection("notify")
                 .add(hashMap);

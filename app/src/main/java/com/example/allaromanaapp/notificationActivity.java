@@ -106,7 +106,8 @@ public class notificationActivity extends AppCompatActivity {
                         letto = documentSnapshot.getString("letto");
                         notify not = new notify(documentSnapshot.getString("nomeMittente"),
                                 documentSnapshot.getString("cognomeMittente"),documentSnapshot.getId(),
-                                Long.valueOf(documentSnapshot.getString("daPagare")),letto);
+                                Long.valueOf(documentSnapshot.getString("daPagare")),letto,
+                                documentSnapshot.getString("data"));
                         notifies.add(not);
                     }
                     Collections.sort(notifies, new Comparator<notify>() {

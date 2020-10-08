@@ -295,6 +295,7 @@ public class SelectPaying extends AppCompatActivity {
         hashMap.put("idMittente",pagante);
         hashMap.put("daPagare",""+credit);
         hashMap.put("letto","no");
+        hashMap.put("data",currentDate);
         if(credit!=1) {
             hashMap.put("testo",getString(R.string.rememberDebt) + " " +
                     credit + " " + getString(R.string.valute) + ".\n" + getString(R.string.rimborsamiPresto));

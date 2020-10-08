@@ -23,7 +23,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,11 +36,14 @@ public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
     Context context;
     AdminActivity adminActivity;
     FirebaseFirestore db;
+    String data;
 
     public reportedAdapter(ArrayList reportedList, Context context) {
         this.reportedList = reportedList;
         this.context = context;
         db = FirebaseFirestore.getInstance();
+        Calendar calendar = Calendar.getInstance();
+        data = DateFormat.getDateInstance().format(calendar.getTime());
     }
 
 
@@ -154,6 +159,7 @@ public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
         hashMap.put("cognomeMittente","");
         hashMap.put("letto","no");
         hashMap.put("daPagare",""+0);
+        hashMap.put("data",data);
 
         db.collection("users").document(id).collection("notify").add(hashMap);
     }

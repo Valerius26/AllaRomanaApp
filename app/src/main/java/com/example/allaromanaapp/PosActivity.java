@@ -199,6 +199,7 @@ public class PosActivity extends AppCompatActivity {
         hashMap.put("idMittente",currentUserID);
         hashMap.put("daPagare",toPay);
         hashMap.put("letto","no");
+        hashMap.put("data",currentDate);
         if(!toPay.equals(1)) {
             hashMap.put("testo", getString(R.string.yourDebtSolved) + " " + toPay + " " + getString(R.string.valute));
         }else{

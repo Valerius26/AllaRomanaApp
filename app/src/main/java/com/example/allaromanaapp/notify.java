@@ -5,13 +5,15 @@ public class notify {
    String id;
    Long debito;
    String letto;
+   String data;
 
-    public notify(String nome, String cognome, String id, Long debito, String letto) {
+    public notify(String nome, String cognome, String id, Long debito, String letto, String data) {
         this.nome = nome;
         this.cognome = cognome;
         this.id = id;
         this.debito = debito;
         this.letto = letto;
+        this.data = data;
     }
 
     public String getNome() {
@@ -52,6 +54,14 @@ public class notify {
 
     public void setLetto(String letto) {
         this.letto = letto;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 }
 

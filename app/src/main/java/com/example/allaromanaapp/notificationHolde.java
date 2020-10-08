@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class notificationHolde extends RecyclerView.ViewHolder {
 
     ImageView iconMsg;
-    TextView info,userName;
+    TextView info,userName,date;
     View notificationView;
 
     public notificationHolde(@NonNull View itemView) {
@@ -38,6 +38,7 @@ public class notificationHolde extends RecyclerView.ViewHolder {
         userName = itemView.findViewById(R.id.userName);
         info = itemView.findViewById(R.id.info);
         iconMsg = itemView.findViewById(R.id.iconMessage);
+        date = itemView.findViewById(R.id.data);
     }
 
     private notificationHolde.ClickListener clickListener;

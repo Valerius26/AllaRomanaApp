@@ -26,6 +26,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,11 +38,14 @@ public class SelectUserAdapter extends RecyclerView.Adapter<SelectUserHolder> {
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
     String address;
+    String currentDate;
 
     public SelectUserAdapter(List<User> usersList,Context context, String address) {
         this.usersList = usersList;
         this.context = context;
         this.address = address;
+        Calendar calendar = Calendar.getInstance();
+        currentDate = DateFormat.getDateInstance().format(calendar.getTime());
     }
 
 
@@ -124,6 +129,7 @@ public class SelectUserAdapter extends RecyclerView.Adapter<SelectUserHolder> {
         hashMap.put("letto","no");
         hashMap.put("testo",context.getString(R.string.thisIsMyPosi) +
                 "\n" + address);
+        hashMap.put("data",currentDate);
 
         db.collection("users").document(id).collection("notify").add(hashMap)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {

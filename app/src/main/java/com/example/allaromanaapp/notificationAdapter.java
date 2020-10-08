@@ -68,6 +68,7 @@ public class notificationAdapter extends RecyclerView.Adapter<notificationHolde>
         if(letto.equals("si"))
             holder.iconMsg.setVisibility(View.INVISIBLE);
 
+        holder.date.setText(notificationList.get(position).getData());
     }
 
     @Override

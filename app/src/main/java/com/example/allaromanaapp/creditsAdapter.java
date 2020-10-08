@@ -23,7 +23,9 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class creditsAdapter extends RecyclerView.Adapter<creditsHolder>{
@@ -35,10 +37,14 @@ public class creditsAdapter extends RecyclerView.Adapter<creditsHolder>{
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
     Long credit;
+    String date;
+
     public creditsAdapter(ArrayList<Creditors> creditsList, Context context, balCreditActivity credAct) {
         this.creditsList = creditsList;
         this.context = context;
         this.credAct = credAct;
+        Calendar calendar = Calendar.getInstance();
+        date = DateFormat.getDateInstance().format(calendar.getTime());
     }
 
 
@@ -123,6 +129,7 @@ public class creditsAdapter extends RecyclerView.Adapter<creditsHolder>{
         hashMap.put("cognomeMittente",currentUserSurname);
         hashMap.put("letto","no");
         hashMap.put("daPagare",""+credit);
+        hashMap.put("data",date);
 
 
         db.collection("users").document(id_dest).collection("notify")

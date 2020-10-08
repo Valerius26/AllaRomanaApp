@@ -23,7 +23,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,11 +36,14 @@ public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder
     Context context;
     AdminActivity adminActivity;
     FirebaseFirestore db;
+    String date;
 
     public debtorsAdminAdapter(ArrayList debtsList, Context context) {
         this.debtsList = debtsList;
         this.context = context;
         db = FirebaseFirestore.getInstance();
+        Calendar calendar = Calendar.getInstance();
+        date = DateFormat.getDateInstance().format(calendar.getTime());
     }
 
 
@@ -130,6 +135,7 @@ public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder
         hashMap.put("cognomeMittente","");
         hashMap.put("letto","no");
         hashMap.put("daPagare",""+0);
+        hashMap.put("data",date);
 
         db.collection("users").document(id).collection("notify").add(hashMap);
     }

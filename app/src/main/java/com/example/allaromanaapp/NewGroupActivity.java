@@ -112,7 +112,7 @@ public class NewGroupActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 String group_id = documentReference.getId();
-                createGroupAll(userID,groupTitle,groupDescription,nome,cognome);
+                //createGroupAll(userID,groupTitle,groupDescription,nome,cognome);
                 createFirstPartecipant(documentReference, nome, cognome);
                 Toast.makeText(NewGroupActivity.this, getString(R.string.GruppoCreato) , Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(),GroupDetail.class);

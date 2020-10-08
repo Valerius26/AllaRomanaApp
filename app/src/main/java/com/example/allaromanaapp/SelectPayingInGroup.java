@@ -30,7 +30,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class SelectPayingInGroup extends AppCompatActivity {
@@ -43,15 +45,17 @@ public class SelectPayingInGroup extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
     ViewAdapterSelectingPay adapter;
+    String currentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_paying_in_group);
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        Calendar calendar = Calendar.getInstance();
+        currentDate = DateFormat.getDateInstance().format(calendar.getTime());
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserID = firebaseAuth.getUid();
         db = FirebaseFirestore.getInstance();
@@ -182,6 +186,7 @@ public class SelectPayingInGroup extends AppCompatActivity {
         hashMap.put("idCreatoreConto",creatorID);
         hashMap.put("nome debitore",nome);
         hashMap.put("cognome debitore",cognome);
+        hashMap.put("data",currentDate);
 
 
         db.collection("users").document(pagante).collection("credits")
@@ -226,6 +231,7 @@ public class SelectPayingInGroup extends AppCompatActivity {
         hashMap.put("idCreditore",pagante);
         hashMap.put("nome creditore",nome);
         hashMap.put("cognome creditore",cognome);
+        hashMap.put("data",currentDate);
 
         db.collection("users").document(debtor).collection("debts")
                 .add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

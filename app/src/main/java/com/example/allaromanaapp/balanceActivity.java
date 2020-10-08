@@ -87,7 +87,8 @@ public class balanceActivity extends AppCompatActivity {
 
                 for(DocumentSnapshot documentSnapshot: task.getResult()){
                         Creditors creditor = new Creditors(documentSnapshot.getString("idCreditore"),documentSnapshot.getString("nome creditore"),
-                                documentSnapshot.getString("cognome creditore"), Long.valueOf(documentSnapshot.getString("debito")));
+                                documentSnapshot.getString("cognome creditore"), Long.valueOf(documentSnapshot.getString("debito")),
+                                documentSnapshot.getString("data"));
                         debtsList.add(creditor);
                 }
                 Collections.sort(debtsList, new Comparator<Creditors>() {

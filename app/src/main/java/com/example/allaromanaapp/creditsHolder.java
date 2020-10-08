@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class creditsHolder extends RecyclerView.ViewHolder{
 
-    TextView userName,info,credit,creditNum;
+    TextView userName,info,credit,creditNum,data;
     ImageView iconUser;
     View creditView;
 
@@ -39,6 +39,7 @@ public class creditsHolder extends RecyclerView.ViewHolder{
         iconUser = itemView.findViewById(R.id.iconUser);
         credit = itemView.findViewById(R.id.credit);
         creditNum = itemView.findViewById(R.id.creditNum);
+        data = itemView.findViewById(R.id.data);
     }
 
     private creditsHolder.ClickListener clickListener;

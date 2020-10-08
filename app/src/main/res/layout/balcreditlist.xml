@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/partecipantCard"
         android:layout_width="match_parent"
-        android:layout_height="97dp"
+        android:layout_height="107dp"
         android:background="@color/cardview_light_background">
 
         <ImageView
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginVertical="70dp"
+            android:layout_marginVertical="88dp"
             android:layout_marginStart="4dp"
             android:layout_toEndOf="@+id/iconUser"
             android:text="@string/sendIfPress"
@@ -45,7 +45,7 @@
             android:id="@+id/credit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="74dp"
+            android:layout_marginHorizontal="72dp"
             android:layout_marginTop="35dp"
             android:text="Credito"
             android:textSize="30dp" />
@@ -58,6 +58,20 @@
             android:layout_toRightOf="@+id/credit"
             android:text="0"
             android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/data"
+            android:layout_width="111dp"
+            android:layout_height="17dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="74dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginEnd="220dp"
+            android:layout_marginBottom="20dp"
+            android:text="TextView" />
 
     </RelativeLayout>
 

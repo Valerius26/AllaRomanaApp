@@ -59,6 +59,20 @@
             android:text="0"
             android:textSize="30dp" />
 
+        <TextView
+            android:id="@+id/data"
+            android:layout_width="102dp"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="289dp"
+            android:layout_marginTop="71dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="6dp"
+            android:text="TextView" />
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

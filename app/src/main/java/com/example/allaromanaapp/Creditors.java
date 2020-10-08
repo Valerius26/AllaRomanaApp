@@ -7,12 +7,14 @@ public class Creditors {
     private String name;
     private String surname;
     private Long debt;
+    private String data;
 
-    public Creditors(String id, String name, String surname, Long debt) {
+    public Creditors(String id, String name, String surname, Long debt, String data) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.debt = debt;
+        this.data = data;
     }
 
     public String getId() {
@@ -45,5 +47,13 @@ public class Creditors {
 
     public void setDebt(Long debt) {
         this.debt = debt;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 }

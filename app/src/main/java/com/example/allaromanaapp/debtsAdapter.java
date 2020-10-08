@@ -85,6 +85,7 @@ public class debtsAdapter extends RecyclerView.Adapter<detsHolder> {
         Long debt = debtsList.get(position).getDebt();
         holder.userName.setText(name + " " + surname);
         holder.debtNum.setText(debt+" "+ context.getString(R.string.simbol));
+        holder.data.setText(debtsList.get(position).getData());
     }
 
     @Override

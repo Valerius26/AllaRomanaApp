@@ -78,7 +78,7 @@
     <string name="goToCredit">Vai a crediti</string>
     <string name="creditListTitle">Lista crediti</string>
     <string name="goToDebts">Vai a debiti</string>
-    <string name="creditString">Crediti</string>
+    <string name="creditString">Credito</string>
     <string name="sendIfPress">Tieni premuto per inviare una notifica</string>
     <string name="notificationSended">Notifica inviata</string>
     <string name="notificationNoSended">Non è stato possibile inviare la notifica</string>

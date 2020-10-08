@@ -115,7 +115,7 @@ public class LockedFragment extends Fragment {
                         total = total + Long.valueOf(documentSnapshot.getString("debito"));
                     }
 
-                    lockedes.add(new Creditors(id,name,surname,total));
+                    lockedes.add(new Creditors(id,name,surname,total,""));
 
 
                     Collections.sort(lockedes, new Comparator<Creditors>() {

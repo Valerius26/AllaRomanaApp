@@ -26,7 +26,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class payActivity extends AppCompatActivity{
@@ -36,6 +38,7 @@ public class payActivity extends AppCompatActivity{
     Button payBtn,difference;
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
+    String currentDate;
     String currentUserID,CreditorID;
     String CreditorName,CreditorSurname;
     Long CreditorCredit;
@@ -57,6 +60,8 @@ public class payActivity extends AppCompatActivity{
         CreditorCredit = Long.valueOf(intent.getStringExtra("debt"));
         CreditorID = intent.getStringExtra("creditorID");
 
+        Calendar calendar = Calendar.getInstance();
+        currentDate = DateFormat.getDateInstance().format(calendar.getTime());
 
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserID = firebaseAuth.getUid();
@@ -243,6 +248,7 @@ public class payActivity extends AppCompatActivity{
         hashMap.put("cognome debitore",surname);
         hashMap.put("idDebitore",id_debtor);
         hashMap.put("credito",""+total);
+        hashMap.put("data",currentDate);
 
         db.collection("users").document(id_user).collection("credits").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
@@ -261,6 +267,7 @@ public class payActivity extends AppCompatActivity{
         hashMap.put("nome creditore",name);
         hashMap.put("debito",""+total);
         hashMap.put("idCreditore",id_creditor);
+        hashMap.put("data",currentDate);
 
         db.collection("users").document(id_user).collection("debts")
                 .add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {

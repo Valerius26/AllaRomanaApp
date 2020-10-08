@@ -151,6 +151,7 @@ public class creditsAdapter extends RecyclerView.Adapter<creditsHolder>{
         holder.credit.setText(context.getString(R.string.creditString));
         holder.creditNum.setText(credit + " " + context.getString(R.string.simbol));
         holder.info.setText(context.getString(R.string.sendIfPress));
+        holder.data.setText(creditsList.get(position).getData());
     }
 
     @Override

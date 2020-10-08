@@ -35,7 +35,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -50,6 +53,7 @@ public class SelectPaying extends AppCompatActivity {
     String creatorID, accountID;
     FirebaseFirestore db;
     ViewAdapterSelectingPay adapter;
+    String currentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +71,8 @@ public class SelectPaying extends AppCompatActivity {
         importTitle = findViewById(R.id.importTitle);
         editImport = findViewById(R.id.editImport);
         pay = findViewById(R.id.payBtn);
-
+        Calendar calendar = Calendar.getInstance();
+        currentDate = DateFormat.getDateInstance().format(calendar.getTime());
 
 
         Intent intent = getIntent();
@@ -208,6 +213,7 @@ public class SelectPaying extends AppCompatActivity {
         hashMap.put("idCreatoreConto",creatorID);
         hashMap.put("nome debitore",nome);
         hashMap.put("cognome debitore",cognome);
+        hashMap.put("data",currentDate);
 
 
         db.collection("users").document(pagante).collection("credits")
@@ -254,6 +260,7 @@ public class SelectPaying extends AppCompatActivity {
         hashMap.put("idCreditore",pagante);
         hashMap.put("nome creditore",nome);
         hashMap.put("cognome creditore",cognome);
+        hashMap.put("data",currentDate);
 
         db.collection("users").document(debtor).collection("debts")
                 .add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

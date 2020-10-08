@@ -82,7 +82,7 @@ public class balCreditActivity extends AppCompatActivity {
                 for(DocumentSnapshot documentSnapshot: task.getResult()){
                     Creditors creditor = new Creditors(documentSnapshot.getString("idDebitore"),documentSnapshot.getString("nome debitore"),
                             documentSnapshot.getString("cognome debitore"),
-                            Long.valueOf(documentSnapshot.getString("credito")));
+                            Long.valueOf(documentSnapshot.getString("credito")),documentSnapshot.getString("data"));
                     creditsList.add(creditor);
                 }  Collections.sort(creditsList, new Comparator<Creditors>() {
                     @Override

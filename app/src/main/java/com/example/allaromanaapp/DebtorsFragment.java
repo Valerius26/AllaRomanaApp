@@ -118,7 +118,7 @@ public class DebtorsFragment extends Fragment {
                         total = total + Long.valueOf(documentSnapshot.getString("debito"));
                     }
                     if(total > 99){
-                        debtors.add(new Creditors(id,name,surname,total));
+                        debtors.add(new Creditors(id,name,surname,total,""));
                     }
 
                     Collections.sort(debtors, new Comparator<Creditors>() {

@@ -34,7 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class NotCurrentProfileActivity extends AppCompatActivity {
 
-    TextView nome, cognome, email, bilancio,balanceTextTitle;
+    TextView nome, cognome, email;
     ImageView profileImage,addFoto;
     FirebaseFirestore fStore;
     FirebaseAuth fAuth;
@@ -58,7 +58,6 @@ public class NotCurrentProfileActivity extends AppCompatActivity {
 
         addFoto.setVisibility(View.INVISIBLE);
 
-        balanceTextTitle.setVisibility(View.INVISIBLE);
         deleteProfile.setVisibility(View.INVISIBLE);
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
@@ -78,7 +77,6 @@ public class NotCurrentProfileActivity extends AppCompatActivity {
                     nome.setText(value.getString("nome"));
                     cognome.setText(value.getString("cognome"));
                     email.setText(value.getString("e-mail"));
-                    bilancio.setVisibility(View.INVISIBLE);
                     Glide.with(NotCurrentProfileActivity.this).load(value.getString("immagine")).circleCrop().into(profileImage);
                 }
             }

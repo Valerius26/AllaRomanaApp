@@ -100,10 +100,12 @@ public class LockedAdapter extends RecyclerView.Adapter<LockedHolder> {
     public void onBindViewHolder(@NonNull LockedHolder holder, int position) {
         String name = lockedList.get(position).getName();
         String surname = lockedList.get(position).getSurname();
-        Long debt = lockedList.get(position).getDebt();
+        Double debt = lockedList.get(position).getDebt();
+        String finalDebt = String.format("%.2f", debt );
         holder.userName.setText(name + " " + surname);
-        holder.debtNum.setText(debt+" $");
+        holder.debtNum.setText(finalDebt+" $");
         holder.info.setText(context.getString(R.string.unlockedIfHold));
+        holder.date.setVisibility(View.INVISIBLE);
     }
 
     @Override

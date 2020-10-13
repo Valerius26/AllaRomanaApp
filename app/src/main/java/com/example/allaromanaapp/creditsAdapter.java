@@ -36,7 +36,7 @@ public class creditsAdapter extends RecyclerView.Adapter<creditsHolder>{
     String Debtorname,Debtorsurname,id_dest,currentUserID;
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
-    Long credit;
+    Double credit;
     String date;
 
     public creditsAdapter(ArrayList<Creditors> creditsList, Context context, balCreditActivity credAct) {
@@ -117,18 +117,19 @@ public class creditsAdapter extends RecyclerView.Adapter<creditsHolder>{
     }
 
     private void send(String currentUserName, String currentUserSurname) {
+        String finalcredit = String.format("%.2f", credit);
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("idMittente",currentUserID);
         if(credit != 1){
-            hashMap.put("testo",context.getString(R.string.payMeDebt) + " " + credit + " " + context.getString(R.string.valute));
+            hashMap.put("testo",context.getString(R.string.payMeDebt) + " " + finalcredit + " " + context.getString(R.string.valute));
         }else{
-            hashMap.put("testo",context.getString(R.string.payMeDebt) + " " + credit + " " + context.getString(R.string.valuteS));
+            hashMap.put("testo",context.getString(R.string.payMeDebt) + " " + finalcredit + " " + context.getString(R.string.valuteS));
         }
 
         hashMap.put("nomeMittente",currentUserName);
         hashMap.put("cognomeMittente",currentUserSurname);
         hashMap.put("letto","no");
-        hashMap.put("daPagare",""+credit);
+        hashMap.put("daPagare", finalcredit);
         hashMap.put("data",date);
 
 

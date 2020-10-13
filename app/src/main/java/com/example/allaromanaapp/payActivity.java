@@ -27,6 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -41,8 +43,8 @@ public class payActivity extends AppCompatActivity{
     String currentDate;
     String currentUserID,CreditorID;
     String CreditorName,CreditorSurname;
-    Long CreditorCredit;
-    Long toPay;
+    Double CreditorCredit;
+    Double toPay;
     boolean total = false;
 
     ArrayList<Long> debts = new ArrayList();
@@ -54,12 +56,11 @@ public class payActivity extends AppCompatActivity{
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         CreditorName = intent.getStringExtra("name");
         CreditorSurname = intent.getStringExtra("surname");
-        CreditorCredit = Long.valueOf(intent.getStringExtra("debt"));
+        CreditorCredit = Double.valueOf(intent.getStringExtra("debt"));
         CreditorID = intent.getStringExtra("creditorID");
-
         Calendar calendar = Calendar.getInstance();
         currentDate = DateFormat.getDateInstance().format(calendar.getTime());
 
@@ -111,9 +112,13 @@ public class payActivity extends AppCompatActivity{
                 Intent intent1 = new Intent(payActivity.this, PosActivity.class);
                 intent1.putExtra("idCreditore",CreditorID);
                 if(total){
+                    String toPayTot = String.format("%.2f", toPay);
+                    intent1.putExtra("daPagareTot", toPayTot);
                     intent1.putExtra("Totale","si");
-                    intent1.putExtra("daPagare",""+toPay);
+                    intent1.putExtra("daPagare",toPay);
                 }else{
+                    String toPayfinal = String.format("%.2f", CreditorCredit);
+                    intent1.putExtra("daPagareTot", toPayfinal);
                     intent1.putExtra("Totale","no");
                     intent1.putExtra("daPagare",""+CreditorCredit);
                 }
@@ -123,14 +128,19 @@ public class payActivity extends AppCompatActivity{
     }
 
     private void loadTotalDebt() {
+        final NumberFormat nf = NumberFormat.getInstance();
         db.collection("users").document(currentUserID).collection("debts")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                Long CreditorTotalC = Long.valueOf(0);
+                Double CreditorTotalC = Double.valueOf(0);
                 for(DocumentSnapshot documentSnapshot: task.getResult()){
                    if(documentSnapshot.getString("idCreditore").equals(CreditorID)){
-                       CreditorTotalC = CreditorTotalC + Long.valueOf(documentSnapshot.getString("debito"));
+                       try {
+                           CreditorTotalC = CreditorTotalC + nf.parse(documentSnapshot.getString("debito")).doubleValue();
+                       } catch (ParseException e) {
+                           e.printStackTrace();
+                       }
                    }
                 }
 
@@ -140,14 +150,19 @@ public class payActivity extends AppCompatActivity{
     }
 
     private void loadTotalDebtTwo() {
+        final NumberFormat nf = NumberFormat.getInstance();
         db.collection("users").document(currentUserID).collection("debts")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                Long CreditorTotalC = Long.valueOf(0);
+                Double CreditorTotalC = Double.valueOf(0);
                 for(DocumentSnapshot documentSnapshot: task.getResult()){
                     if(documentSnapshot.getString("idCreditore").equals(CreditorID)){
-                        CreditorTotalC = CreditorTotalC + Long.valueOf(documentSnapshot.getString("debito"));
+                        try {
+                            CreditorTotalC = CreditorTotalC + nf.parse(documentSnapshot.getString("debito")).doubleValue();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
 
@@ -156,19 +171,24 @@ public class payActivity extends AppCompatActivity{
         });
     }
 
-    private void loadCreditorTotalDebt(final Long CreditorTotalC) {
+    private void loadCreditorTotalDebt(final Double CreditorTotalC) {
+        final NumberFormat nf = NumberFormat.getInstance();
         db.collection("users").document(currentUserID).collection("credits")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                Long CreditorTotalD = Long.valueOf(0);
+                Double CreditorTotalD = Double.valueOf(0);
                 for(DocumentSnapshot documentSnapshot: task.getResult()){
                     if(documentSnapshot.getString("idDebitore").equals(CreditorID)){
-                        CreditorTotalD = CreditorTotalD + Long.valueOf(documentSnapshot.getString("credito"));
+                        try {
+                            CreditorTotalD = CreditorTotalD + nf.parse(documentSnapshot.getString("credito")).doubleValue();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
 
-                final Long total = CreditorTotalC - CreditorTotalD;
+                final Double total = CreditorTotalC - CreditorTotalD;
                 recoverCurrentUserName(total);
 
 
@@ -178,7 +198,7 @@ public class payActivity extends AppCompatActivity{
 
     }
 
-    private void recoverCurrentUserName(final Long total) {
+    private void recoverCurrentUserName(final Double total) {
         db.collection("users").document(currentUserID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -194,25 +214,28 @@ public class payActivity extends AppCompatActivity{
         });
     }
 
-    private void updateDb(Long total, String currentName, String currentSurname) {
+    private void updateDb(Double total, String currentName, String currentSurname) {
+
         if(total < 0){
+            String finaltotal = String.format("%.2f",-total);
             //aggiorna con un unica tabella il mio credito e il suo debito
             updateDebt(CreditorID,(-total),currentName,currentSurname,currentUserID);
             updateCredit(currentUserID,(-total),CreditorName,CreditorSurname,CreditorID);
             String text = R.string.compensationFirst + "\n" +
-                    R.string.yourDebtNow + " " + (-total) + R.string.simbol;
+                    R.string.yourDebtNow + " " + finaltotal + " " + R.string.simbol;
             sendNotification(currentName,currentSurname,(-total),currentUserID,text);
-            Toast.makeText(payActivity.this,getString(R.string.compensationSecond) + " " + CreditorName + " " + CreditorSurname + " " + getString(R.string.pariA) + " "  + (-total) + getString(R.string.simbol), Toast.LENGTH_SHORT).show();
+            Toast.makeText(payActivity.this,getString(R.string.compensationSecond) + " " + CreditorName + " " + CreditorSurname + " " + getString(R.string.pariA) + " "  + finaltotal + " " + getString(R.string.simbol), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(payActivity.this,MainActivity.class));
         }else
         if(total > 0){
+            String finaltotal = String.format("%.2f",total);
             //aggiorna con un unica tabella il mio di debito e il suo di credito
             updateDebt(currentUserID,total,CreditorName,CreditorSurname,CreditorID);
             updateCredit(CreditorID,total,currentName,currentSurname,currentUserID);
             String text =  R.string.compensationThird + "\n" +
-                    R.string.myDebtNow + " " + total + " " + R.string.simbol;
+                    R.string.myDebtNow + " " + finaltotal + " " + R.string.simbol;
             sendNotification(currentName,currentSurname,total,currentUserID,text);
-            Toast.makeText(payActivity.this, getString(R.string.yourDebtNow2) + " " + CreditorName + " " + CreditorSurname + " " + getString(R.string.pariA) + " "  + total + getString(R.string.simbol), Toast.LENGTH_SHORT).show();
+            Toast.makeText(payActivity.this, getString(R.string.yourDebtNow2) + " " + CreditorName + " " + CreditorSurname + " " + getString(R.string.pariA) + " "  + finaltotal + getString(R.string.simbol), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(payActivity.this,MainActivity.class));
         }else{
             String text =  R.string.perfectCompensation + "\n" +
@@ -228,12 +251,13 @@ public class payActivity extends AppCompatActivity{
         }
     }
 
-    private void sendNotification(String currentName, String currentSurname, long daPagare, String currentUserID, String text) {
+    private void sendNotification(String currentName, String currentSurname, Double daPagare, String currentUserID, String text) {
+        String finalDaPagare = String.format("%.2f", daPagare);
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("nomeMittente",currentName);
         hashMap.put("cognomeMittente",currentSurname);
         hashMap.put("idMittente",currentUserID);
-        hashMap.put("daPagare",""+daPagare);
+        hashMap.put("daPagare",""+finalDaPagare);
         hashMap.put("letto","no");
         hashMap.put("testo", text);
         hashMap.put("date",currentDate);
@@ -243,12 +267,13 @@ public class payActivity extends AppCompatActivity{
         startActivity(new Intent(payActivity.this,MainActivity.class));
     }
 
-    private void updateCredit(String id_user, Long total, String name, String surname, String id_debtor) {
+    private void updateCredit(String id_user, Double total, String name, String surname, String id_debtor) {
+        String finalTotal = String.format("%.2f", total);
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("nome debitore",name);
         hashMap.put("cognome debitore",surname);
         hashMap.put("idDebitore",id_debtor);
-        hashMap.put("credito",""+total);
+        hashMap.put("credito",""+finalTotal);
         hashMap.put("data",currentDate);
 
         db.collection("users").document(id_user).collection("credits").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
@@ -262,11 +287,12 @@ public class payActivity extends AppCompatActivity{
 
     }
 
-    private void updateDebt(String id_user, Long total, String name, String surname, String id_creditor) {
+    private void updateDebt(String id_user, Double total, String name, String surname, String id_creditor) {
+        String finalTotal = String.format("%.2f", total);
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("cognome creditore",surname);
         hashMap.put("nome creditore",name);
-        hashMap.put("debito",""+total);
+        hashMap.put("debito",""+finalTotal);
         hashMap.put("idCreditore",id_creditor);
         hashMap.put("data",currentDate);
 
@@ -321,10 +347,11 @@ public class payActivity extends AppCompatActivity{
                 .document(id).delete();
     }
 
-    private void goNow(final Long creditorTotalC) {
-        debt.setText(getString(R.string.debtTo) + " " + CreditorName + " " + CreditorSurname + " : " + CreditorCredit + getString(R.string.simbol));
-
-        totalDebt.setText(getString(R.string.totalDebtTo) + " " + CreditorName + " " + CreditorSurname + " : " + creditorTotalC + getString(R.string.simbol));
+    private void goNow(final Double creditorTotalC) {
+        String finalCreditorCredit = String.format("%.2f", CreditorCredit);
+        debt.setText(getString(R.string.debtTo) + " " + CreditorName + " " + CreditorSurname + " : " + finalCreditorCredit + getString(R.string.simbol));
+        String finalCreditorTotalC = String.format("%.2f", creditorTotalC);
+        totalDebt.setText(getString(R.string.totalDebtTo) + " " + CreditorName + " " + CreditorSurname + " : " + finalCreditorTotalC + getString(R.string.simbol));
 
         //l'importo da pagare dovrebbe corrispondere al debito che si seleziona a questo punto
 

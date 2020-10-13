@@ -26,6 +26,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -114,20 +116,25 @@ public class historyActivity extends AppCompatActivity {
 
 
     private void loadDataFromFirebase() {
-
+        final NumberFormat nf = NumberFormat.getInstance();
         fStore.collection("users").document(userID).collection("payment").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for(DocumentSnapshot querySnapshot : task.getResult()){
-                    Pyments payment = new Pyments(querySnapshot.getString("idPagato"), querySnapshot.getString("nomePagato"),
-                            querySnapshot.getString("cognomePagato"), Long.valueOf(querySnapshot.getString("totalePagato")),
-                            querySnapshot.getString("data"),querySnapshot.getId());
+                    Pyments payment = null;
+                    try {
+                        payment = new Pyments(querySnapshot.getString("idPagato"), querySnapshot.getString("nomePagato"),
+                                querySnapshot.getString("cognomePagato"), nf.parse(querySnapshot.getString("totalePagato")).doubleValue(),
+                                querySnapshot.getString("data"),querySnapshot.getId());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     payments.add(payment);
                 }
                 Collections.sort(payments, new Comparator<Pyments>() {
                     @Override
                     public int compare(Pyments p1, Pyments p2) {
-                        return p1.getDate().compareTo(p2.getDate());
+                        return p2.getDate().compareTo(p1.getDate());
                     }
                 });
 

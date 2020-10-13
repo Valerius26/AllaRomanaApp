@@ -64,7 +64,7 @@ public class debtsAdapter extends RecyclerView.Adapter<detsHolder> {
                 String creditorID = debtsList.get(position).getId();
                 String name = debtsList.get(position).getName();
                 String surname = debtsList.get(position).getSurname();
-                Long debt = debtsList.get(position).getDebt();
+                Double debt = debtsList.get(position).getDebt();
                 Intent intent = new Intent(context,payActivity.class);
                 intent.putExtra("name",name);
                 intent.putExtra("surname",surname);
@@ -82,7 +82,7 @@ public class debtsAdapter extends RecyclerView.Adapter<detsHolder> {
     public void onBindViewHolder(@NonNull detsHolder holder, int position) {
         String name = debtsList.get(position).getName();
         String surname = debtsList.get(position).getSurname();
-        Long debt = debtsList.get(position).getDebt();
+        Double debt = debtsList.get(position).getDebt();
         holder.userName.setText(name + " " + surname);
         holder.debtNum.setText(debt+" "+ context.getString(R.string.simbol));
         holder.data.setText(debtsList.get(position).getData());

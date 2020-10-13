@@ -6,10 +6,10 @@ public class Creditors {
     private String id;
     private String name;
     private String surname;
-    private Long debt;
+    private Double debt;
     private String data;
 
-    public Creditors(String id, String name, String surname, Long debt, String data) {
+    public Creditors(String id, String name, String surname, Double debt, String data) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -41,11 +41,11 @@ public class Creditors {
         this.surname = surname;
     }
 
-    public Long getDebt() {
+    public Double getDebt() {
         return debt;
     }
 
-    public void setDebt(Long debt) {
+    public void setDebt(Double debt) {
         this.debt = debt;
     }
 

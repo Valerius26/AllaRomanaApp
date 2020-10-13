@@ -197,6 +197,11 @@
     <string name="youAreDown">Sei al verde! Ricarica per pagare</string>
     <string name="dontRemove">Non puoi rimuoverti! Siete solo due partecipanti.</string>
     <string name="partecipantDelete">Ti sei rimosso da questo gruppo</string>
+    <string name="DoubleRequested">Inserire un numero</string>
+    <string name="importRequired">Un intero è richiesto</string>
+    <string name="importMin">Un importo deve essere maggiore o ugale numero di partecipanti</string>
+    <string name="numReq">Inserisci un intero</string>
+    <string name="importPayd">Importo pagato</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

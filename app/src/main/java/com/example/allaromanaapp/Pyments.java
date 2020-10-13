@@ -6,11 +6,11 @@ public class Pyments {
     private String id;
     private String name;
     private String surname;
-    private Long debt;
+    private Double debt;
     private String date;
     private String id_ref;
 
-    public Pyments(String id, String name, String surname, Long debt, String date, String id_ref) {
+    public Pyments(String id, String name, String surname, Double debt, String date, String id_ref) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -43,11 +43,11 @@ public class Pyments {
         this.surname = surname;
     }
 
-    public Long getDebt() {
+    public Double getDebt() {
         return debt;
     }
 
-    public void setDebt(Long debt) {
+    public void setDebt(Double debt) {
         this.debt = debt;
     }
 

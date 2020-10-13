@@ -27,12 +27,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.HashMap;
 
 public class NotDetailActivity extends AppCompatActivity {
     
     String idNotification,currentUserID;
-    Long debt;
+    Double debt;
     TextView userName,message,info,indicate;
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
@@ -52,7 +54,12 @@ public class NotDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         idNotification = intent.getStringExtra("idNotifica");
-        debt = Long.valueOf(intent.getStringExtra("debito"));
+        NumberFormat nf = NumberFormat.getInstance();
+        try {
+            debt = nf.parse(intent.getStringExtra("debito")).doubleValue();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
         markAsRead(currentUserID,idNotification);
@@ -125,7 +132,7 @@ public class NotDetailActivity extends AppCompatActivity {
                 } else {
                     final AlertDialog.Builder indicateDialog = new AlertDialog.Builder(view.getContext());
                     indicateDialog.setTitle(getString(R.string.report));
-                    indicateDialog.setMessage(R.string.areYouSure2 + " " + nomeMittente + " " + cognomeMittente + "?");
+                    indicateDialog.setMessage(getString(R.string.areYouSure2) + " " + nomeMittente + " " + cognomeMittente + "?");
 
                     indicateDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
@@ -207,18 +214,19 @@ public class NotDetailActivity extends AppCompatActivity {
     }
 
     private void sendToCreditor() {
+        String finaldebito = String.format("%.2f", debito);
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("idMittente",currentUserID);
         if(!debito.equals(1)) {
-            hashMap.put("testo", getString(R.string.iHaveRepYou) + " " + debito + " " + getString(R.string.valute) + ".\n" +
+            hashMap.put("testo", getString(R.string.iHaveRepYou) + " " + finaldebito + " " + getString(R.string.valute) + ".\n" +
                     getString(R.string.IdontKnow));
         }else{
-            hashMap.put("testo", getString(R.string.iHaveRepYou) + " " + debito + " " + getString(R.string.valuteS) + ".\n" + getString(R.string.IdontKnow));
+            hashMap.put("testo", getString(R.string.iHaveRepYou) + " " + finaldebito + " " + getString(R.string.valuteS) + ".\n" + getString(R.string.IdontKnow));
         }
         hashMap.put("nomeMittente",name);
         hashMap.put("cognomeMittente",surname);
         hashMap.put("letto","no");
-        hashMap.put("daPagare",""+debito);
+        hashMap.put("daPagare", finaldebito);
 
         db.collection("users").document(sendID).collection("notify").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
@@ -237,11 +245,12 @@ public class NotDetailActivity extends AppCompatActivity {
 
     private void sendToDebtor() {
         HashMap<String,String> hashMap = new HashMap<>();
+        String finalDebito = String.format("%.2f", debito);
         hashMap.put("idMittente",currentUserID);
         if(!debito.equals(1)) {
-            hashMap.put("testo", getString(R.string.iHaveDelDeb) + " " + debito + " " + getString(R.string.valute));
+            hashMap.put("testo", getString(R.string.iHaveDelDeb) + " " + finalDebito + " " + getString(R.string.valute));
         }else{
-            hashMap.put("testo", getString(R.string.iHaveDelDeb) + " " + debito + " " + getString(R.string.valuteS));
+            hashMap.put("testo", getString(R.string.iHaveDelDeb) + " " + finalDebito + " " + getString(R.string.valuteS));
         }
         hashMap.put("nomeMittente",name);
         hashMap.put("cognomeMittente",surname);

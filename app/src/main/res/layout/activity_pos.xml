@@ -32,7 +32,7 @@
         android:background="#020202"
         android:ems="10"
         android:hint="@string/password"
-        android:inputType="textEmailAddress"
+        android:inputType="textPassword"
         android:padding="10dp"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cardType"
-        android:textColor="@color/colorGreen"
+        android:textColor="@color/red"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/confirmBtn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:onClick="checkButton"
             android:text="VISA"
-            android:textColor="@color/colorGreen"
+            android:textColor="@color/red"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="40dp"
             tools:layout_editor_absoluteY="326dp" />
@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:onClick="checkButton"
             android:text="MASTERCARD"
-            android:textColor="@color/colorGreen"
+            android:textColor="@color/red"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="102dp"
             tools:layout_editor_absoluteY="326dp" />
@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:onClick="checkButton"
             android:text="POSTPAY"
-            android:textColor="@color/colorGreen"
+            android:textColor="@color/red"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="225dp"
             tools:layout_editor_absoluteY="326dp" />
@@ -118,7 +118,7 @@
             android:backgroundTint="#9A1D1D"
             android:onClick="checkButton"
             android:text="PAYPAL"
-            android:textColor="@color/colorGreen"
+            android:textColor="@color/red"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="317dp"
             tools:layout_editor_absoluteY="326dp" />

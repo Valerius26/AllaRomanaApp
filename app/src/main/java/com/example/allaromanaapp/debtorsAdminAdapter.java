@@ -115,10 +115,11 @@ public class debtorsAdminAdapter extends RecyclerView.Adapter<debtorsAdminHolder
     public void onBindViewHolder(@NonNull debtorsAdminHolder holder, int position) {
         String name = debtsList.get(position).getName();
         String surname = debtsList.get(position).getSurname();
-        Long debt = debtsList.get(position).getDebt();
+        Double debt = debtsList.get(position).getDebt();
         holder.userName.setText(name + " " + surname);
         holder.debtNum.setText(debt+" $");
         holder.info.setText(context.getString(R.string.stuckIfHold));
+        holder.date.setVisibility(View.INVISIBLE);
     }
 
     @Override

@@ -26,6 +26,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -84,12 +86,18 @@ public class balanceActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
              ArrayList<Creditors> debtsList = new ArrayList();
-
+             NumberFormat nf = NumberFormat.getInstance();
                 for(DocumentSnapshot documentSnapshot: task.getResult()){
-                        Creditors creditor = new Creditors(documentSnapshot.getString("idCreditore"),documentSnapshot.getString("nome creditore"),
-                                documentSnapshot.getString("cognome creditore"), Long.valueOf(documentSnapshot.getString("debito")),
+                    Creditors creditor = null;
+                    try {
+                        creditor = new Creditors(documentSnapshot.getString("idCreditore"),documentSnapshot.getString("nome creditore"),
+                                documentSnapshot.getString("cognome creditore"), nf.parse(documentSnapshot.getString("debito")).doubleValue()
+                                ,
                                 documentSnapshot.getString("data"));
-                        debtsList.add(creditor);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    debtsList.add(creditor);
                 }
                 Collections.sort(debtsList, new Comparator<Creditors>() {
                     @Override

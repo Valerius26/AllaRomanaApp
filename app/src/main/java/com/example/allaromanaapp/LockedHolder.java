@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class LockedHolder extends RecyclerView.ViewHolder {
 
     ImageView iconUser;
-    TextView info,userName,debt,debtNum;
+    TextView info,userName,debt,debtNum,date;
     View lockedView;
 
     public LockedHolder(@NonNull View itemView) {
@@ -40,6 +40,7 @@ public class LockedHolder extends RecyclerView.ViewHolder {
         iconUser = itemView.findViewById(R.id.iconUser);
         debt = itemView.findViewById(R.id.debt);
         debtNum = itemView.findViewById(R.id.debtNum);
+        date = itemView.findViewById(R.id.data);
     }
 
     private LockedHolder.ClickListener clickListener;

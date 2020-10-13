@@ -111,20 +111,20 @@ public class SelectPaying extends AppCompatActivity {
                 String pagante = adapter.getPayingUser();
                 if(!TextUtils.isEmpty(pagante)) {
                     String importo = editImport.getText().toString().trim();
-                    Long importNumber = Long.valueOf(0);
+                    Double importNumber = Double.valueOf(0);
                     int partecipantsSize = 0;
 
                     try {
-                        int num = Integer.parseInt(importo);
+                        double num = Double.parseDouble(importo);
                     } catch (NumberFormatException e) {
-                        editImport.setError(getString(R.string.integerRequested));
+                        editImport.setError(getString(R.string.DoubleRequested));
                     }
                         if (TextUtils.isEmpty(importo)) {
                             editImport.setError(getString(R.string.amountRequested));
                             return;
                         }else {
                             try {
-                                importNumber = (Long) Long.valueOf(importo);
+                                importNumber = (Double) Double.valueOf(importo);
                                 partecipantsSize = adapter.getItemCount();
                                 if (importNumber < partecipantsSize) {
                                     editImport.setError(getString(R.string.importominoreouguale));
@@ -154,7 +154,7 @@ public class SelectPaying extends AppCompatActivity {
 
     }
 
-    private void recupera_nome_debitore(final String id_debtor, final String pagante, final Long importNumber, final int partecipantSize) {
+    private void recupera_nome_debitore(final String id_debtor, final String pagante, final Double importNumber, final int partecipantSize) {
         db.collection("users").document(id_debtor).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -204,11 +204,11 @@ public class SelectPaying extends AppCompatActivity {
         });
     }
 
-    private void updateDB(final String debtor, final String pagante, Long importNumber, int partecipantsSize, String nome, String cognome) {
-
+    private void updateDB(final String debtor, final String pagante, Double importNumber, int partecipantsSize, String nome, String cognome) {
         HashMap<String,String> hashMap = new HashMap<>();
-        final int credit = (int) (importNumber/partecipantsSize);
-        hashMap.put("credito",""+credit);
+        final Double credit = (importNumber/partecipantsSize);
+        String finalcredit = String.format("%.2f", credit);
+        hashMap.put("credito", finalcredit);
         hashMap.put("idDebitore",debtor);
         hashMap.put("idCreatoreConto",creatorID);
         hashMap.put("nome debitore",nome);
@@ -236,7 +236,7 @@ public class SelectPaying extends AppCompatActivity {
 
     }
 
-    private void recupera_nome_creditore(final String pagante, final String debtor, final int credit, final String id_credito) {
+    private void recupera_nome_creditore(final String pagante, final String debtor, final Double credit, final String id_credito) {
         db.collection("users").document(pagante).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -254,9 +254,10 @@ public class SelectPaying extends AppCompatActivity {
     }
 
 
-    private void updateDebtor(final String pagante, final String debtor, final int credit, final String nome, final String cognome, final String id_credito) {
+    private void updateDebtor(final String pagante, final String debtor, final Double credit, final String nome, final String cognome, final String id_credito) {
+        String finalCredit = String.format("%.2f", credit);
         HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put("debito",""+credit);
+        hashMap.put("debito",""+finalCredit);
         hashMap.put("idCreditore",pagante);
         hashMap.put("nome creditore",nome);
         hashMap.put("cognome creditore",cognome);
@@ -277,7 +278,7 @@ public class SelectPaying extends AppCompatActivity {
         });
     }
 
-    private void updateBalanceDebit(String debtor, int credit) {
+    private void updateBalanceDebit(String debtor, Double credit) {
         DocumentReference documentReference = db.collection("users").document(debtor);
         documentReference.update("bilancio", FieldValue.increment(-credit)).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -287,21 +288,21 @@ public class SelectPaying extends AppCompatActivity {
         });
     }
 
-    private void inviaNotifica(String debtor,String pagante, String nomeMittente, String cognomeMittente, int credit) {
-
+    private void inviaNotifica(String debtor,String pagante, String nomeMittente, String cognomeMittente, Double credit) {
+        String finalcredit = String.format("%.2f", credit);
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("nomeMittente",nomeMittente);
         hashMap.put("cognomeMittente",cognomeMittente);
         hashMap.put("idMittente",pagante);
-        hashMap.put("daPagare",""+credit);
+        hashMap.put("daPagare",finalcredit);
         hashMap.put("letto","no");
         hashMap.put("data",currentDate);
         if(credit!=1) {
             hashMap.put("testo",getString(R.string.rememberDebt) + " " +
-                    credit + " " + getString(R.string.valute) + ".\n" + getString(R.string.rimborsamiPresto));
+                    finalcredit + " " + getString(R.string.valute) + ".\n" + getString(R.string.rimborsamiPresto));
         }else{
             hashMap.put("testo", getString(R.string.rememberDebt) + " " +
-                    credit + " " + getString(R.string.valute) + ".\n" + getString(R.string.rimborsamiPresto));
+                    finalcredit + " " + getString(R.string.valute) + ".\n" + getString(R.string.rimborsamiPresto));
         }
         db.collection("users").document(debtor).collection("notify")
                 .add(hashMap);
@@ -326,7 +327,7 @@ public class SelectPaying extends AppCompatActivity {
                     }
                 });
     }
-    private void updateBalanceCredit(String pagante, int credit) {
+    private void updateBalanceCredit(String pagante, Double credit) {
 
         DocumentReference documentReference = db.collection("users").document(pagante);
         documentReference.update("bilancio", FieldValue.increment(credit));

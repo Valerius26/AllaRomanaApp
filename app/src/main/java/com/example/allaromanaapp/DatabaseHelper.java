@@ -6,9 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -20,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_4 = "TYPE";
     public static final String COL_5 = "CREDIT";
     public static final String COL_6 = "EMAIL";
-     String createTabCard = "create table if not exists " + TABLE_NAME + " (USER_ID INTEGER PRIMARY KEY AUTOINCREMENT, CARD_NUM TEXT, PASSWORD TEXT, TYPE TEXT, CREDIT TEXT, EMAIL TEXT)";
+    String createTabCard = "create table if not exists " + TABLE_NAME + " (USER_ID INTEGER PRIMARY KEY AUTOINCREMENT, CARD_NUM TEXT, PASSWORD TEXT, TYPE TEXT, CREDIT TEXT, EMAIL TEXT)";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -59,20 +63,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean updateCreditinDB(String toPay, String card_num){
+        NumberFormat nf = NumberFormat.getInstance();
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "select CREDIT from " + TABLE_NAME + " where CARD_NUM='" + card_num + "'";
         Cursor cursor = db.rawQuery(sql,null);
-        String credit = null;
+        String credit = "";
         if(cursor.moveToFirst()){
             credit = cursor.getString(0);
         }
-        Long value = Long.valueOf(credit);
-        Long newCredit = value - Long.valueOf(toPay);
-        if(newCredit < 0){
+        Double value = Double.valueOf(0);
+        try {
+            value = nf.parse(credit).doubleValue();
+            value = value - nf.parse(toPay).doubleValue();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if(value < 0){
             return false;
         }else{
 
-            String sql2 = "UPDATE "+TABLE_NAME +" SET " + COL_5+ " = '"+newCredit.toString()+"' WHERE "+COL_2+ " = "+card_num;
+            String finalValue = String.format("%.2f",value);
+            String sql2 = "UPDATE "+TABLE_NAME +" SET " + COL_5+ " = '"+finalValue+"' WHERE "+COL_2+ " = "+card_num;
             db.execSQL(sql2);
         }
 
@@ -81,26 +93,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public boolean updateCreditCreditorDB(String toPay, String email){
+        NumberFormat nf = NumberFormat.getInstance();
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "select CREDIT from " + TABLE_NAME + " where EMAIL='" + email + "'";
         Cursor cursor = db.rawQuery(sql,null);
-        String credit = null;
+        String credit = "";
         if(cursor.moveToFirst()){
             credit = cursor.getString(0);
         }
-        Long value = Long.valueOf(credit);
-        Long newCredit = value + Long.valueOf(toPay);
+        Double value = Double.valueOf(0);
+        try {
+            value = nf.parse(credit).doubleValue();
+            value = value + nf.parse(toPay).doubleValue();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        String sql2 = "UPDATE "+TABLE_NAME +" SET " + COL_5+ " = '"+newCredit.toString()+"' WHERE "+COL_6+ " = '"+email+"'";
+        String finalValue = String.format("%.2f",value);
+        String sql2 = "UPDATE "+TABLE_NAME +" SET " + COL_5+ " = '"+finalValue+"' WHERE "+COL_6+ " = '"+email+"'";
         db.execSQL(sql2);
-
 
         return true;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-         db.execSQL(createTabCard);
+        db.execSQL(createTabCard);
     }
 
     @Override

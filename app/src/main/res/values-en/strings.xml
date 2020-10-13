@@ -199,6 +199,11 @@
     <string name="youAreDown">You are broke! Top up to pay</string>
     <string name="dontRemove">You cannot remove yourself! You are only two participants.</string>
     <string name="partecipantDelete">You have removed yourself from this group</string>
+    <string name="DoubleRequested">Enter a number</string>
+    <string name="importRequired">A whole is required</string>
+    <string name="importMin">An amount must be greater than or equal to the number of participants</string>
+    <string name="numReq">Please enter an integer</string>
+    <string name="importPayd">Importo pagato</string>
 
 
 

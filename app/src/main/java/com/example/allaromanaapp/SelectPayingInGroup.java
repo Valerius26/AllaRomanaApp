@@ -86,19 +86,19 @@ public class SelectPayingInGroup extends AppCompatActivity {
                 if(!TextUtils.isEmpty(pagante)) {
 
                     String importo = editImport.getText().toString().trim();
-                    Long importNumber = Long.valueOf(0);
+                    Double importNumber = Double.valueOf(0);
                     int partecipantsSize = 0;
 
                     try {
-                        int num = Integer.parseInt(importo);
+                        double num = Double.parseDouble(importo);
                         if (TextUtils.isEmpty(importo)) {
-                            editImport.setError("L'importo è richiesto");
+                            editImport.setError(getString(R.string.importRequired));
                             return;
                         }else {
-                            importNumber = (Long) Long.valueOf(importo);
+                            importNumber = (Double) Double.valueOf(importo);
                             partecipantsSize = adapter.getItemCount();
                             if (importNumber < partecipantsSize) {
-                                editImport.setError("L'importo dev'essere maggiore o ugale numero di partecipanti");
+                                editImport.setError(getString(R.string.importMin));
                             }else {
                                 ArrayList<String> debtors = new ArrayList<>();
                                 debtors = adapter.getDebtors();
@@ -112,14 +112,14 @@ public class SelectPayingInGroup extends AppCompatActivity {
                             return;
 
                     } catch (NumberFormatException e) {
-                        editImport.setError("Inserisci un intero");
+                        editImport.setError(getString(R.string.numReq));
                     }
 
 
                     return;
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"Seleziona un pagante", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),getString(R.string.selectPayer), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -147,7 +147,7 @@ public class SelectPayingInGroup extends AppCompatActivity {
     }
 
 
-    private void recupera_nome_debitore(final String id_debtor, final String pagante, final Long importNumber, final int partecipantSize) {
+    private void recupera_nome_debitore(final String id_debtor, final String pagante, final Double importNumber, final int partecipantSize) {
         db.collection("users").document(id_debtor).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -164,7 +164,7 @@ public class SelectPayingInGroup extends AppCompatActivity {
 
     }
 
-    private void recuperaCreatore(final String id_debtor, final String pagante, final Long importNumber, final int partecipantSize, final String nome_debitore, final String cognome_debitore) {
+    private void recuperaCreatore(final String id_debtor, final String pagante, final Double importNumber, final int partecipantSize, final String nome_debitore, final String cognome_debitore) {
         DocumentReference documentReference = db.collection("users").document(id_debtor).collection("groups").document(groupID);
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -177,11 +177,11 @@ public class SelectPayingInGroup extends AppCompatActivity {
     }
 
 
-    private void updateDB(final String debtor, final String pagante, Long importNumber, int partecipantsSize, String nome, String cognome, String creatorID) {
-
+    private void updateDB(final String debtor, final String pagante, Double importNumber, int partecipantsSize, String nome, String cognome, String creatorID) {
         HashMap<String,String> hashMap = new HashMap<>();
-        final int credit = (int) (importNumber/partecipantsSize);
-        hashMap.put("credito",""+credit);
+        final Double credit = (importNumber/partecipantsSize);
+        String finalCredit = String.format("%.2f", credit);
+        hashMap.put("credito",finalCredit);
         hashMap.put("idDebitore",debtor);
         hashMap.put("idCreatoreConto",creatorID);
         hashMap.put("nome debitore",nome);
@@ -193,7 +193,7 @@ public class SelectPayingInGroup extends AppCompatActivity {
                 .add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(getApplicationContext(),"importo Pagato", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),getString(R.string.importPayd), Toast.LENGTH_SHORT).show();
                 String id_credito = documentReference.getId();
                 //updateBalanceCredit(pagante,credit); //devo pensare a qualcos altro...
                 recupera_nome_creditore(pagante,debtor,credit,id_credito);
@@ -208,7 +208,7 @@ public class SelectPayingInGroup extends AppCompatActivity {
 
 
     }
-    private void recupera_nome_creditore(final String pagante, final String debtor, final int credit, final String id_credito) {
+    private void recupera_nome_creditore(final String pagante, final String debtor, final Double credit, final String id_credito) {
         db.collection("users").document(pagante).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -225,9 +225,10 @@ public class SelectPayingInGroup extends AppCompatActivity {
 
     }
 
-    private void updateDebtor(final String pagante, final String debtor, final int credit, final String nome, final String cognome, final String id_credito) {
+    private void updateDebtor(final String pagante, final String debtor, final Double credit, final String nome, final String cognome, final String id_credito) {
+        String finalCredit = String.format("%.2f", credit);
         HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put("debito",""+credit);
+        hashMap.put("debito",finalCredit);
         hashMap.put("idCreditore",pagante);
         hashMap.put("nome creditore",nome);
         hashMap.put("cognome creditore",cognome);
@@ -248,13 +249,13 @@ public class SelectPayingInGroup extends AppCompatActivity {
         });
     }
 
-    private void inviaNotifica(String debtor,String pagante, String nomeMittente, String cognomeMittente, int credit) {
-
+    private void inviaNotifica(String debtor,String pagante, String nomeMittente, String cognomeMittente, Double credit) {
+        String finalCredit = String.format("%.2f", credit);
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("nomeMittente",nomeMittente);
         hashMap.put("cognomeMittente",cognomeMittente);
         hashMap.put("idMittente",pagante);
-        hashMap.put("daPagare",""+credit);
+        hashMap.put("daPagare",""+finalCredit);
         hashMap.put("letto","no");
         hashMap.put("data",currentDate);
         if(credit!=1) {

@@ -9,5 +9,6 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorGreen">#32CD32</color>
+    <color name="red">#FF0000</color>
     <drawable name="colorBlue">#061EF2</drawable>
 </resources>

@@ -19,6 +19,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -105,14 +107,19 @@ public class LockedFragment extends Fragment {
     }
 
     private void totalDebt(final String id, final String name, final String surname) {
+        final NumberFormat nf = NumberFormat.getInstance();
         db.collection("users").document(id).collection("debts")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(!task.getResult().isEmpty()){
-                    Long total = Long.valueOf(0);
+                    Double total = Double.valueOf(0);
                     for(DocumentSnapshot documentSnapshot : task.getResult()){
-                        total = total + Long.valueOf(documentSnapshot.getString("debito"));
+                        try {
+                            total = total + nf.parse(documentSnapshot.getString("debito")).doubleValue();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     lockedes.add(new Creditors(id,name,surname,total,""));

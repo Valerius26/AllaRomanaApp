@@ -143,6 +143,7 @@ public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
         holder.email.setText(e_mail);
         holder.debtNum.setVisibility(View.INVISIBLE);
         holder.info.setText(context.getString(R.string.stuckIfHold));
+        holder.date.setVisibility(View.INVISIBLE);
     }
 
     @Override

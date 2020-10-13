@@ -43,7 +43,7 @@ public class PosActivity extends AppCompatActivity {
     RadioButton radioButton;
     TextView title;
     String cardType = "";
-
+    String toPaytot = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +63,7 @@ public class PosActivity extends AppCompatActivity {
         creditorID = intent.getStringExtra("idCreditore");
         total = intent.getStringExtra("Totale");
         toPay = intent.getStringExtra("daPagare");
+        toPaytot = intent.getStringExtra("daPagareTot");
 
         title = findViewById(R.id.cardType);
         radioGroup = findViewById(R.id.radiogroup);
@@ -99,10 +100,10 @@ public class PosActivity extends AppCompatActivity {
                         }else{
                             String email = value.getString("e-mail");
                             if(databaseHelper.isCorrectCard(number, password,cardType)){
-                                if(!databaseHelper.updateCreditinDB(toPay,number)){
+                                if(!databaseHelper.updateCreditinDB(toPaytot,number)){
                                     Toast.makeText(PosActivity.this, getString(R.string.youAreDown), Toast.LENGTH_SHORT).show();
                                 }else {
-                                    databaseHelper.updateCreditCreditorDB(toPay,email);
+                                    databaseHelper.updateCreditCreditorDB(toPaytot,email);
                                     deleteDebt();
                                     deleteCredit();
                                     sendNotification();
@@ -127,7 +128,6 @@ public class PosActivity extends AppCompatActivity {
                     updatePayment();
                     Toast.makeText(PosActivity.this, getString(R.string.debtSolved) ,Toast.LENGTH_SHORT).show();
                 }else{
-
                     Toast.makeText(PosActivity.this,getString(R.string.errore), Toast.LENGTH_SHORT).show();
                 }*/
             }
@@ -157,7 +157,7 @@ public class PosActivity extends AppCompatActivity {
     private void writePayment(String nome, String cognome) {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("idPagato",creditorID);
-        hashMap.put("totalePagato",toPay);
+        hashMap.put("totalePagato",toPaytot);
         hashMap.put("nomePagato",nome);
         hashMap.put("cognomePagato",cognome);
         hashMap.put("data",currentDate);
@@ -197,13 +197,13 @@ public class PosActivity extends AppCompatActivity {
         hashMap.put("nomeMittente",nome);
         hashMap.put("cognomeMittente",cognome);
         hashMap.put("idMittente",currentUserID);
-        hashMap.put("daPagare",toPay);
+        hashMap.put("daPagare",toPaytot);
         hashMap.put("letto","no");
         hashMap.put("data",currentDate);
-        if(!toPay.equals(1)) {
-            hashMap.put("testo", getString(R.string.yourDebtSolved) + " " + toPay + " " + getString(R.string.valute));
+        if(!toPaytot.equals(1)) {
+            hashMap.put("testo", getString(R.string.yourDebtSolved) + " " + toPaytot + " " + getString(R.string.valute));
         }else{
-            hashMap.put("testo", getString(R.string.yourDebtSolved) + " " + toPay + " " + getString(R.string.valuteS));
+            hashMap.put("testo", getString(R.string.yourDebtSolved) + " " + toPaytot + " " + getString(R.string.valuteS));
         }
 
         db.collection("users").document(creditorID).collection("notify").add(hashMap)
@@ -236,7 +236,7 @@ public class PosActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         if(documentSnapshot.getString("idDebitore").equals(currentUserID) &&
-                                documentSnapshot.getString("credito").equals(toPay)){
+                                documentSnapshot.getString("credito").equals(toPaytot)){
                             deleteC(documentSnapshot.getId());
                             break;
                         }
@@ -272,7 +272,7 @@ public class PosActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         if(documentSnapshot.getString("idCreditore").equals(creditorID) &&
-                         documentSnapshot.getString("debito").equals(toPay)){
+                                documentSnapshot.getString("debito").equals(toPaytot)){
                             deleteD(documentSnapshot.getId());
                             break;
                         }

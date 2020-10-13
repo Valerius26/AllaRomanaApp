@@ -41,7 +41,7 @@ public class notificationAdapter extends RecyclerView.Adapter<notificationHolde>
             @Override
             public void onItemClick(View view, int position) {
                 String notID = notificationList.get(position).getId();
-                Long daPagare = notificationList.get(position).getDebito();
+                Double daPagare = notificationList.get(position).getDebito();
                 Intent intent = new Intent(context,NotDetailActivity.class);
                 intent.putExtra("idNotifica", notID);
                 intent.putExtra("debito",""+daPagare);

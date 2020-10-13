@@ -3,11 +3,11 @@ package com.example.allaromanaapp;
 public class notify {
    String nome,cognome;
    String id;
-   Long debito;
+   Double debito;
    String letto;
    String data;
 
-    public notify(String nome, String cognome, String id, Long debito, String letto, String data) {
+    public notify(String nome, String cognome, String id, Double debito, String letto, String data) {
         this.nome = nome;
         this.cognome = cognome;
         this.id = id;
@@ -40,11 +40,11 @@ public class notify {
         this.id = id;
     }
 
-    public Long getDebito() {
+    public Double getDebito() {
         return debito;
     }
 
-    public void setDebito(Long debito) {
+    public void setDebito(Double debito) {
         this.debito = debito;
     }
 

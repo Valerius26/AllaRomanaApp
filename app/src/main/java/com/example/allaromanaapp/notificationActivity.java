@@ -27,6 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -95,6 +97,7 @@ public class notificationActivity extends AppCompatActivity {
     }
 
     private void loadDataFromFirebase() {
+        final NumberFormat nf = NumberFormat.getInstance();
         db.collection("users").document(currentUserID).collection("notify")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -104,16 +107,21 @@ public class notificationActivity extends AppCompatActivity {
                     ArrayList<notify> notifies = new ArrayList<>();
                     for (DocumentSnapshot documentSnapshot : task.getResult()){
                         letto = documentSnapshot.getString("letto");
-                        notify not = new notify(documentSnapshot.getString("nomeMittente"),
-                                documentSnapshot.getString("cognomeMittente"),documentSnapshot.getId(),
-                                Long.valueOf(documentSnapshot.getString("daPagare")),letto,
-                                documentSnapshot.getString("data"));
+                        notify not = null;
+                        try {
+                            not = new notify(documentSnapshot.getString("nomeMittente"),
+                                    documentSnapshot.getString("cognomeMittente"),documentSnapshot.getId(),
+                                    nf.parse(documentSnapshot.getString("daPagare")).doubleValue(),letto,
+                                    documentSnapshot.getString("data"));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                         notifies.add(not);
                     }
                     Collections.sort(notifies, new Comparator<notify>() {
                         @Override
-                        public int compare(notify notify, notify t1) {
-                            return notify.getLetto().compareTo(t1.getLetto());
+                        public int compare(notify t2, notify t1) {
+                            return t1.getData().compareTo(t2.getData());
                         }
                     });
                     adapter = new notificationAdapter(notifies,notificationActivity.this);

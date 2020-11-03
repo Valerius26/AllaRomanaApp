@@ -155,7 +155,7 @@ public class reportedAdapter extends RecyclerView.Adapter<reportedHolder> {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("idMittente","Admin");
         hashMap.put("testo",context.getString(R.string.youAreStuckS) + "\n" +
-                R.string.youWillSbD);
+                context.getString(R.string.youWillSbD));
         hashMap.put("nomeMittente","Admin");
         hashMap.put("cognomeMittente","");
         hashMap.put("letto","no");

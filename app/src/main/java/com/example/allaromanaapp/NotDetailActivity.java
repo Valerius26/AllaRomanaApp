@@ -27,8 +27,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class NotDetailActivity extends AppCompatActivity {
@@ -39,7 +41,7 @@ public class NotDetailActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
     String debito,name,surname,nomeMittente,cognomeMittente;
-    String sendID,testo;
+    String sendID,testo,currentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,9 @@ public class NotDetailActivity extends AppCompatActivity {
         setContentView(R.layout.not_detail_activity);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
+
+        Calendar calendar = Calendar.getInstance();
+        currentDate = DateFormat.getDateInstance().format(calendar.getTime());
 
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserID = firebaseAuth.getUid();
@@ -92,7 +97,8 @@ public class NotDetailActivity extends AppCompatActivity {
                         indicate.setText(R.string.deleteDebtYes);
                     }
                     if(testo.contains(getString(R.string.thisIsMyPosi)) || testo.contains(getString(R.string.IpaidYou)) ||
-                     testo.contains(getString(R.string.youLocked)) || testo.contains(getString(R.string.youNoLocked))){
+                     testo.contains(getString(R.string.youAreStuck)) || testo.contains(getString(R.string.youNoLocked))
+                    || testo.contains(getString(R.string.youWillSbD))){
                         info.setVisibility(View.INVISIBLE);
                         indicate.setVisibility(View.INVISIBLE);
                     }
@@ -214,7 +220,14 @@ public class NotDetailActivity extends AppCompatActivity {
     }
 
     private void sendToCreditor() {
-        String finaldebito = String.format("%.2f", debito);
+        NumberFormat nf = NumberFormat.getInstance();
+        Double value = Double.valueOf(0);
+        try {
+            value = nf.parse(debito).doubleValue();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String finaldebito = String.format("%.2f", value);
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("idMittente",currentUserID);
         if(!debito.equals(1)) {
@@ -227,6 +240,7 @@ public class NotDetailActivity extends AppCompatActivity {
         hashMap.put("cognomeMittente",surname);
         hashMap.put("letto","no");
         hashMap.put("daPagare", finaldebito);
+        hashMap.put("data",currentDate);
 
         db.collection("users").document(sendID).collection("notify").add(hashMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
@@ -245,7 +259,14 @@ public class NotDetailActivity extends AppCompatActivity {
 
     private void sendToDebtor() {
         HashMap<String,String> hashMap = new HashMap<>();
-        String finalDebito = String.format("%.2f", debito);
+        NumberFormat nf = NumberFormat.getInstance();
+        Double value = Double.valueOf(0);
+        try {
+            value = nf.parse(debito).doubleValue();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String finalDebito = String.format("%.2f", value);
         hashMap.put("idMittente",currentUserID);
         if(!debito.equals(1)) {
             hashMap.put("testo", getString(R.string.iHaveDelDeb) + " " + finalDebito + " " + getString(R.string.valute));
@@ -256,6 +277,7 @@ public class NotDetailActivity extends AppCompatActivity {
         hashMap.put("cognomeMittente",surname);
         hashMap.put("letto","no");
         hashMap.put("daPagare",""+0);
+        hashMap.put("data",currentDate);
 
         db.collection("users").document(sendID).collection("notify").add(hashMap);
     }

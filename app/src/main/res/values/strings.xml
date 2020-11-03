@@ -151,7 +151,7 @@
     <string name="report">Segnalazione</string>
     <string name="areYouSure2">Sei sicuro di voler segnalare</string>
     <string name="debtDoesntExi">Questo debito non esiste più</string>
-    <string name="iHaveRepYou">I reported you for a debt of</string>
+    <string name="iHaveRepYou">Ti ho segnalato per un debito di</string>
     <string name="IdontKnow">Non so nulla di questo debito</string>
     <string name="reportSent">Segnalazione inviata</string>
     <string name="iHaveDelDeb">Ti ho annulato il debito di</string>

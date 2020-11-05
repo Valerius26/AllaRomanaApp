@@ -16,7 +16,7 @@ import java.text.ParseException;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "CrCard.db";
+    public static final String DATABASE_NAME = "DbCrCard.db";
     public static final String TABLE_NAME = "card_table";
     public static final String COL_1 = "USER_ID";
     public static final String COL_2 = "CARD_NUM";

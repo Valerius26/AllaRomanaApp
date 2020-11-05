@@ -32,13 +32,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="HardcodedDebugMode">
-        <activity android:name=".byeActivity"></activity>
+        <activity android:name=".byeActivity"
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".SelectPayingInGroup"
-            android:windowSoftInputMode= "adjustPan"></activity>
-        <activity android:name=".groupComplete" />
-        <activity android:name=".GroupDetail" />
-        <activity android:name=".AddressActivity" />
-        <activity android:name=".CurrentPosition" />
+            android:windowSoftInputMode= "adjustPan"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".groupComplete"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".GroupDetail"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AddressActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CurrentPosition"
+            android:screenOrientation="portrait"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -53,15 +59,18 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
-            android:value="barcode" />
+            android:value="barcode"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".SpashScreenActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -70,30 +79,50 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:noHistory="true" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".NotCurrentProfileActivity" />
-        <activity android:name=".AddUsers" />
+            android:noHistory="true"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ProfileActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NotCurrentProfileActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AddUsers"
+            android:screenOrientation="portrait"/>
         <activity android:name=".SelectPaying"
-            android:windowSoftInputMode= "adjustPan"/>
-        <activity android:name=".confirmActivity" />
-        <activity android:name=".balanceActivity" />
-        <activity android:name=".balCreditActivity" />
-        <activity android:name=".notificationActivity" />
-        <activity android:name=".NotDetailActivity" />
-        <activity android:name=".LoginAdminActivity" />
-        <activity android:name=".AdminActivity" />
-        <activity android:name=".SettingActivity" />
+            android:windowSoftInputMode= "adjustPan"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".confirmActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".balanceActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".balCreditActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".notificationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NotDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LoginAdminActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AdminActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SettingActivity"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".payActivity"/>
-        <activity android:name=".NewGroupActivity" />
-        <activity android:name=".groupActivity" />
-        <activity android:name=".SelectUser" />
-        <activity android:name=".PosActivity" />
-        <activity android:name=".historyActivity" />
-        <activity android:name=".byeActivity"/>
+        <activity android:name=".payActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NewGroupActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".groupActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SelectUser"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PosActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".historyActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -98,7 +98,7 @@ public class NotDetailActivity extends AppCompatActivity {
                     }
                     if(testo.contains(getString(R.string.thisIsMyPosi)) || testo.contains(getString(R.string.IpaidYou)) ||
                      testo.contains(getString(R.string.youAreStuck)) || testo.contains(getString(R.string.youNoLocked))
-                    || testo.contains(getString(R.string.youWillSbD))){
+                    || testo.contains(getString(R.string.youWillSbD)) || testo.contains(getString(R.string.iHaveDelDeb))){
                         info.setVisibility(View.INVISIBLE);
                         indicate.setVisibility(View.INVISIBLE);
                     }

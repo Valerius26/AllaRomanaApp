@@ -24,9 +24,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -91,25 +95,17 @@ public class PosActivity extends AppCompatActivity {
                     Toast.makeText(PosActivity.this,getString(R.string.insertCardT), Toast.LENGTH_SHORT).show();
                 }
 
-                db.collection("users").document(creditorID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                final DocumentReference dr = db.collection("users").document(currentUserID);
+                dr.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                         if(error!=null)
                         {
 
                         }else{
-                            String email = value.getString("e-mail");
-                            if(databaseHelper.isCorrectCard(number, password,cardType)){
-                                if(!databaseHelper.updateCreditinDB(toPaytot,number)){
-                                    Toast.makeText(PosActivity.this, getString(R.string.youAreDown), Toast.LENGTH_SHORT).show();
-                                }else {
-                                    databaseHelper.updateCreditCreditorDB(toPaytot,email);
-                                    deleteDebt();
-                                    deleteCredit();
-                                    sendNotification();
-                                    updatePayment();
-                                    Toast.makeText(PosActivity.this, getString(R.string.debtSolved), Toast.LENGTH_SHORT).show();
-                                }
+                            //String email = value.getString("e-mail");
+                            if(value.getString("numero carta").equals(number) && value.getString("password").equals(password)) {
+                                getDebtorCredit(dr);
                             }else{
                                 Toast.makeText(PosActivity.this,getString(R.string.errore), Toast.LENGTH_SHORT).show();
                             }
@@ -134,6 +130,107 @@ public class PosActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void getDebtorCredit(final DocumentReference dr) {
+        dr.collection("creditCard").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(!task.getResult().isEmpty()) {
+                    NumberFormat nf = NumberFormat.getInstance();
+                    Double creditVal = Double.valueOf(0);
+                    Double toPaytotal2 = Double.valueOf(0);
+                    String creditValstr = "";
+                    String id = "";
+                    for(DocumentSnapshot documentSnapshot: task.getResult()){
+                       creditValstr = documentSnapshot.getString("credito");
+                       id = documentSnapshot.getId();
+                       break;
+                    }
+
+                    try {
+                    creditVal = nf.parse(creditValstr).doubleValue();
+                    toPaytotal2 = nf.parse(toPaytot).doubleValue();
+                    if (creditVal < toPaytotal2) {
+                        Toast.makeText(PosActivity.this, getString(R.string.youAreDown), Toast.LENGTH_SHORT).show();
+                                /*if(databaseHelper.isCorrectCard(number, password,cardType)){
+                                    if(!databaseHelper.updateCreditinDB(toPaytot,number)){*/
+                    } else {
+                        //databaseHelper.updateCreditCreditorDB(toPaytot,email);
+                        deleteDebt();
+                        deleteCredit();
+                        sendNotification();
+                        updatePayment();
+                        updateDebtorCredit(creditVal - toPaytotal2, dr, id);
+                        getCreditorCredit(toPaytotal2);
+                        //updateCreditorCredit(toPaytotal2);
+                        Toast.makeText(PosActivity.this, getString(R.string.debtSolved), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            }
+        });
+
+
+    }
+
+    private void getCreditorCredit(final Double toPaytotal2) {
+        db.collection("users").document(creditorID).collection("creditCard").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (!task.getResult().isEmpty()) {
+                    NumberFormat nf = NumberFormat.getInstance();
+                    Double creditVal = Double.valueOf(0);
+                    String creditValstr = "";
+                    String id = "";
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        creditValstr = documentSnapshot.getString("credito");
+                        id = documentSnapshot.getId();
+                        break;
+                    }
+                    try {
+                        creditVal = nf.parse(creditValstr).doubleValue();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    Double toPayFinal = creditVal + toPaytotal2;
+                    updateCreditorCredit(toPayFinal, id);
+                }
+            }
+        });
+    }
+
+    private void updateCreditorCredit(final Double newCreditVal, String id) {
+        String creditValStr = String.format("%.2f", newCreditVal);
+
+        db.collection("users").document(creditorID).collection("creditCard")
+                .document(id).delete();
+
+        HashMap<String,String> creditTab = new HashMap<>();
+        creditTab.put("credito", creditValStr);
+        creditTab.put("data", currentDate);
+        db.collection("users").document(creditorID).collection("creditCard")
+                .add(creditTab);
+    }
+
+    private void update(String finalValuestr, String id, DocumentReference dr) {
+        dr.collection("creditCard").document(id).delete();
+        HashMap<String,String> creditTab = new HashMap<>();
+        creditTab.put("credito", finalValuestr);
+        creditTab.put("data", currentDate);
+        dr.collection("creditorCard").add(creditTab);
+    }
+
+    private void updateDebtorCredit(final Double value1, DocumentReference dr, String id) {
+        dr.collection("creditCard").document(id).delete();
+        String valueStr = String.format("%.2f", value1 );
+        HashMap<String,String> creditTab = new HashMap<>();
+        creditTab.put("credito", valueStr );
+        creditTab.put("data", currentDate);
+        dr.collection("creditCard").add(creditTab);
     }
 
     private void updatePayment() {

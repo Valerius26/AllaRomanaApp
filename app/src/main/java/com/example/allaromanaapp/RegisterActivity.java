@@ -32,7 +32,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -51,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
     String userID;
     Long bilancio = Long.valueOf(0);
     DatabaseHelper cardDB;
+    String currentDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +82,10 @@ public class RegisterActivity extends AppCompatActivity {
         cardType.add("MASTERCARD");
         cardType.add("POSTPAY");
         cardType.add("PAYPAL");
+
+        Calendar calendar = Calendar.getInstance();
+        currentDate = DateFormat.getDateInstance().format(calendar.getTime());
+
         RegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,12 +117,12 @@ public class RegisterActivity extends AppCompatActivity {
                 //Register card in Sql
                 Random rnd = new Random();
                 int number = rnd.nextInt(999999);
-                String card = String.format("%06d", number);
-                int n = (int) (Math.random() * 4);
+                final String card = String.format("%06d", number);
+                final int n = (int) (Math.random() * 4);
                 int credit = (int) (Math.random() * 1000);
                 Long c = Long.valueOf(credit);
-                String credito = c.toString();
-                boolean insert = cardDB.insertData(card, password,cardType.get(n),credito,email);
+                final String credito = c.toString();
+                //boolean insert = cardDB.insertData(card, password,cardType.get(n),credito,email);
 
                 //Register the user in firebase
 
@@ -125,16 +132,19 @@ public class RegisterActivity extends AppCompatActivity {
                        if(task.isSuccessful()){
                            Toast.makeText(RegisterActivity.this, R.string.utenteRegistrato, Toast.LENGTH_SHORT).show();
                            userID = fAuth.getCurrentUser().getUid();
-                           DocumentReference documentReference = fStore.collection("users").document(userID);
+                           final DocumentReference documentReference = fStore.collection("users").document(userID);
                            Map<String,Object> user = new HashMap<>();
                            user.put("nome", nome);
                            user.put("cognome",cognome);
                            user.put("e-mail",email);
                            user.put("password",password);
-                           user.put("bilancio",bilancio);
+                           user.put("numero carta",card);
+                           user.put("tipo carta", cardType.get(n));
+
                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                @Override
                                public void onSuccess(Void aVoid) {
+                                   createCredit(credito, documentReference);
                                    Log.d("TAG", "successo, il profilo è stato creato correttamente per " + userID);
                                }
                            }).addOnFailureListener(new OnFailureListener() {
@@ -168,6 +178,13 @@ public class RegisterActivity extends AppCompatActivity {
                 showChangeLanguageDialog();
             }
         });
+    }
+
+    private void createCredit(String credito, DocumentReference doc) {
+        HashMap<String,String> creditTab = new HashMap<>();
+        creditTab.put("credito", credito);
+        creditTab.put("data", currentDate);
+        doc.collection("creditCard").add(creditTab);
     }
 
     private void showChangeLanguageDialog() {

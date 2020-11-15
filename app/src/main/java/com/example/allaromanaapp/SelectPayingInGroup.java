@@ -106,6 +106,7 @@ public class SelectPayingInGroup extends AppCompatActivity {
                                     String id_debtor = debtors.get(position);
                                     recupera_nome_debitore(id_debtor,pagante,importNumber,partecipantsSize);
                                 }
+                                Toast.makeText(SelectPayingInGroup.this,getString(R.string.importPayd), Toast.LENGTH_SHORT).show();
                                 }
 
                             }
@@ -119,7 +120,7 @@ public class SelectPayingInGroup extends AppCompatActivity {
                     return;
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),getString(R.string.selectPayer), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SelectPayingInGroup.this,getString(R.string.selectPayer), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -193,7 +194,6 @@ public class SelectPayingInGroup extends AppCompatActivity {
                 .add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(getApplicationContext(),getString(R.string.importPayd), Toast.LENGTH_SHORT).show();
                 String id_credito = documentReference.getId();
                 //updateBalanceCredit(pagante,credit); //devo pensare a qualcos altro...
                 recupera_nome_creditore(pagante,debtor,credit,id_credito);
@@ -201,7 +201,7 @@ public class SelectPayingInGroup extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(SelectPayingInGroup.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -244,7 +244,7 @@ public class SelectPayingInGroup extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(SelectPayingInGroup.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
     }

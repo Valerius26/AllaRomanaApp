@@ -137,6 +137,7 @@ public class SelectPaying extends AppCompatActivity {
                                     }
                                     deletePartecipants(creatorID, accountID);
                                     deleteAccount(creatorID, accountID);
+                                    Toast.makeText(SelectPaying.this,getString(R.string.amountPaied), Toast.LENGTH_SHORT).show();
                                 }
                                 return;
                             } catch (Exception e) {
@@ -147,7 +148,7 @@ public class SelectPaying extends AppCompatActivity {
                         }
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),getString(R.string.selectPayer), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SelectPaying.this,getString(R.string.selectPayer), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -220,7 +221,6 @@ public class SelectPaying extends AppCompatActivity {
                 .add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                 Toast.makeText(getApplicationContext(),getString(R.string.amountPaied), Toast.LENGTH_SHORT).show();
                  String id_credito = documentReference.getId();
                  //updateBalanceCredit(pagante,credit); //devo pensare a qualcos altro...
                  recupera_nome_creditore(pagante,debtor,credit,id_credito);
@@ -228,7 +228,7 @@ public class SelectPaying extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(SelectPaying.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
 

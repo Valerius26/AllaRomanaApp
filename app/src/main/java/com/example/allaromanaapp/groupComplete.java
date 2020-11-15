@@ -152,7 +152,7 @@ public class groupComplete extends AppCompatActivity {
                         Collections.sort(partecipants, new Comparator<User>() {
                             @Override
                             public int compare(User u, User u1) {
-                                return u.getNome().compareTo(u1.getCognome());
+                                return u.getNome().compareTo(u1.getNome());
                             }
                         });
                         adapter = new recVieGroupCompleteAdapter(partecipants, groupComplete.this , groupID);

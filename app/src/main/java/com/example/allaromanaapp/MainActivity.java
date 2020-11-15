@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     String currentUserID;
     String name,surname;
     CardView nuovaNotifica;
+    ProgressBar progressBarpay,progressBargr,progressBarmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
         account_delete(currentUserID);
         group_delete();
 
+        progressBarpay = (ProgressBar) findViewById(R.id.progressBarpay);
+        progressBargr = (ProgressBar) findViewById(R.id.progressBargr);
+        progressBarmap = (ProgressBar) findViewById(R.id.progressBarmap);
         profileBtn = (Button) findViewById(R.id.buttonProfile);
         balanceBtn = (Button) findViewById(R.id.buttonDebitoCredito);
         historyBtn = (Button) findViewById(R.id.storyBtn);
@@ -90,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         payBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBarpay.setVisibility(View.VISIBLE);
                 db.collection("blocked").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -136,13 +142,16 @@ public class MainActivity extends AppCompatActivity {
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBarmap.setVisibility(View.VISIBLE);
                 startActivity(new Intent(MainActivity.this,MapsActivity.class));
+                progressBarmap.setVisibility(View.INVISIBLE);
             }
         });
 
         groupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBargr.setVisibility(View.VISIBLE);
                 db.collection("blocked").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -155,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         if(bloccato==0){
+                            progressBargr.setVisibility(View.INVISIBLE);
                             startActivity(new Intent(MainActivity.this,groupActivity.class));
                         }
                     }
@@ -304,10 +314,11 @@ public class MainActivity extends AppCompatActivity {
                 .collection("partecipants").add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                Intent intent = new Intent(getApplicationContext(),AddUsers.class);
+                Intent intent = new Intent(MainActivity.this, AddUsers.class);
                 intent.putExtra("idCreatore", creatorID);
                 intent.putExtra("idAccount",accountID);
              //   getApplicationContext().startActivity(intent);
+                progressBarpay.setVisibility(View.INVISIBLE);
                 MainActivity.this.startActivity(intent);
             }
         });

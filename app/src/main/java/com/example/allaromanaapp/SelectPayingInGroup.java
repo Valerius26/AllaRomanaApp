@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class SelectPayingInGroup extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     ViewAdapterSelectingPay adapter;
     String currentDate;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class SelectPayingInGroup extends AppCompatActivity {
         currentUserID = firebaseAuth.getUid();
         db = FirebaseFirestore.getInstance();
 
+        progressBar = findViewById(R.id.progressBar);
         title = findViewById(R.id.TitleInPay);
         list = findViewById(R.id.ListaPart);
         recyclerView = findViewById(R.id.recycler2);
@@ -100,12 +103,14 @@ public class SelectPayingInGroup extends AppCompatActivity {
                             if (importNumber < partecipantsSize) {
                                 editImport.setError(getString(R.string.importMin));
                             }else {
+                                progressBar.setVisibility(View.VISIBLE);
                                 ArrayList<String> debtors = new ArrayList<>();
                                 debtors = adapter.getDebtors();
                                 for (int position = 0; position < debtors.size(); position++) {
                                     String id_debtor = debtors.get(position);
                                     recupera_nome_debitore(id_debtor,pagante,importNumber,partecipantsSize);
                                 }
+                                progressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(SelectPayingInGroup.this,getString(R.string.importPayd), Toast.LENGTH_SHORT).show();
                                 }
 

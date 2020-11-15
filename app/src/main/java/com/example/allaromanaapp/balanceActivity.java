@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ public class balanceActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     String currentUserID;
     debtsAdapter adapter;
+    ProgressBar progressBar;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +59,8 @@ public class balanceActivity extends AppCompatActivity {
         title = findViewById(R.id.debtTitle);
         otherPage = findViewById(R.id.goCredit);
         recyclerView = findViewById(R.id.recycler4);
-
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
         setUpRecyclerView();
         loadDataFromFirebase();
 
@@ -105,6 +108,7 @@ public class balanceActivity extends AppCompatActivity {
                         return d.getName().compareTo(d1.getName());
                     }
                 });
+                progressBar.setVisibility(View.INVISIBLE);
                 adapter = new debtsAdapter(debtsList, balanceActivity.this);
                 recyclerView.setAdapter(adapter);
             }

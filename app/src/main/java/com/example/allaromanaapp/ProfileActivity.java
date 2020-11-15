@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -38,6 +39,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -87,7 +90,19 @@ public class ProfileActivity extends AppCompatActivity {
                     nome.setText(value.getString("nome"));
                     cognome.setText(value.getString("cognome"));
                     email.setText(value.getString("e-mail"));
-                    Glide.with(ProfileActivity.this).load(value.getString("immagine")).circleCrop().into(profilePicture);
+                    documentReference.collection("immagine").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (!task.getResult().isEmpty()) {
+                                String urlImmagine = "";
+                                for (DocumentSnapshot documentSnapshot : task.getResult()){
+                                    urlImmagine = documentSnapshot.getString("Url immagine");
+                                }
+                                Glide.with(ProfileActivity.this).load(urlImmagine).circleCrop().into(profilePicture);
+                            }
+                        }
+                    });
+
                 }
             }
         });
@@ -222,8 +237,27 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadImageToFirebase() {
+        final DocumentReference dr = fStore.collection("users").document(userID);
+        dr.collection("image").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        String id = "";
+                        if(!task.getResult().isEmpty()){
+                            for(DocumentSnapshot documentSnapshot: task.getResult()){
+                                id = documentSnapshot.getId();
+                                break;
+                            }
+                            dr.collection("immagine").document(id).delete();
+                        }
+
+                    }
+                });
+
         final String image = imageUri != null ? imageUri.toString() : null;
-        fStore.collection("users").document(userID).update("immagine", image);
+        HashMap<String,String> imageRef = new HashMap<>();
+        imageRef.put("Url immagine", image);
+        fStore.collection("users").document(userID).collection("immagine").add(imageRef);
         restartActivity();
         }
 

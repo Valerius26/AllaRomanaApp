@@ -236,7 +236,7 @@ public class NewGroupActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(NewGroupActivity.this, groupActivity.class));
+        startActivity(new Intent(NewGroupActivity.this, MainActivity.class));
     }
 
 }

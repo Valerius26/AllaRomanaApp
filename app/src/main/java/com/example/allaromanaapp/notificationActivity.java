@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,7 @@ import java.util.Comparator;
 
 public class notificationActivity extends AppCompatActivity {
 
+    ProgressBar progressBar;
     ImageButton back;
     Button deleteBtn;
     TextView notTitle;
@@ -51,6 +53,7 @@ public class notificationActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        progressBar = findViewById(R.id.progressBar);
         back = findViewById(R.id.back);
         deleteBtn = findViewById(R.id.deleteBtn);
         notTitle = findViewById(R.id.notTitle);
@@ -124,6 +127,7 @@ public class notificationActivity extends AppCompatActivity {
                             return t1.getData().compareTo(t2.getData());
                         }
                     });
+                    progressBar.setVisibility(View.INVISIBLE);
                     adapter = new notificationAdapter(notifies,notificationActivity.this);
                     recyclerView.setAdapter(adapter);
                 }

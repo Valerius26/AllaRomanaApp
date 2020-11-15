@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ public class AddUsers extends AppCompatActivity {
     String currentUserID;
     String creatorID,accountID;
     Button next;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,8 @@ public class AddUsers extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
         Intent intent = getIntent();
         creatorID = intent.getStringExtra("idCreatore");
         accountID = intent.getStringExtra("idAccount");
@@ -71,8 +75,6 @@ public class AddUsers extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserID = firebaseAuth.getCurrentUser().getUid();
-
-
 
         searchUser = findViewById(R.id.searchUser);
         recyclerView = findViewById(R.id.recycler3);
@@ -225,6 +227,8 @@ public class AddUsers extends AppCompatActivity {
                         return u.getNome().compareTo(u1.getNome());
                     }
                 });
+
+                progressBar.setVisibility(View.INVISIBLE);
                 adapter = new ViewAdapterAddUsers( usersList, AddUsers.this,creatorID,accountID);
                 recyclerView.setAdapter(adapter);
             }

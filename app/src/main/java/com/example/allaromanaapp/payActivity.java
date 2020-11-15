@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +47,7 @@ public class payActivity extends AppCompatActivity{
     Double CreditorCredit;
     Double toPay;
     boolean total = false;
+    ProgressBar progressBar;
 
     ArrayList<Long> debts = new ArrayList();
 
@@ -63,7 +65,7 @@ public class payActivity extends AppCompatActivity{
         CreditorID = intent.getStringExtra("creditorID");
         Calendar calendar = Calendar.getInstance();
         currentDate = DateFormat.getDateInstance().format(calendar.getTime());
-
+        progressBar = findViewById(R.id.progressBar);
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserID = firebaseAuth.getUid();
 
@@ -83,6 +85,7 @@ public class payActivity extends AppCompatActivity{
         difference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 db.collection("users").document(currentUserID).collection("credits")
                         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -224,6 +227,7 @@ public class payActivity extends AppCompatActivity{
             String text = R.string.compensationFirst + "\n" +
                     R.string.yourDebtNow + " " + finaltotal + " " + R.string.simbol;
             sendNotification(currentName,currentSurname,(-total),currentUserID,text);
+            progressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(payActivity.this,getString(R.string.compensationSecond) + " " + CreditorName + " " + CreditorSurname + " " + getString(R.string.pariA) + " "  + finaltotal + " " + getString(R.string.simbol), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(payActivity.this,MainActivity.class));
         }else

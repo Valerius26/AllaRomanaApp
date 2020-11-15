@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +55,7 @@ public class SelectPaying extends AppCompatActivity {
     FirebaseFirestore db;
     ViewAdapterSelectingPay adapter;
     String currentDate;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class SelectPaying extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
+        progressBar = findViewById(R.id.progressBar);
         title = findViewById(R.id.TitleInPay);
         list = findViewById(R.id.ListaPart);
         retAdd = findViewById(R.id.addPartecipant);
@@ -124,6 +127,7 @@ public class SelectPaying extends AppCompatActivity {
                             return;
                         }else {
                             try {
+                                progressBar.setVisibility(View.VISIBLE);
                                 importNumber = (Double) Double.valueOf(importo);
                                 partecipantsSize = adapter.getItemCount();
                                 if (importNumber < partecipantsSize) {
@@ -137,6 +141,7 @@ public class SelectPaying extends AppCompatActivity {
                                     }
                                     deletePartecipants(creatorID, accountID);
                                     deleteAccount(creatorID, accountID);
+                                    progressBar.setVisibility(View.INVISIBLE);
                                     Toast.makeText(SelectPaying.this,getString(R.string.amountPaied), Toast.LENGTH_SHORT).show();
                                 }
                                 return;

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,7 @@ import java.util.Comparator;
 
 public class historyActivity extends AppCompatActivity {
 
-
+    ProgressBar progressBar;
     TextView title;
     ImageButton back;
     FirebaseFirestore fStore;
@@ -52,6 +53,8 @@ public class historyActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         userID = fAuth.getUid();
@@ -138,6 +141,7 @@ public class historyActivity extends AppCompatActivity {
                     }
                 });
 
+                progressBar.setVisibility(View.INVISIBLE);
                 adapter = new historyAdapter(payments, historyActivity.this);
                 recyclerView.setAdapter(adapter);
 

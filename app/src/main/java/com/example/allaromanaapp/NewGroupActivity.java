@@ -115,7 +115,7 @@ public class NewGroupActivity extends AppCompatActivity {
                 //createGroupAll(userID,groupTitle,groupDescription,nome,cognome);
                 createFirstPartecipant(documentReference, nome, cognome);
                 Toast.makeText(NewGroupActivity.this, getString(R.string.GruppoCreato) , Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(),GroupDetail.class);
+                Intent intent = new Intent(NewGroupActivity.this, GroupDetail.class);
                 intent.putExtra("idGruppo",group_id);
                 intent.putExtra("NomeGruppo",groupTitle);
                 intent.putExtra("DescrizioneGruppo",groupDescription);

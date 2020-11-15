@@ -120,7 +120,7 @@ public class SelectUser extends AppCompatActivity {
                 Collections.sort(usersList, new Comparator<User>() {
                     @Override
                     public int compare(User u, User u1) {
-                        return u.getNome().compareTo(u1.getCognome());
+                        return u.getNome().compareTo(u1.getNome());
                     }
                 });
                 adapter = new SelectUserAdapter(usersList, SelectUser.this, address );

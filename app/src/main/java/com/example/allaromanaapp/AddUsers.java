@@ -222,7 +222,7 @@ public class AddUsers extends AppCompatActivity {
                 Collections.sort(usersList, new Comparator<User>() {
                     @Override
                     public int compare(User u, User u1) {
-                        return u.getNome().compareTo(u1.getCognome());
+                        return u.getNome().compareTo(u1.getNome());
                     }
                 });
                 adapter = new ViewAdapterAddUsers( usersList, AddUsers.this,creatorID,accountID);

@@ -125,7 +125,7 @@ public class GroupDetail extends AppCompatActivity {
                 Collections.sort(users, new Comparator<User>() {
                             @Override
                             public int compare(User u, User u1) {
-                                return u.getNome().compareTo(u1.getCognome());
+                                return u.getNome().compareTo(u1.getNome());
                             }
                         });
                 adapter = new RecVieAdapterGroupDet(usersSearched, GroupDetail.this, groupID);
@@ -158,7 +158,7 @@ public class GroupDetail extends AppCompatActivity {
                 Collections.sort(users, new Comparator<User>() {
                     @Override
                     public int compare(User u, User u1) {
-                        return u.getNome().compareTo(u1.getCognome());
+                        return u.getNome().compareTo(u1.getNome());
                     }
                 });
                 adapter = new RecVieAdapterGroupDet(users, GroupDetail.this, groupID);

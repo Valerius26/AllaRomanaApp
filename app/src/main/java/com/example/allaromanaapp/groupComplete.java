@@ -73,9 +73,11 @@ public class groupComplete extends AppCompatActivity {
         retAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),GroupDetail.class);
+                Intent intent = new Intent(groupComplete.this,GroupDetail.class);
                 intent.putExtra("idCreatore", currentUserID);
                 intent.putExtra("idGruppo",groupID);
+                intent.putExtra("NomeGruppo",groupTitle);
+                intent.putExtra("DescrizioneGruppo",groupDescription);
                 startActivity(intent);
             }
         });

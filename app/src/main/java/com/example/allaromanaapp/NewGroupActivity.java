@@ -41,6 +41,7 @@ public class NewGroupActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID, nome, cognome;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +56,13 @@ public class NewGroupActivity extends AppCompatActivity {
         SubmitGruppoBtn = findViewById(R.id.submitGruppo);
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
+        progressBar = findViewById(R.id.progressBar);
 
 
         SubmitGruppoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 startCreatingGroup();
             }
         });

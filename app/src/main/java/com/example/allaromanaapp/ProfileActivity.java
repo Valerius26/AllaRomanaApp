@@ -87,19 +87,20 @@ public class ProfileActivity extends AppCompatActivity {
                     return;
                 }
                 else {
-                    nome.setText(value.getString("nome"));
-                    cognome.setText(value.getString("cognome"));
-                    email.setText(value.getString("e-mail"));
+                    final String name = value.getString("nome");
+                    final String surname = value.getString("cognome");
+                    final String e_mail = value.getString("e-mail");
                     documentReference.collection("immagine").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            String urlImmagine = "";
                             if (!task.getResult().isEmpty()) {
-                                String urlImmagine = "";
                                 for (DocumentSnapshot documentSnapshot : task.getResult()){
                                     urlImmagine = documentSnapshot.getString("Url immagine");
+                                    break;
                                 }
-                                Glide.with(ProfileActivity.this).load(urlImmagine).circleCrop().into(profilePicture);
                             }
+                            loadProfileData(name, surname, e_mail, urlImmagine);
                         }
                     });
 
@@ -127,6 +128,13 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(gallery, "seleziona l'immagine"), PICK_IMAGE);
             }
         });
+    }
+
+    private void loadProfileData(String name, String surname, String e_mail, String urlImmagine) {
+        nome.setText(name);
+        cognome.setText(surname);
+        email.setText(e_mail);
+        Glide.with(ProfileActivity.this).load(urlImmagine).circleCrop().into(profilePicture);
     }
 
     private void updateBalance() {
@@ -233,33 +241,41 @@ public class ProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        loadImageToFirebase();
+        final DocumentReference dr = fStore.collection("users").document(userID);
+        dr.collection("immagine").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String id = "";
+                if(!task.getResult().isEmpty()){
+                    for(DocumentSnapshot documentSnapshot : task.getResult()){
+                        id = documentSnapshot.getId();
+                        loadImageToFirebase(dr,id);
+                        break;
+                    }
+                }else{
+                    loadImageToFirebaseInit(dr);
+                }
+            }
+        });
+
     }
 
-    private void loadImageToFirebase() {
-        final DocumentReference dr = fStore.collection("users").document(userID);
-        dr.collection("image").get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        String id = "";
-                        if(!task.getResult().isEmpty()){
-                            for(DocumentSnapshot documentSnapshot: task.getResult()){
-                                id = documentSnapshot.getId();
-                                break;
-                            }
-                            dr.collection("immagine").document(id).delete();
-                        }
+    private void loadImageToFirebaseInit(DocumentReference dr) {
+        final String image = imageUri != null ? imageUri.toString() : null;
+        HashMap<String,String> imageRef = new HashMap<>();
+        imageRef.put("Url immagine", image);
+        dr.collection("immagine").add(imageRef);
+        restartActivity();
+    }
 
-                    }
-                });
-
+    private void loadImageToFirebase(DocumentReference dr, String id) {
+        dr.collection("immagine").document(id).delete();
         final String image = imageUri != null ? imageUri.toString() : null;
         HashMap<String,String> imageRef = new HashMap<>();
         imageRef.put("Url immagine", image);
         fStore.collection("users").document(userID).collection("immagine").add(imageRef);
         restartActivity();
-        }
+    }
 
     private void restartActivity() {
         Intent intent = getIntent();

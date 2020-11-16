@@ -31,6 +31,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class NotCurrentProfileActivity extends AppCompatActivity {
 
@@ -77,7 +78,20 @@ public class NotCurrentProfileActivity extends AppCompatActivity {
                     nome.setText(value.getString("nome"));
                     cognome.setText(value.getString("cognome"));
                     email.setText(value.getString("e-mail"));
-                    Glide.with(NotCurrentProfileActivity.this).load(value.getString("immagine")).circleCrop().into(profileImage);
+                    documentReference.collection("immagine").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            String url = "";
+                            if(!task.getResult().isEmpty()){
+                                 for(DocumentSnapshot documentSnapshot: task.getResult()){
+                                     url = documentSnapshot.getString("Url immagine");
+                                     break;
+                                 }
+                                Glide.with(NotCurrentProfileActivity.this).load(url).circleCrop().into(profileImage);
+                             }
+                        }
+                    });
+
                 }
             }
         });
